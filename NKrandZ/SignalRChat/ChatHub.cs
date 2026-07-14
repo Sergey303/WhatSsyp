@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using System.Text.Json;
+using System.Collections.Generic;
 
 public class ChatMessage {
     public string room { get; set; } = "general";
@@ -20,13 +21,26 @@ public class ChatHub : Hub
 {
     private static Dictionary<string, string[]> userList = new Dictionary<string, string[]>()
     {
-        ["ZOVchik"] = {"Zovchik-WGNR", "12345678"}
+        ["ZOVchik"] = new string[] {"Zovchik-WGNR", "12345678"}
     };
 
     private static Dictionary<string, string[]> connectionList = new Dictionary<string, string[]>(){};
 
     public Task Send(string eventName, string text)
     {
+        if (eventName == "login"){
+            LoginMessage login = JsonSerializer.Deserialize<LoginMessage>(text);
+            if (login == null){
+                login = new LoginMessage();
+            }
+            bool hasUser = userList.ContainsValue(new string[] {login.login, login.password});
+            if (hasUser){
+                connectionList[ConnectionId] = login.login;
+                return Clients.Caller.SendAsync("loginResult", "Login Complete");
+            }
+            return Clients.Caller.SendAsync("loginResult", "error");
+        }
+        
         ChatMessage message = JsonSerializer.Deserialize<ChatMessage>(text);
         if (eventName == "joinRoom"){
             try {
@@ -43,9 +57,14 @@ public class ChatHub : Hub
             }
         }
         if (eventName == "chat"){
+            if (!connectionList.ContainsKey(Context.ConnectionId)){
+                return Clients.Caller.SendAsync("loginResult", "needLogin");
+            }
             if (message == null) {
                 message = new ChatMessage();
             }
+            string realName = connectionNames[Context.ConnectionId];
+            string textmessage = realName + ": " + message.text;
             return Clients.Group(message.room).SendAsync("chat", text);
         }
         if (eventName == "newRoom"){
