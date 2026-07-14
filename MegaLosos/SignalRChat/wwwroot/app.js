@@ -56,11 +56,10 @@ function startApp() {
     Chat.connect();
 }
 function regin() {
-    const name = signInName.value;
-    const login = signInLogin.value;
-    const password = signInPassword.value;
-    Auth.regin(name, login, password, 
-        Auth.login(login, password, startApp))
+    const name_ = signInName.value;
+    const login_ = signInLogin.value;
+    const password_ = signInPassword.value;
+    Auth.regin(name_, login_, password_, login)
 }
 
 function login() {
