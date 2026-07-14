@@ -1,0 +1,59 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MegaLosos", "MegaLosos", "{939254EF-09A5-64D2-D5E4-9059CBB64776}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NKrandZ", "NKrandZ", "{64F3A67E-48C4-EE95-216D-DA80A49B0D23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LittleMathGame_L1", "MegaLosos\LittleMathGame_L1\LittleMathGame_L1.csproj", "{B9555606-EDA4-1F03-8A22-8A8D1620C0D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRChat", "MegaLosos\SignalRChat\SignalRChat.csproj", "{5133AA04-CDC0-CB2B-98CB-6D9E5896443C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRConsoleClient", "MegaLosos\SignalRConsoleClient\SignalRConsoleClient.csproj", "{892ADE72-3CB8-4F80-B576-33B3B7A61EF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRChat", "NKrandZ\SignalRChat\SignalRChat.csproj", "{C0D80D4C-7B17-A8D2-314F-84FDDD187306}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRConsoleClient", "NKrandZ\SignalRConsoleClient\SignalRConsoleClient.csproj", "{790C60CC-642F-51A3-F07E-834CC717FD14}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B9555606-EDA4-1F03-8A22-8A8D1620C0D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9555606-EDA4-1F03-8A22-8A8D1620C0D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9555606-EDA4-1F03-8A22-8A8D1620C0D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9555606-EDA4-1F03-8A22-8A8D1620C0D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5133AA04-CDC0-CB2B-98CB-6D9E5896443C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5133AA04-CDC0-CB2B-98CB-6D9E5896443C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5133AA04-CDC0-CB2B-98CB-6D9E5896443C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5133AA04-CDC0-CB2B-98CB-6D9E5896443C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{892ADE72-3CB8-4F80-B576-33B3B7A61EF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{892ADE72-3CB8-4F80-B576-33B3B7A61EF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{892ADE72-3CB8-4F80-B576-33B3B7A61EF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{892ADE72-3CB8-4F80-B576-33B3B7A61EF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0D80D4C-7B17-A8D2-314F-84FDDD187306}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0D80D4C-7B17-A8D2-314F-84FDDD187306}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0D80D4C-7B17-A8D2-314F-84FDDD187306}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0D80D4C-7B17-A8D2-314F-84FDDD187306}.Release|Any CPU.Build.0 = Release|Any CPU
+		{790C60CC-642F-51A3-F07E-834CC717FD14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{790C60CC-642F-51A3-F07E-834CC717FD14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{790C60CC-642F-51A3-F07E-834CC717FD14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{790C60CC-642F-51A3-F07E-834CC717FD14}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B9555606-EDA4-1F03-8A22-8A8D1620C0D7} = {939254EF-09A5-64D2-D5E4-9059CBB64776}
+		{5133AA04-CDC0-CB2B-98CB-6D9E5896443C} = {939254EF-09A5-64D2-D5E4-9059CBB64776}
+		{892ADE72-3CB8-4F80-B576-33B3B7A61EF2} = {939254EF-09A5-64D2-D5E4-9059CBB64776}
+		{C0D80D4C-7B17-A8D2-314F-84FDDD187306} = {64F3A67E-48C4-EE95-216D-DA80A49B0D23}
+		{790C60CC-642F-51A3-F07E-834CC717FD14} = {64F3A67E-48C4-EE95-216D-DA80A49B0D23}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {02B52084-F38C-44DA-BCD5-0BB22BD7E2A5}
+	EndGlobalSection
+EndGlobal
