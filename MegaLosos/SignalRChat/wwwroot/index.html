@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Печатает...</title>
+    <link rel="stylesheet" href="assets/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-4">
+                    <h1>Чатилка №1 v1.1</h1>
+                </div>
+                <div class="col-8">
+                    <div id="appPanel">
+                        <button class="btn btn-primary" onclick="signOut()">Sign out</button>
+                    </div>
+                    <div class="card" id="loginCard">
+                        <div class="card-body">
+                            <input class="form-control" id="nameInp" placeholder="Name">
+                            <input class="form-control" id="loginInp" placeholder="Login">
+                            <input class="form-control" id="passwordInp" placeholder="Password">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button class="btn btn-primary" onclick="regin()">Register</button>
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn btn-primary" onclick="login()">Log in</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="chat-box" id="chatBox">
+        Блок чатв
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Чат</h2>
+            <!-- Поле ввода: ученик пишет сюда текст. -->
+            <input class="form-control" id="messageInp" placeholder="Message">
+            <!-- Кнопка запускает действие. -->
+            <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script src="assets/auth-helper.js"></script>
+    <script src="assets/signalr.min.js"></script>
+    <script src="assets/workshop-chat-helper.js"></script>
+    <script src="assets/api-helper.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
