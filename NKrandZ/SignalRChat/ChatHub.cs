@@ -64,7 +64,8 @@ public class ChatHub : Hub
                 message = new ChatMessage();
             }
             string realName = connectionNames[Context.ConnectionId];
-            string textmessage = realName + ": " + message.text;
+            message.name = realName;
+            string textMessage = JsonSerializer.Serialize<ChatMessage>(message);
             return Clients.Group(message.room).SendAsync("chat", text);
         }
         if (eventName == "newRoom"){
