@@ -101,6 +101,18 @@ function register() {
     Chat.send("register", json);
 }
 
+function login() {
+    const login = document.getElementById("loginInput").value.trim();
+    const password = document.getElementById("passwordInput").value.trim();
+    const loginMessage = {
+        username: "",
+        login: login,
+        password: password
+    }
+    const json = JSON.stringify(loginMessage);
+    Chat.send("login", json);
+}
+
 function joinRoom(rm) {
     const message = {
         text: "",
