@@ -24,7 +24,7 @@ public class ChatHub : Hub
         ["ZOVchik"] = new string[] {"Zovchik-WGNR", "12345678"}
     };
 
-    private static Dictionary<string, string[]> connectionList = new Dictionary<string, string[]>(){};
+    private static Dictionary<string, string> connectionList = new Dictionary<string, string>(){};
 
     public Task Send(string eventName, string text)
     {
