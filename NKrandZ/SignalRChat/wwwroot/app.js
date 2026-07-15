@@ -1,3 +1,4 @@
+
 function loadRooms(){
     loadListR("/api/rooms");
 }
@@ -74,6 +75,9 @@ Chat.receive("loginResult", function (text) {
     if (text == "Login Complete") {
         document.getElementById("login").hidden = true;
         document.getElementById("bd").hidden = false;
+        loadRooms(); 
+        joinRoom('General'); 
+        loadRoomUsers('General');
     }
 });
 
@@ -158,7 +162,7 @@ function sendMessage() {
         room: document.getElementById('roomResult').value
     };
     if (message.text == ""){
-        break;
+        return;
     }
     const json = JSON.stringify(message);
     Chat.send("chat", json)
