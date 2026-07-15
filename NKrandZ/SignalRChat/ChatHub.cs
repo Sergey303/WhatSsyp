@@ -35,7 +35,7 @@ public class ChatHub : Hub
             }
             bool hasUser = userList.ContainsValue(new string[] {login.login, login.password});
             if (hasUser){
-                connectionList[ConnectionId] = login.login;
+                connectionList[Context.ConnectionId] = login.login;
                 return Clients.Caller.SendAsync("loginResult", "Login Complete");
             }
             return Clients.Caller.SendAsync("loginResult", "error");
@@ -63,7 +63,7 @@ public class ChatHub : Hub
             if (message == null) {
                 message = new ChatMessage();
             }
-            string realName = connectionNames[Context.ConnectionId];
+            string realName = connectionList[Context.ConnectionId];
             message.name = realName;
             string textMessage = JsonSerializer.Serialize<ChatMessage>(message);
             return Clients.Group(message.room).SendAsync("chat", text);
