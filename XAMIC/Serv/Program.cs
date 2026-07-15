@@ -1,0 +1,89 @@
+using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.IO;
+using Microsoft.AspNetCore.Mvc;
+
+
+
+List<Room> rooms = new List<Room>();
+Room general = new Room();
+
+
+Dictionary<string, string> users = new Dictionary<string, string>();
+users["Маша"] = "123";
+
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+builder.Services.AddAuthorization();
+
+builder.Services.AddSignalR();
+var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapGet("/api/rooms", () => rooms);
+app.MapPost("/api/rooms", (Room room) =>
+{
+    rooms.Add(room); return Results.Ok();
+});
+
+app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
+{
+    if (users.ContainsKey(login.Name) == false)
+    {
+        return Results.Unauthorized();
+    }
+    if (users[login.Name] != login.Password)
+    {
+        return Results.Unauthorized();
+    }
+    string userName = "UserName";
+
+    Claim nameClaim1 = new Claim(ClaimTypes.Name, login.Name);
+    Claim nameClaim2 = new Claim(userName, login.UserName);
+    List<Claim> claims = new List<Claim>();
+
+    claims.Add(nameClaim1);
+    claims.Add(nameClaim2);
+
+    ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+    ClaimsPrincipal user = new ClaimsPrincipal(identity);
+    context.SignInAsync(user).Wait();
+    return Results.Ok();
+});
+app.MapGet("/api/me", (HttpContext context) =>
+{
+    string name = "";
+    if (context.User.Identity != null && context.User.Identity.Name != null)
+    {
+        name = context.User.Identity.Name;
+    }
+    if (name == "")
+    {
+        return Results.Unauthorized();
+    }
+
+    return Results.Ok(new { name = name });
+});
+app.MapPost("/api/logout", (HttpContext context) => { context.SignOutAsync().Wait(); return Results.Ok(); });
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+app.MapHub<ChatHub>("/ChatHub");
+app.Run("http://0.0.0.0:8080");
+
+
+
+
+
+    
+
+

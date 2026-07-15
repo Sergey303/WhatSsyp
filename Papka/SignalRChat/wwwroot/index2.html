@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Авторизация Scam</title>
+    <link rel="stylesheet" href="assets/bootstrap.min.css">
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+    <div id="loginPanel" >
+        <div class="login-wrapper">
+            <div class="login-form">
+                <h2>Регистрация</h2>
+                <div class="input-group">
+                    <label for="loginname">Логин (Login name)</label>
+                    <input type="text" id="loginName" placeholder="ivan_99" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Пароль (Password)</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <div class="input-group">
+                    <label for="username">Имя пользователя (Username)</label>
+                    <input type="text" id="username" placeholder="Иван Иванов" required>
+                </div>
+                <button onclick="login()" type="submit" style="margin-bottom: 10px;">Зарегистрироваться</button>
+                <button onclick="login()" type="submit">Вход</button>
+            </div>
+        </div>
+    </div>
+    <script src="assets/auth-helper.js"></script>
+    <script src="assets/signalr.min.js"></script>
+    <script src="assets/workshop-chat-helper.js"></script>
+    <script src="assets/api-helper.js"></script>
+    <script src="app2.js"></script>
+</body>
+<html>
