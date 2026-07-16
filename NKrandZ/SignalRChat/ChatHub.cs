@@ -70,7 +70,10 @@ public class ChatHub : Hub
             try {
                 Groups.AddToGroupAsync(Context.ConnectionId, message.room).Wait();
                 if (!(Rooms.usersByRoom[message.room].Contains(message.name))){
-                    Rooms.usersByRoom[message.room].Add(message.name);
+                    string[] newNumbers = new string[Rooms.usersByRoom[message.room].Length + 1];
+                    Array.Copy(Rooms.usersByRoom[message.room], newNumbers, Rooms.usersByRoom[message.room].Length);
+                    newNumbers[newNumbers.Length - 1] = message.name;
+                    Rooms.usersByRoom[message.room] = newNumbers;
                 }
                 ChatMessage messagect = new ChatMessage();
                 messagect.name = "SoZVon System";
