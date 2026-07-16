@@ -69,16 +69,19 @@ app.MapPost("api/upload", async (IFormFile file) =>
 app.MapGet("/api/me", (HttpContext context) =>
 {
     string name = "";
+    // string login = "";
     if (context.User.Identity != null && context.User.Identity.Name != null)
     {
         name = context.User.Identity.Name;
+        // var claims = context.User.Claims;
+        // login = claims.FirstOrDefault(a =>
+        //     a.GetType().ToString() == ClaimTypes.NameIdentifier).Value;
     }
     if (name == "")
     {
         return Results.Unauthorized();
     }
-
-    return Results.Ok(new { name = name });
+    return Results.Ok(new { name = name});
 });
 
 app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
@@ -106,6 +109,8 @@ app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
 
 app.MapGet("api/fileR", (string filePath) =>
 {
+    //C:\IAS\WhatSsyp\MegaLosos\SignalRChat\uploads\8523ed99-28d6-4eb5-86fa-b4ed3d00983d\x6jc2gc68ph81.mp4
+    //return Results.File(Path.Combine(Directory.GetCurrentDirectory(), "uploads", filePath), "", );
     Console.WriteLine(filePath.Split("\\").Last());
     return Results.File(filePath, "application/octet-stream", filePath.Split("\\").Last());
 });

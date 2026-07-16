@@ -22,8 +22,12 @@ Chat.receive("pct", function (json) {
     showPct(json);
 });
 
-Chat.receive("chat", function (json) {
-    showMessage(json);
+Chat.receive("chat", function (text) {
+    const msgObj = JSON.parse(text);
+    showMessage(msgObj.text, "chatBox");
+    if (msgObj.filePath) {
+        showFile("chatBox", msgObj.filePath)
+    }
 });
 
 function showMessage(text) {
@@ -37,6 +41,12 @@ function showMessage(text) {
 function sendMessage() {
     const name = document.getElementById("nameInput").value.trim();
     const text = document.getElementById("messageInput").value.trim();
+    const inpMessage = document.getElementById("messageInp");
+    const text = inpMessage.value.trim();
+    const name = "";
+    const filePath = "";
+    const date = "";
+    const jsonString = JSON.stringify({Name: name, text: text, filePath: filePath, date: date});
     if (text === "" || name === "") {
         alert("Нужно имя и сообщение");
         return;
@@ -45,7 +55,8 @@ function sendMessage() {
         Chat.send(text);
         return;
     }
-    Chat.send("chat", name + ": " + text);
+    //Chat.send("chat", name + ": " + text);
+    Chat.send("chat", jsoNSrting);
     document.getElementById("messageInput").value = "";
     text.value = "";
 }
@@ -125,7 +136,22 @@ function accountReg(name, login, password) {
         alert("password must not exceed 20 characters!");
         return;
     }
+}
 
+function showFile(filePath, messageBlockId) {
+    console.log("1");
+    const fileUrl = "http://172.16.47.22:8080/" + filePath;
+    console.log("2");
+    const messages = document.getElementById(messageBlockId);
+    console.log("3");
+    const fileMTemp = document.getElementById("file-template");
+    console.log("4");
+    const newFileMsg = fileMTemp.content.cloneNode(true);
+    console.log("5");
+    activateMedia(fileUrl, newFileMsg);
+    console.log("6");
+    messages.appendChild(newFileMsg);
+    console.log("7");
 }
 
 function startApp() {
@@ -151,3 +177,26 @@ function signOut() {
 
 Auth.start(startApp);
 Chat.send("chat", "Пользователь подключился к серверу!");
+
+// document.getElementById("fileInp").addEventListener("change", function (event) {
+//     const file = document.getElementById("fileInp").file;
+    
+//     if (file) {
+//         const reader = new FileReader();
+        
+//         reader.onload = function(e) {
+//             try {
+//                 const jsonData = JSON.parse(e.target.result);
+//                 console.log('JSON data:', jsonData);
+//             } catch (error) {
+//                 console.error('Invalid JSON file:', error);
+//             }
+//         };
+        
+//         reader.readAsText(file);
+//     }
+
+//     console.log(fileJSON);
+// });
+
+//showFile("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAeefR4LoJQ_nFipMLNB3nVe5sWMnzvdIogIW05YVxaWDDrySuV8kduys&s=10","chatBox");
