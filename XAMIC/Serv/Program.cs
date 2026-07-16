@@ -52,7 +52,7 @@ app.MapPost("/olele", (LoginRequest request) =>
 });
 app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
 {
-    if (Users.FirstOrDefault(x=>x.UserName == request.UserName && x.Password == request.Password && x.UserName == request.UserName)==null)
+    if (Users.FirstOrDefault(x=>x.UserName == login.UserName && x.Password == login.Password && x.UserName == login.UserName)==null)
     {
         return Results.Unauthorized();
     }
