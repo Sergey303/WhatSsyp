@@ -66,14 +66,17 @@ public class ChatHub : Hub
         message.name = usernameList[realName];
         if (eventName == "joinRoom"){
             try {
-            Groups.AddToGroupAsync(Context.ConnectionId, message.room).Wait();
-            ChatMessage messagect = new ChatMessage();
-            messagect.name = "SoZVon System";
-            messagect.room = message.room;
-            messagect.text = message.name + " Вошел в " + message.room;
-            messagect.time = DateTime.Now.ToLongTimeString();
-            string messagec = JsonSerializer.Serialize<ChatMessage>(messagect);
-            return Clients.Group(text).SendAsync("chat", messagec);
+                Groups.AddToGroupAsync(Context.ConnectionId, message.room).Wait();
+                if (!(Rooms.usersByRoom[message.room].Contains(message.name))){
+                    Rooms.usersByRoom[message.room].Add(message.name);
+                }
+                ChatMessage messagect = new ChatMessage();
+                messagect.name = "SoZVon System";
+                messagect.room = message.room;
+                messagect.text = message.name + " Вошел в " + message.room;
+                messagect.time = DateTime.Now.ToLongTimeString();
+                string messagec = JsonSerializer.Serialize<ChatMessage>(messagect);
+                return Clients.Group(text).SendAsync("chat", messagec);
             } catch (Exception ex) {
                 Console.WriteLine($"Failed again: {ex.Message}");
             }
