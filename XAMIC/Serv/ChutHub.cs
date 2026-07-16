@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Security.Claims;
-
+using System.Text;
 public class ChatHub : Hub
 {
-    
-    private static Dictionary<string, List <string>> roomMembers = new Dictionary<string, List<string>>();
+    List<Room> roomMembers=JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("Rooms.json"));
+    //private static Dictionary<string, List <string>> roomMembers = new Dictionary<string, List<string>>();
     public Task Send(string eventName, string text)
     {
         if (eventName == "chat")
@@ -49,17 +49,25 @@ public class ChatHub : Hub
             return Clients.Caller.SendAsync("system", "нужное имя и название комнаты");
         }
         Groups.AddToGroupAsync(Context.ConnectionId, join.RoomName).Wait();
-        if (roomMembers.ContainsKey(join.RoomName) == false)
+        if (roomMembers.FirstOrDefault(x => join.RoomName == x.name) != null)
         {
-            roomMembers[join.RoomName] = new List<string>();
+            //List<string> members = roomMembers[join.RoomName];
+            List<string> members = roomMembers.FirstOrDefault(x => join.RoomName == x.name).Members;
+            if (members.Contains(join.UserName) == false)
+            {
+                members.Add(join.UserName);
+            }
+            roomMembers.FirstOrDefault(x => join.RoomName == x.name).Members = members;
+            string output = JsonSerializer.Serialize(roomMembers);
+            File.WriteAllText("Rooms.json", output, Encoding.UTF8);
+            string membersJson = JsonSerializer.Serialize(members);
+            return Clients.Group(join.RoomName).SendAsync("roomMembers", membersJson);
         }
-        List<string> members = roomMembers[join.RoomName];
-        if (members.Contains(join.UserName) == false)
+        else
         {
-            members.Add(join.UserName);
+            return Task.CompletedTask;
         }
-        string membersJson = JsonSerializer.Serialize(members);
-        return Clients.Group(join.RoomName).SendAsync("roomMembers", membersJson);
+        
     }
 }
 

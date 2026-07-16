@@ -18,9 +18,11 @@ List<Room> rooms = JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("Room
 List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsers.json"));
 
 // Users.Add(new LoginRequest() { Name = "Men1", Password = "1234", UserName = "Андрей" });
-// string output = JsonSerializer.Serialize(Users);
-// File.WriteAllText("DataUsers.json", output);
-
+// string output1 = JsonSerializer.Serialize(Users);
+// File.WriteAllText("DataUsers.json", output1);
+// Users.Add(new LoginRequest() { Name = "Men2", Password = "1234", UserName = "Артем" });
+// string output2 = JsonSerializer.Serialize(Users);
+// File.WriteAllText("DataUsers.json", output2);
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -31,17 +33,33 @@ builder.Services.AddAuthorization();
 builder.Services.AddSignalR();
 var app = builder.Build();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        if (ctx.File.Name.EndsWith(".html", StringComparison.OrdinalIgnoreCase))
+        {
+            ctx.Context.Response.Headers.Append("Cache-Control", "no-cache, no-store, must-revalidate");
+            ctx.Context.Response.Headers.Append("Pragma", "no-cache");
+            ctx.Context.Response.Headers.Append("Expires", "0");
+        }
+    }
+});
 
 //rooms
 app.MapGet("/api/rooms", () => rooms);
 app.MapPost("/api/rooms", (Room room) =>
 {
-    rooms.Add(room);
-    string convert = JsonSerializer.Serialize(rooms);
-    File.WriteAllText("Rooms.json", convert);
+    if (rooms.FirstOrDefault(x => x.name == room.name) == null)
+    {
+        rooms.Add(room);
+        string convert = JsonSerializer.Serialize(rooms);
+        File.WriteAllText("Rooms.json", convert);
+    }
     return Results.Ok();
 });
 
@@ -94,8 +112,6 @@ app.MapGet("/api/me", (HttpContext context) =>
 });
 app.MapPost("/api/logout", (HttpContext context) => { context.SignOutAsync().Wait(); return Results.Ok(); });
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
 
 app.MapHub<ChatHub>("/ChatHub");
 app.Run("http://0.0.0.0:8080");
