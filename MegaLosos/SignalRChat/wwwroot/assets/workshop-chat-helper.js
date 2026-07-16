@@ -200,26 +200,6 @@
         invoke(name, text);
     }
 
-    function sendFile(name, file) {
-        name = cleanName(name);
-
-        if (demoMode || state === "demo") {
-            localReceiveFile(name, file);
-            return;
-        }
-
-        if (state !== "connected") {
-            sendQueue.push({
-                name: name,
-                file: file
-            });
-
-            return;
-        }
-
-        invokeFile(name, file);
-    }
-
 
     function receive(name, fn) {
         name = cleanName(name);
@@ -238,7 +218,7 @@
         registerSignalR(name);
     }
 
-    function recevieFile(name, fn) {
+    function receiveFile(name, fn) {
         name = cleanName(name);
 
         if (typeof fn !== "function") {
@@ -258,8 +238,6 @@
     window.Chat = {
         connect: connect,
         send: send,
-        sendFile: sendFile,
         receive: receive,
-        recevieFile: recevieFile
     };
 })();
