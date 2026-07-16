@@ -77,7 +77,7 @@ function createRoom() {
     if (name === "") {
         return;
     }
-    Api.post("/api/rooms", {name: name}, roomCreated);
+    Api.post("/api/rooms", {name: name, Members:[]}, roomCreated);
 }
 Chat.receive("roomMembers", function(text){const members = JSON.parse(text); console.log(members);});
 

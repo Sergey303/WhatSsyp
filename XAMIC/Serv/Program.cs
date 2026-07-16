@@ -11,15 +11,19 @@ using System.ComponentModel;
 using System.Net.Cache;
 
 
-List<Room> rooms = new List<Room>();
-Room general = new Room();
+List<Room> rooms = JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("Rooms.json"));
 
 
+//user.json
 List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsers.json"));
-Users.Add(new LoginRequest() { Name = "Men1", Password = "1234", UserName = "Андрей" });
-string output = JsonSerializer.Serialize(Users);
-File.WriteAllText("DataUsers.json", output);
+
+// Users.Add(new LoginRequest() { Name = "Men1", Password = "1234", UserName = "Андрей" });
+// string output = JsonSerializer.Serialize(Users);
+// File.WriteAllText("DataUsers.json", output);
+
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 builder.Services.AddAuthorization();
@@ -30,11 +34,18 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
+//rooms
 app.MapGet("/api/rooms", () => rooms);
 app.MapPost("/api/rooms", (Room room) =>
 {
-    rooms.Add(room); return Results.Ok();
+    rooms.Add(room);
+    string convert = JsonSerializer.Serialize(rooms);
+    File.WriteAllText("Rooms.json", convert);
+    return Results.Ok();
 });
+
+
 app.MapPost("/olele", (LoginRequest request) =>
 {
     if (Users.FirstOrDefault(x=>x.UserName==request.UserName)==null)
@@ -52,7 +63,7 @@ app.MapPost("/olele", (LoginRequest request) =>
 });
 app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
 {
-    if (Users.FirstOrDefault(x=>x.UserName == login.UserName && x.Password == login.Password && x.UserName == login.UserName)==null)
+    if (Users.FirstOrDefault(x=>x.Name == login.Name && x.Password == login.Password && x.UserName == login.UserName)==null)
     {
         return Results.Unauthorized();
     }
