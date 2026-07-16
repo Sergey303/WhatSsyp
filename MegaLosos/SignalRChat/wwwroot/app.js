@@ -44,19 +44,13 @@ function showMessage(text, messageBlockId) {
 }
 
 function showFile(filePath, messageBlockId) {
-    console.log("1");
-    const fileUrl = "http://172.16.47.22:8080/" + filePath;
-    console.log("2");
+    const fileUrl = "http://172.16.47.22:8080/api/fileR?filePath=" + filePath;
     const messages = document.getElementById(messageBlockId);
-    console.log("3");
     const fileMTemp = document.getElementById("file-template");
-    console.log("4");
     const newFileMsg = fileMTemp.content.cloneNode(true);
-    console.log("5");
-    activateMedia(fileUrl, newFileMsg);
-    console.log("6");
+    activateMedia(newFileMsg, fileUrl);
+    console.log(fileUrl);
     messages.appendChild(newFileMsg);
-    console.log("7");
 }
 
 Chat.receive("chat", function (text) {

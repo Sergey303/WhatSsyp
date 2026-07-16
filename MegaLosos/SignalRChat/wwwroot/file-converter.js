@@ -41,13 +41,13 @@ function activateMedia(fileMsg, fileUrl) {
     } 
     
     else if (type === '.tpl-iframe') {
-        const iframe = document.getElementById(type);
+        const iframe = document.querySelector(type);
         iframe.src = fileUrl;
         iframe.style.display = 'block';
     } 
 
     else if (type === '.tpl-g-iframe') {
-        const giframe = document.getElementById(type);
+        const giframe = document.querySelector(type);
         giframe.src = fileUrl;
         giframe.style.display = 'block';
     } 
@@ -111,7 +111,6 @@ class FileUploadManager {
     }
     
     sendFile(file) {
-        console.log(file.name);
         const formdata = new FormData();
         formdata.append("file", file);
         const url = "api/upload";
