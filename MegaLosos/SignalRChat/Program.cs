@@ -47,6 +47,13 @@ app.MapGet("/api/me", (HttpContext context) =>
     return Results.Ok(new { name = name});
 });
 
+app.MapGet("api/fileR", (string filePath) =>
+{
+    Console.WriteLine(filePath.Split("\\").Last());
+    //C:\IAS\WhatSsyp\MegaLosos\SignalRChat\uploads\8523ed99-28d6-4eb5-86fa-b4ed3d00983d\x6jc2gc68ph81.mp4
+    //return Results.File(Path.Combine(Directory.GetCurrentDirectory(), "uploads", filePath), "", );
+    return Results.File(filePath, "application/octet-stream", filePath.Split("\\").Last());
+});
 app.MapPost("/api/logout", (HttpContext context) =>
 {
     context.SignOutAsync().Wait();
@@ -105,21 +112,14 @@ app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
 
 app.MapPost("api/upload", async (IFormFile file) =>
 {
-    Console.WriteLine("1");
     string dir = Path.Combine(Directory.GetCurrentDirectory(), "uploads", Guid.NewGuid().ToString());
-    Console.WriteLine("2");
     string filePath = Path.Combine(dir, file.FileName);
-    Console.WriteLine("3");
     Directory.CreateDirectory(dir);
-    Console.WriteLine("4");
 
     using (var stream = new FileStream(filePath, FileMode.Create))
     {
-        Console.WriteLine("4");
         await file.CopyToAsync(stream);
-        Console.WriteLine("5");
     }
-    Console.WriteLine("6");
     return Results.Ok(filePath);
 }).DisableAntiforgery();
 
