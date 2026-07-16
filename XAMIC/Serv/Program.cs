@@ -6,19 +6,19 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Text.Json;
+using System.ComponentModel;
+using System.Net.Cache;
 
 
 List<Room> rooms = new List<Room>();
 Room general = new Room();
 
 
-Dictionary<string, string> users_password = new Dictionary<string, string>();
-Dictionary<string, string> users_username = new Dictionary<string, string>();
-users_password["Маша"] = "123";
-users_username["Маша"] = "ddwdw";
-
-
+List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsers.json"));
+Users.Add(new LoginRequest() { Name = "Men1", Password = "1234", UserName = "Андрей" });
+string output = JsonSerializer.Serialize(Users);
+File.WriteAllText("DataUsers.json", output);
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
@@ -37,10 +37,11 @@ app.MapPost("/api/rooms", (Room room) =>
 });
 app.MapPost("/olele", (LoginRequest request) =>
 {
-    if (!users_password.ContainsKey(request.Name))
+    if (Users.FirstOrDefault(x=>x.UserName==request.UserName)==null)
     {
-        users_password[request.Name] = request.Password;
-        users_username[request.Name] = request.UserName;
+        Users.Add(new LoginRequest() { Name = request.Name, Password = request.Password, UserName = request.UserName});
+        string ser = JsonSerializer.Serialize(Users);
+        File.WriteAllText("DataUsers.json", ser);
         return Results.Ok();
     }
     else
@@ -51,19 +52,7 @@ app.MapPost("/olele", (LoginRequest request) =>
 });
 app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
 {
-    if (users_password.ContainsKey(login.Name) == false)
-    {
-        return Results.Unauthorized();
-    }
-    if (users_password[login.Name] != login.Password)
-    {
-        return Results.Unauthorized();
-    }
-    if (users_username.ContainsKey(login.Name) == false)
-    {
-        return Results.Unauthorized();
-    }
-    if (users_username[login.Name] != login.UserName)
+    if (Users.FirstOrDefault(x=>x.UserName == request.UserName && x.Password == request.Password && x.UserName == request.UserName)==null)
     {
         return Results.Unauthorized();
     }

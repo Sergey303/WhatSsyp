@@ -41,9 +41,20 @@ function showMessage(text, messageBlockId) {
     messages.appendChild(block);
 }
 
+function showFile(file, messageBlockId) {
+    const messages = document.getElementById(messageBlockId);
+    const fileMTemp = document.getElementById("file-template");
+    const newFileMsg = fileMTemp.cloneNode();
+    messages.appendChild(block);
+}
+
 Chat.receive("chat", function (text) {
     showMessage(text, "chatBox");
 });
+
+Chat.receiveFile("chat", function (file) {
+    showFile(file, "chatBox");
+})
 
 // document.getElementById("fileInp").addEventListener("change", function (event) {
 //     const file = document.getElementById("fileInp").file;

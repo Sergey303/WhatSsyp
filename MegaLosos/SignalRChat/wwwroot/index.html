@@ -41,6 +41,11 @@
     <br>
     <div class="chat-box" id="chatBox">
         Блок чатв
+        <template id="file-template">
+            <div class="message">
+                <a class="fileHA" href="http://localhost:8080/api/fileR?filePath=C:\IAS\WhatSsyp\MegaLosos\SignalRChat\uploads\8523ed99-28d6-4eb5-86fa-b4ed3d00983d\x6jc2gc68ph81.mp4">file</a>
+            </div>
+        </template>
     </div>
     <div class="card">
         <div class="card-body">
@@ -72,7 +77,15 @@
         <div id="stats" class="stats"></div>
         <div id="fileList" class="file-list"></div>
     </div>
-        
+    
+    <div id="fileMessages">
+        <div class="success-message">File uploaded successfully!</div>
+        <div class="error-message">File is too large (max 10MB)</div>
+        <div class="info-message">Please select at least one file</div>
+    </div>
+
+    <a href="..\uploads\8523ed99-28d6-4eb5-86fa-b4ed3d00983d\x6jc2gc68ph81.mp4">Download vid</a>
+
     <button class="upload-btn" id="fileUploadBtn" disabled>Upload Files</button>
     <script src="file-converter.js"></script>
     <script src="assets/auth-helper.js"></script>
@@ -80,10 +93,5 @@
     <script src="assets/workshop-chat-helper.js"></script>
     <script src="assets/api-helper.js"></script>
     <script src="app.js"></script>
-    <div id="fileMessages">
-        <div class="success-message">File uploaded successfully!</div>
-        <div class="error-message">File is too large (max 10MB)</div>
-        <div class="info-message">Please select at least one file</div>
-    </div>
 </body>
 </html>

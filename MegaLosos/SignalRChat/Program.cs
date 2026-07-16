@@ -1,13 +1,8 @@
 using System.Text;
 using System.Text.Json;
-using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Reflection.Metadata.Ecma335;
-using Microsoft.AspNetCore.Http.HttpResults;
-using System.IO;
-using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
 using Microsoft.AspNetCore.Identity;
 
 Console.WriteLine("start");
@@ -16,14 +11,18 @@ var accountsList = processor.LoadAccounts();
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSignalR();
-
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
-builder.Services.AddAuthentication();
+
+builder.Services.AddAntiforgery(options => 
+{
+    options.SuppressXFrameOptionsHeader = true;
+});
 
 var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseAntiforgery();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.MapHub<ChatHub>("/chatHub");
@@ -48,13 +47,20 @@ app.MapGet("/api/me", (HttpContext context) =>
     return Results.Ok(new { name = name});
 });
 
+app.MapGet("api/fileR", (string filePath) =>
+{
+    Console.WriteLine(filePath.Split("\\").Last());
+    //C:\IAS\WhatSsyp\MegaLosos\SignalRChat\uploads\8523ed99-28d6-4eb5-86fa-b4ed3d00983d\x6jc2gc68ph81.mp4
+    //return Results.File(Path.Combine(Directory.GetCurrentDirectory(), "uploads", filePath), "", );
+    return Results.File(filePath, "application/octet-stream", filePath.Split("\\").Last());
+});
 app.MapPost("/api/logout", (HttpContext context) =>
 {
     context.SignOutAsync().Wait();
     return Results.Ok();
 });
 
-app.MapPost("/api/login", (LoginRequest loginData, HttpContext context) =>
+app.MapPost("/api/login", async (LoginRequest loginData, HttpContext context) =>
 {
     if (!accountsList.Any(a =>
     a.login == loginData.login && a.password == loginData.password))
@@ -76,7 +82,7 @@ app.MapPost("/api/login", (LoginRequest loginData, HttpContext context) =>
         CookieAuthenticationDefaults.AuthenticationScheme);
     ClaimsPrincipal user = new ClaimsPrincipal(identity);
 
-    context.SignInAsync(user).Wait();
+    await context.SignInAsync(user);
 
     return Results.Ok();
 });
@@ -106,23 +112,16 @@ app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
 
 app.MapPost("api/upload", async (IFormFile file) =>
 {
-    Console.WriteLine("1");
     string dir = Path.Combine(Directory.GetCurrentDirectory(), "uploads", Guid.NewGuid().ToString());
-    Console.WriteLine("2");
-    string filePath = Path.Combine(dir, file.Name);
-    Console.WriteLine("3");
+    string filePath = Path.Combine(dir, file.FileName);
     Directory.CreateDirectory(dir);
-    Console.WriteLine("4");
 
     using (var stream = new FileStream(filePath, FileMode.Create))
     {
-        Console.WriteLine("4");
         await file.CopyToAsync(stream);
-        Console.WriteLine("5");
     }
-    Console.WriteLine("6");
     return Results.Ok(filePath);
-});
+}).DisableAntiforgery();
 
 
 app.Run("http://0.0.0.0:8080");
