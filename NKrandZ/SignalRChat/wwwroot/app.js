@@ -152,6 +152,7 @@ function appendRoom() {
     
     const json = JSON.stringify(message);
     Chat.send("newRoom", json);
+    loadRooms();
 }
 
 function sendMessage() {
