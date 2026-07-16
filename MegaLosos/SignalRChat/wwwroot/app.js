@@ -45,26 +45,26 @@ Chat.receive("chat", function (text) {
     showMessage(text, "chatBox");
 });
 
-document.getElementById("fileInp").addEventListener("change", function (event) {
-    const file = document.getElementById("fileInp").file;
+// document.getElementById("fileInp").addEventListener("change", function (event) {
+//     const file = document.getElementById("fileInp").file;
     
-    if (file) {
-        const reader = new FileReader();
+//     if (file) {
+//         const reader = new FileReader();
         
-        reader.onload = function(e) {
-            try {
-                const jsonData = JSON.parse(e.target.result);
-                console.log('JSON data:', jsonData);
-            } catch (error) {
-                console.error('Invalid JSON file:', error);
-            }
-        };
+//         reader.onload = function(e) {
+//             try {
+//                 const jsonData = JSON.parse(e.target.result);
+//                 console.log('JSON data:', jsonData);
+//             } catch (error) {
+//                 console.error('Invalid JSON file:', error);
+//             }
+//         };
         
-        reader.readAsText(file);
-    }
+//         reader.readAsText(file);
+//     }
 
-    console.log(fileJSON);
-});
+//     console.log(fileJSON);
+// });
 
 const signInName = document.getElementById("nameInp");
 

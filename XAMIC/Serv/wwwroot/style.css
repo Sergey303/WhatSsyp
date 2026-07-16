@@ -57,19 +57,17 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     height: 100vh;
-    display: flex; /* Включаем Flexbox */
-    justify-content: center; /* Центрируем по горизонтали */
-    align-items: center; /* Центрируем по вертикали */
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-  
-  /* Стили самой панели */
   .login-form {
     background: #ffffff;
     padding: 40px;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 400px; /* Ограничиваем максимальную ширину */
+    max-width: 400px;
   }
   
   .login-form h2 {
@@ -78,7 +76,6 @@ body {
     color: #333333;
   }
   
-  /* Блоки полей ввода */
   .input-group {
     margin-bottom: 20px;
   }
@@ -99,13 +96,11 @@ body {
     transition: border-color 0.3s ease;
   }
   
-  /* Эффект при наведении на поле */
   .input-group input:focus {
     border-color: #667eea;
     outline: none;
   }
   
-  /* Кнопка */
   button {
     width: 100%;
     padding: 14px;
