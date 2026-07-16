@@ -8,6 +8,7 @@ using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.ComponentModel;
+using System.Net.Cache;
 
 
 
@@ -37,7 +38,7 @@ app.MapPost("/api/rooms", (Room room) =>
 });
 app.MapPost("/olele", (LoginRequest request) =>
 {
-    if (!Users.FirstOrDefault(x=>x.UserName==request.UserName))
+    if (Users.FirstOrDefault(x=>x.UserName==request.UserName)==null)
     {
         Users.Add(new LoginRequest() { Name = request.Name, Password = request.Password, UserName = request.UserName});
         string ser = JsonSerializer.Serialize(Users);
@@ -52,19 +53,7 @@ app.MapPost("/olele", (LoginRequest request) =>
 });
 app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
 {
-    if (users_password.ContainsKey(login.Name) == false)
-    {
-        return Results.Unauthorized();
-    }
-    if (users_password[login.Name] != login.Password)
-    {
-        return Results.Unauthorized();
-    }
-    if (users_username.ContainsKey(login.Name) == false)
-    {
-        return Results.Unauthorized();
-    }
-    if (users_username[login.Name] != login.UserName)
+    if (Users.FirstOrDefault(x=>x.UserName == request.UserName && x.Password == request.Password && x.UserName == request.UserName)==null)
     {
         return Results.Unauthorized();
     }
