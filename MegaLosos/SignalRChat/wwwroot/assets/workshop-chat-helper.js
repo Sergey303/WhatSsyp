@@ -194,6 +194,24 @@
         registerSignalR(name);
     }
 
+    function recevieFile(name, fn) {
+        name = cleanName(name);
+
+        if (typeof fn !== "function") {
+            console.warn(
+                "Chat.receive ждёт функцию вторым параметром.");
+
+            return;
+        }
+        if (!receivers[name]) {
+            receivers[name] = [];
+        }
+
+        receivers[name].push(fn);
+        registerSignalR(name);
+
+    }
+
     window.Chat = {
         connect: connect,
         send: send,
