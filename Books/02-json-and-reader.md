@@ -334,7 +334,7 @@ app.MapGet("/api/book", () =>
 Проверьте адрес:
 
 ```text
-https://localhost:ВАШ_ПОРТ/api/book
+http://localhost:ВАШ_ПОРТ/api/book
 ```
 
 ---
