@@ -62,7 +62,7 @@ public class ChatHub : Hub
             return Clients.Caller.SendAsync("loginResult", login.login + " error " + login.password);
         }
         
-        
+
         ChatMessage message = JsonSerializer.Deserialize<ChatMessage>(text);
         string realName = connectionList[Context.ConnectionId];
         message.name = usernameList[realName];
@@ -97,7 +97,7 @@ public class ChatHub : Hub
 
         if (eventName == "newRoom"){
             Rooms.rooms.Add(message.room);
-            Rooms.usersByRoom[message.room] = new[] {message.name};
+            Rooms.usersByRoom[message.room] = new List<string> {message.name};
             return Clients.Group(message.room).SendAsync("chat", text);
         }
 

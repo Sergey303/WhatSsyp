@@ -9,9 +9,9 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 app.MapHub<ChatHub>("/chatHub");
 
-Rooms.usersByRoom["General"] = new[] {};
-Rooms.usersByRoom["Games"] = new[] {};
-Rooms.usersByRoom["School"] = new[] {};
+Rooms.usersByRoom["General"] = new List<string> {};
+Rooms.usersByRoom["Games"] = new List<string> {};
+Rooms.usersByRoom["School"] = new List<string> {};
 
 app.MapGet("/api/rooms", () => Rooms.rooms);
 app.MapGet("/api/rooms/{roomName}/users",  (string roomName) =>
