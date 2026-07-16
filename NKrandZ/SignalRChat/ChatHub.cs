@@ -34,6 +34,7 @@ public class ChatHub : Hub
 
     public Task Send(string eventName, string text)
     {
+
         if (eventName == "register"){
             LoginMessage reg = JsonSerializer.Deserialize<LoginMessage>(text);
             if (reg == null){
@@ -61,6 +62,7 @@ public class ChatHub : Hub
             return Clients.Caller.SendAsync("loginResult", login.login + " error " + login.password);
         }
         
+        
         ChatMessage message = JsonSerializer.Deserialize<ChatMessage>(text);
         string realName = connectionList[Context.ConnectionId];
         message.name = usernameList[realName];
@@ -81,6 +83,7 @@ public class ChatHub : Hub
                 Console.WriteLine($"Failed again: {ex.Message}");
             }
         }
+
         if (eventName == "chat"){
             if (!connectionList.ContainsKey(Context.ConnectionId)){
                 return Clients.Caller.SendAsync("loginResult", "needLogin");
@@ -91,11 +94,13 @@ public class ChatHub : Hub
             string textMessage = JsonSerializer.Serialize<ChatMessage>(message);
             return Clients.Group(message.room).SendAsync("chat", textMessage);
         }
+
         if (eventName == "newRoom"){
             Rooms.rooms.Add(message.room);
             Rooms.usersByRoom[message.room] = new[] {message.name};
             return Clients.Group(message.room).SendAsync("chat", text);
         }
+
         return Clients.Group(message.room).SendAsync("chat", text);
     }
 }
