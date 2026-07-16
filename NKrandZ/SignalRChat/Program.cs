@@ -9,16 +9,11 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 app.MapHub<ChatHub>("/chatHub");
 
-string[] users = { "Masha", "Petya", "Ania", "Kirill" };
-string[] chatUsers = { "Masha", "Petya" };
-
-Rooms.usersByRoom["General"] = new[] { "Masha", "Petya" };
-Rooms.usersByRoom["Games"] = new[] { "Kirill" };
-Rooms.usersByRoom["School"] = new[] { "Ania" };
+Rooms.usersByRoom["General"] = new[] {};
+Rooms.usersByRoom["Games"] = new[] {};
+Rooms.usersByRoom["School"] = new[] {};
 
 app.MapGet("/api/rooms", () => Rooms.rooms);
-app.MapGet("/api/users", () => users);
-app.MapGet("/api/chat-users", () => chatUsers);
 app.MapGet("/api/rooms/{roomName}/users",  (string roomName) =>
 {
     if (Rooms.usersByRoom.ContainsKey(roomName))

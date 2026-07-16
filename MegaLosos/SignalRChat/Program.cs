@@ -6,7 +6,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Http.HttpResults;
+using System.IO;
+using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
+using Microsoft.AspNetCore.Identity;
 
+Console.WriteLine("start");
 var processor = new AccountProcessor();
 var accountsList = processor.LoadAccounts();
 
@@ -99,6 +103,27 @@ app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
         return Results.Problem();
     }
 });
+
+app.MapPost("api/upload", async (IFormFile file) =>
+{
+    Console.WriteLine("1");
+    string dir = Path.Combine(Directory.GetCurrentDirectory(), "uploads", Guid.NewGuid().ToString());
+    Console.WriteLine("2");
+    string filePath = Path.Combine(dir, file.Name);
+    Console.WriteLine("3");
+    Directory.CreateDirectory(dir);
+    Console.WriteLine("4");
+
+    using (var stream = new FileStream(filePath, FileMode.Create))
+    {
+        Console.WriteLine("4");
+        await file.CopyToAsync(stream);
+        Console.WriteLine("5");
+    }
+    Console.WriteLine("6");
+    return Results.Ok(filePath);
+});
+
 
 app.Run("http://0.0.0.0:8080");
 

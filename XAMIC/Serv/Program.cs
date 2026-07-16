@@ -13,8 +13,10 @@ List<Room> rooms = new List<Room>();
 Room general = new Room();
 
 
-Dictionary<string, string> users = new Dictionary<string, string>();
-users["Маша"] = "123";
+Dictionary<string, string> users_password = new Dictionary<string, string>();
+Dictionary<string, string> users_username = new Dictionary<string, string>();
+users_password["Маша"] = "123";
+users_username["Маша"] = "ddwdw";
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,14 +35,35 @@ app.MapPost("/api/rooms", (Room room) =>
 {
     rooms.Add(room); return Results.Ok();
 });
-
-app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
+app.MapPost("/olele", (LoginRequest request) =>
 {
-    if (users.ContainsKey(login.Name) == false)
+    if (!users_password.ContainsKey(request.Name))
+    {
+        users_password[request.Name] = request.Password;
+        users_username[request.Name] = request.UserName;
+        return Results.Ok();
+    }
+    else
     {
         return Results.Unauthorized();
     }
-    if (users[login.Name] != login.Password)
+    
+});
+app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
+{
+    if (users_password.ContainsKey(login.Name) == false)
+    {
+        return Results.Unauthorized();
+    }
+    if (users_password[login.Name] != login.Password)
+    {
+        return Results.Unauthorized();
+    }
+    if (users_username.ContainsKey(login.Name) == false)
+    {
+        return Results.Unauthorized();
+    }
+    if (users_username[login.Name] != login.UserName)
     {
         return Results.Unauthorized();
     }
@@ -48,10 +71,7 @@ app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
 
     Claim nameClaim1 = new Claim(ClaimTypes.Name, login.Name);
     Claim nameClaim2 = new Claim(userName, login.UserName);
-    List<Claim> claims = new List<Claim>();
-
-    claims.Add(nameClaim1);
-    claims.Add(nameClaim2);
+    List<Claim> claims = [nameClaim1, nameClaim2];
 
     ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
     ClaimsPrincipal user = new ClaimsPrincipal(identity);

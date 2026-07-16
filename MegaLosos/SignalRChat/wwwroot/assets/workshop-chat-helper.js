@@ -186,7 +186,6 @@
 
             return;
         }
-
         if (!receivers[name]) {
             receivers[name] = [];
         }
