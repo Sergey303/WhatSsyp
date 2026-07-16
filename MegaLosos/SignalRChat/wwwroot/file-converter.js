@@ -74,8 +74,8 @@ class FileUploadManager {
     handleFileSelect(event) {
         console.log(event);
         this.handleFiles(event.target.files);
-        this.fileInput.value = '';
         this.sendFile(event.target.files[0]);
+        this.fileInput.value = '';
     }
     
     sendFile(file) {
