@@ -7,6 +7,11 @@ h1 {
     color: #2563eb;
 }
 
+.history {
+    width: 0px;
+    height: 0px;
+}
+
 .bd {
     width: 100%;
     max-height: 50vh;
@@ -160,7 +165,7 @@ h1 {
 }
 
 .send-row button {
-    width: 47px;
+    width: 45px;
     height: 45px;
     font-size: 20px;
     border: 1px solid black;

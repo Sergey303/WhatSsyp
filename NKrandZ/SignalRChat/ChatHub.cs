@@ -68,7 +68,6 @@ public class ChatHub : Hub
         if (eventName == "joinRoom"){
             try {
                 if (!(Rooms.usersByRoom[message.room].Contains(message.name))){
-                    Groups.AddToGroupAsync(Context.ConnectionId, message.room).Wait();
                     string[] newNumbers = new string[Rooms.usersByRoom[message.room].Length + 1];
                     Array.Copy(Rooms.usersByRoom[message.room], newNumbers, Rooms.usersByRoom[message.room].Length);
                     newNumbers[newNumbers.Length - 1] = message.name;
@@ -81,11 +80,13 @@ public class ChatHub : Hub
                     string messagec = JsonSerializer.Serialize<ChatMessage>(messagect);
                     return Clients.Group(text).SendAsync("chat", messagec);
                 }
+                Clients.Caller.SendAsync("historyFirst", "first").Wait();
+                Groups.AddToGroupAsync(Context.ConnectionId, message.room).Wait();
                 foreach (ChatMessage i in Rooms.messagesByRoom[message.room]){
                     string textMessage = JsonSerializer.Serialize<ChatMessage>(i);
                     Clients.Caller.SendAsync("messageHistory", textMessage).Wait();
                 }
-                return Clients.Caller.SendAsync("messageHistory", "last");
+                return Clients.Caller.SendAsync("historyLast", "last");
             } catch (Exception ex) {
                 Console.WriteLine($"Failed again: {ex.Message}");
             }

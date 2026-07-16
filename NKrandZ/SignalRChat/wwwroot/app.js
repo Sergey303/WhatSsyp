@@ -71,6 +71,25 @@ function showList(items){
     }
 }
 
+Chat.receive("historyFirst", function(text){
+    const message = document.getElementById("messages");
+    message.innerHTML="";
+    const block = document.createElement("input");
+    block.placeholder="Сообщение";
+    block.id="messageInput";
+    message.appendChild(block);
+    const block = document.createElement("button");
+    block.textContent="&#10550;";
+    block.onclick="sendMessage()";
+    message.appendChild(block);
+
+});
+
+Chat.receive("messageHistory", function(json){
+    const message = JSON.parse(json);
+    showMessage(message.room + ": " + message.name + ": " + message.text);
+});
+
 Chat.receive("loginResult", function (text) {
     if (text == "Login Complete") {
         document.getElementById("login").hidden = true;
@@ -174,6 +193,7 @@ function showMessage(text) {
     const messages = document.getElementById("messages");
     const block = document.createElement("div");
     block.className = "message";
+    block.id = "message";
     block.textContent = text;
     messages.appendChild(block);
 }
