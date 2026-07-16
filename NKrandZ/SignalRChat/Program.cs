@@ -12,6 +12,10 @@ app.MapHub<ChatHub>("/chatHub");
 string[] users = { "Masha", "Petya", "Ania", "Kirill" };
 string[] chatUsers = { "Masha", "Petya" };
 
+Rooms.usersByRoom["General"] = new string[] {};
+Rooms.usersByRoom["Games"] = new string[] {};
+Rooms.usersByRoom["School"] = new string[] {};
+
 app.MapGet("/api/rooms", () => Rooms.rooms);
 app.MapGet("/api/users", () => users);
 app.MapGet("/api/chat-users", () => chatUsers);

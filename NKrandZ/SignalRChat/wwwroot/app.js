@@ -76,7 +76,7 @@ Chat.receive("loginResult", function (text) {
         document.getElementById("login").hidden = true;
         document.getElementById("bd").hidden = false;
         loadRooms(); 
-        joinRoom('General'); 
+        joinRoom('General');
         loadRoomUsers('General');
     }
 });
