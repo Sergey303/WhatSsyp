@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<!-- lang="ru" помогает браузеру и экранным дикторам определить язык страницы. -->
+<html lang="ru">
+<head>
+    <!-- UTF-8 нужен, чтобы русские буквы не искажались. -->
+    <meta charset="UTF-8">
+
+    <!-- viewport делает страницу удобной в узком окне и на мобильном экране. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Этот текст виден на вкладке до загрузки book.title. -->
+    <title>Книга-игра</title>
+
+    <link 
+        rel="stylesheet"
+        href="assets/bootstrap.min.css"> 
+
+    <link
+        rel="stylesheet"
+        href="style.css">
+</head>
+<body>
+    <!-- main объединяет элементы, содержимое которых меняет read.js. -->
+    <main>
+        <!-- После загрузки сюда будет записано book.title. -->
+        <h1 id="book-title">Загрузка...</h1>
+
+        <!-- showScene будет записывать сюда scene.text. -->
+        <article id="scene-text"></article>
+
+        <!-- JavaScript создаст здесь кнопки или поле для ответа. -->
+        <section id="choices"></section>
+
+        <!-- Если /api/book недоступен, сообщение появится здесь. -->
+        <p id="error-message"></p>
+    </main>
+
+    <!-- Скрипт подключён после HTML, поэтому все элементы с id уже существуют. -->
+    <script src="read.js"></script>
+</body>
+</html>

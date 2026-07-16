@@ -1,3 +1,4 @@
+const fileJSON = "";
 
 function sayHello() {
     alert("sup");
@@ -16,7 +17,6 @@ function accountReg(name, login, password) {
         alert("password must not exceed 20 characters!");
         return;
     }
-
 }
 
 function sendMessage() {
@@ -28,6 +28,7 @@ function sendMessage() {
     }
     Chat.send("chat", text);
     document.getElementById("messageInp").value = "";
+
     // alert(name + ": " + text);
 }
 
@@ -40,9 +41,41 @@ function showMessage(text, messageBlockId) {
     messages.appendChild(block);
 }
 
+function showFile(file, messageBlockId) {
+    const messages = document.getElementById(messageBlockId);
+    const fileMTemp = document.getElementById("file-template");
+    const newFileMsg = fileMTemp.cloneNode();
+    messages.appendChild(block);
+}
+
 Chat.receive("chat", function (text) {
     showMessage(text, "chatBox");
 });
+
+Chat.receiveFile("chat", function (file) {
+    showFile(file, "chatBox");
+})
+
+// document.getElementById("fileInp").addEventListener("change", function (event) {
+//     const file = document.getElementById("fileInp").file;
+    
+//     if (file) {
+//         const reader = new FileReader();
+        
+//         reader.onload = function(e) {
+//             try {
+//                 const jsonData = JSON.parse(e.target.result);
+//                 console.log('JSON data:', jsonData);
+//             } catch (error) {
+//                 console.error('Invalid JSON file:', error);
+//             }
+//         };
+        
+//         reader.readAsText(file);
+//     }
+
+//     console.log(fileJSON);
+// });
 
 const signInName = document.getElementById("nameInp");
 
