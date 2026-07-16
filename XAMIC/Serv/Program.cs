@@ -6,17 +6,19 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Text.Json;
+using System.ComponentModel;
+using System.Net.Cache;
 
 
 List<Room> rooms = new List<Room>();
 Room general = new Room();
 
 
-Dictionary<string, string> users = new Dictionary<string, string>();
-users["Маша"] = "123";
-
-
+List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsers.json"));
+Users.Add(new LoginRequest() { Name = "Men1", Password = "1234", UserName = "Андрей" });
+string output = JsonSerializer.Serialize(Users);
+File.WriteAllText("DataUsers.json", output);
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
@@ -33,14 +35,24 @@ app.MapPost("/api/rooms", (Room room) =>
 {
     rooms.Add(room); return Results.Ok();
 });
-
-app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
+app.MapPost("/olele", (LoginRequest request) =>
 {
-    if (users.ContainsKey(login.Name) == false)
+    if (Users.FirstOrDefault(x=>x.UserName==request.UserName)==null)
+    {
+        Users.Add(new LoginRequest() { Name = request.Name, Password = request.Password, UserName = request.UserName});
+        string ser = JsonSerializer.Serialize(Users);
+        File.WriteAllText("DataUsers.json", ser);
+        return Results.Ok();
+    }
+    else
     {
         return Results.Unauthorized();
     }
-    if (users[login.Name] != login.Password)
+    
+});
+app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
+{
+    if (Users.FirstOrDefault(x=>x.UserName == login.UserName && x.Password == login.Password && x.UserName == login.UserName)==null)
     {
         return Results.Unauthorized();
     }
@@ -48,10 +60,7 @@ app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
 
     Claim nameClaim1 = new Claim(ClaimTypes.Name, login.Name);
     Claim nameClaim2 = new Claim(userName, login.UserName);
-    List<Claim> claims = new List<Claim>();
-
-    claims.Add(nameClaim1);
-    claims.Add(nameClaim2);
+    List<Claim> claims = [nameClaim1, nameClaim2];
 
     ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
     ClaimsPrincipal user = new ClaimsPrincipal(identity);

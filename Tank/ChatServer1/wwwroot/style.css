@@ -1,0 +1,40 @@
+body { /* body выбирает HTML-тег body. */
+    font-size: 18px;
+}
+
+#score {
+    font-size: 30px;
+} /* # перед score означает id. */
+
+.page {
+    max-width: 900px;  /* Блок может быть меньше 900px, но не больше. */
+} 
+
+.player-name {
+    font-weight: bold;
+}
+
+.title {
+    text-align: center;
+}
+
+/* Курсор над кнопкой */
+.buttton {
+    cursor: pointer;
+}
+/* Наведение  */
+.buttton:hover {
+    opacity: 0.9; 
+} /* :hover означает состояние, когда указатель находится над элементом.
+opacity меняет прозрачность. */
+
+.oform {
+    display: flex;
+    flex-direction: column;
+} /*Колонка
+ Дочерние элементы идут сверху вниз. */
+
+
+
+
+

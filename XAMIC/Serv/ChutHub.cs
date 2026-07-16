@@ -28,6 +28,11 @@ public class ChatHub : Hub
             //name = Context.User.Claims.FirstOrDefault((x)=>((x.Type == ClaimTypes.UserData)))?.Value;
             string userName = "UserName";
             name = Context.User.FindFirst(userName).Value;
+            foreach (var item in Context.User.Claims)
+            {
+                Console.WriteLine(item.Value);
+                Console.WriteLine(item.Type);
+            }
         }
         
         if (name == "")

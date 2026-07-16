@@ -29,11 +29,11 @@ public class ChatHub : Hub
         ["ZOVchik"] = "WGNR",
     };
 
-
     private static Dictionary<string, string> connectionList = new Dictionary<string, string>(){};
 
     public Task Send(string eventName, string text)
     {
+
         if (eventName == "register"){
             LoginMessage reg = JsonSerializer.Deserialize<LoginMessage>(text);
             if (reg == null){
@@ -61,23 +61,37 @@ public class ChatHub : Hub
             return Clients.Caller.SendAsync("loginResult", login.login + " error " + login.password);
         }
         
+
         ChatMessage message = JsonSerializer.Deserialize<ChatMessage>(text);
         string realName = connectionList[Context.ConnectionId];
         message.name = usernameList[realName];
         if (eventName == "joinRoom"){
             try {
-            Groups.AddToGroupAsync(Context.ConnectionId, message.room).Wait();
-            ChatMessage messagect = new ChatMessage();
-            messagect.name = "SoZVon System";
-            messagect.room = message.room;
-            messagect.text = message.name + " Вошел в " + message.room;
-            messagect.time = DateTime.Now.ToLongTimeString();
-            string messagec = JsonSerializer.Serialize<ChatMessage>(messagect);
-            return Clients.Group(text).SendAsync("chat", messagec);
+                if (!(Rooms.usersByRoom[message.room].Contains(message.name))){
+                    string[] newNumbers = new string[Rooms.usersByRoom[message.room].Length + 1];
+                    Array.Copy(Rooms.usersByRoom[message.room], newNumbers, Rooms.usersByRoom[message.room].Length);
+                    newNumbers[newNumbers.Length - 1] = message.name;
+                    Rooms.usersByRoom[message.room] = newNumbers;
+                    ChatMessage messagect = new ChatMessage();
+                    messagect.name = "SoZVon System";
+                    messagect.room = message.room;
+                    messagect.text = message.name + " Вошел в " + message.room;
+                    messagect.time = DateTime.Now.ToLongTimeString();
+                    string messagec = JsonSerializer.Serialize<ChatMessage>(messagect);
+                    return Clients.Group(text).SendAsync("chat", messagec);
+                }
+                Clients.Caller.SendAsync("historyFirst", "first").Wait();
+                Groups.AddToGroupAsync(Context.ConnectionId, message.room).Wait();
+                foreach (ChatMessage i in Rooms.messagesByRoom[message.room]){
+                    string textMessage = JsonSerializer.Serialize<ChatMessage>(i);
+                    Clients.Caller.SendAsync("messageHistory", textMessage).Wait();
+                }
+                return Clients.Caller.SendAsync("historyLast", "last");
             } catch (Exception ex) {
                 Console.WriteLine($"Failed again: {ex.Message}");
             }
         }
+
         if (eventName == "chat"){
             if (!connectionList.ContainsKey(Context.ConnectionId)){
                 return Clients.Caller.SendAsync("loginResult", "needLogin");
@@ -85,14 +99,18 @@ public class ChatHub : Hub
             if (message == null) {
                 message = new ChatMessage();
             }
+            Rooms.messagesByRoom[message.room].Add(message);
             string textMessage = JsonSerializer.Serialize<ChatMessage>(message);
             return Clients.Group(message.room).SendAsync("chat", textMessage);
         }
+
         if (eventName == "newRoom"){
             Rooms.rooms.Add(message.room);
             Rooms.usersByRoom[message.room] = new[] {message.name};
+            Rooms.messagesByRoom[message.room] = new List<ChatMessage> {message};
             return Clients.Group(message.room).SendAsync("chat", text);
         }
+
         return Clients.Group(message.room).SendAsync("chat", text);
     }
 }

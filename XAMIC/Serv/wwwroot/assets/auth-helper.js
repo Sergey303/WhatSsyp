@@ -52,7 +52,7 @@
             });
     }
 
-    function login(name, password, ready) {
+    function login(name, password, username, ready) {
         fetch(
             "/api/login",
             {
@@ -61,8 +61,9 @@
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    name: name,
-                    password: password
+                    Name: name,
+                    Password: password,
+                    UserName : username
                 })
             })
             .then(function (response) {

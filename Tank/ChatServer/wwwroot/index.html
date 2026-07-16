@@ -31,31 +31,70 @@ class="oform">
 </a> 
 <!-- тег "а" создает ссылку -->
 
-<button class="buttton"
-        class="oform"> Кнопка и тд </button>  
+<div class="card">  <!-- внешний блок карточки. -->
+    <div class="card-body">  <!-- содержимое карточки. -->
+        <h2 class="card-title"> <!-- заголовок карточки. -->
+            Имя1
+        </h2>
 
+        <p> 5 очков</p>
+    </div>
+</div>
+<input
+    class="form-control"
+    placeholder="Сообщение">
 
-<div class="chat">Чат</div>
+<ul class="list-group">
+    <li class="list-group-item">
+        Имя1
+    </li>
+    <li class="list-group-item">
+        Имя2
+    </li>
 
-<div class="player">
-    <div>Маша</div>  
-    <div>5 очков</div>
+<Li class="list-group-item">
+    Маша
+    <span class="badage text-bg-primary">
+        5
+    </span>
+</Li>
+</ul>
+<div class="alert alert-info"> <!-- alert — готовый блок сообщения. -->
+    Имя1 вошел в чат
 </div>
 
-<div class="container"> <!--создаёт контейнер страницы. -->
-    <div class="row"> <!--создаёт строку сетки. -->
-        <div class="col"><!-- создаёт колонку. Две одинаковые col делят свободную ширину между собой.-->
-            Чат
-        </div>
+<li class="list-group-item"
+    Имя1
 
-        <div class="col">
-            Игроки
-        </div>
 
-        <div class="col">
-            кологка 3
-        </div>
-    </div>
+    
+
+<select class="form-control">
+    <option> Красный</option>
+    <option> Синий</option>
+</select>
+
+<button class="btn btn-primary">
+    Отправить
+</button>
+
+<button class="btn btn-primary">
+    Готов
+</button>
+
+<button class="btn btn-primary">
+    Выйти
+</button>
+
+<div class="input-group">
+    <input
+        class="form-control"
+        aria-placeholder="Сообщение">
+
+    <button
+        class="btn btn-primary">
+    Отправить
+    </button>
 </div>
 
 </body>

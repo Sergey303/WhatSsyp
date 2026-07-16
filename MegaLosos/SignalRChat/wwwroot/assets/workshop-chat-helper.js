@@ -37,6 +37,14 @@
         }
     }
 
+    function localReceiveFile(name, file) {
+        const list = receivers[name] || [];
+
+        for (const fn of list) {
+            fn(file);
+        }
+    }
+
     function registerSignalR(name) {
         if (!connection || registered[name]) {
             return;
@@ -59,6 +67,21 @@
                 "Send",
                 name,
                 text)
+            .catch(function (error) {
+                console.error(error);
+
+                localReceive(
+                    "system",
+                    "Не получилось отправить: " + name);
+            });
+    }
+
+    function invokeFile(name, file) {
+        return connection
+            .invoke(
+                "Send",
+                name,
+                file)
             .catch(function (error) {
                 console.error(error);
 
@@ -177,6 +200,27 @@
         invoke(name, text);
     }
 
+    function sendFile(name, file) {
+        name = cleanName(name);
+
+        if (demoMode || state === "demo") {
+            localReceiveFile(name, file);
+            return;
+        }
+
+        if (state !== "connected") {
+            sendQueue.push({
+                name: name,
+                file: file
+            });
+
+            return;
+        }
+
+        invokeFile(name, file);
+    }
+
+
     function receive(name, fn) {
         name = cleanName(name);
 
@@ -186,7 +230,6 @@
 
             return;
         }
-
         if (!receivers[name]) {
             receivers[name] = [];
         }
@@ -195,9 +238,28 @@
         registerSignalR(name);
     }
 
+    function recevieFile(name, fn) {
+        name = cleanName(name);
+
+        if (typeof fn !== "function") {
+            console.warn(
+                "Chat.receiveFile ждёт функцию вторым параметром.");
+
+            return;
+        }
+        if (!receivers[name]) {
+            receivers[name] = [];
+        }
+        receivers[name].push(fn);
+        registerSignalR(name);
+
+    }
+
     window.Chat = {
         connect: connect,
         send: send,
-        receive: receive
+        sendFile: sendFile,
+        receive: receive,
+        recevieFile: recevieFile
     };
 })();
