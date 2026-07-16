@@ -29,7 +29,6 @@ public class ChatHub : Hub
         ["ZOVchik"] = "WGNR",
     };
 
-
     private static Dictionary<string, string> connectionList = new Dictionary<string, string>(){};
 
     public Task Send(string eventName, string text)
@@ -68,20 +67,21 @@ public class ChatHub : Hub
         message.name = usernameList[realName];
         if (eventName == "joinRoom"){
             try {
-                Groups.AddToGroupAsync(Context.ConnectionId, message.room).Wait();
                 if (!(Rooms.usersByRoom[message.room].Contains(message.name))){
+                    Groups.AddToGroupAsync(Context.ConnectionId, message.room).Wait();
                     string[] newNumbers = new string[Rooms.usersByRoom[message.room].Length + 1];
                     Array.Copy(Rooms.usersByRoom[message.room], newNumbers, Rooms.usersByRoom[message.room].Length);
                     newNumbers[newNumbers.Length - 1] = message.name;
                     Rooms.usersByRoom[message.room] = newNumbers;
+                    ChatMessage messagect = new ChatMessage();
+                    messagect.name = "SoZVon System";
+                    messagect.room = message.room;
+                    messagect.text = message.name + " Вошел в " + message.room;
+                    messagect.time = DateTime.Now.ToLongTimeString();
+                    string messagec = JsonSerializer.Serialize<ChatMessage>(messagect);
+                    return Clients.Group(text).SendAsync("chat", messagec);
                 }
-                ChatMessage messagect = new ChatMessage();
-                messagect.name = "SoZVon System";
-                messagect.room = message.room;
-                messagect.text = message.name + " Вошел в " + message.room;
-                messagect.time = DateTime.Now.ToLongTimeString();
-                string messagec = JsonSerializer.Serialize<ChatMessage>(messagect);
-                return Clients.Group(text).SendAsync("chat", messagec);
+                return Clients.Caller.SendAsync("messageHistory", Rooms.messagesByRoom[message.room]);
             } catch (Exception ex) {
                 Console.WriteLine($"Failed again: {ex.Message}");
             }
@@ -94,6 +94,7 @@ public class ChatHub : Hub
             if (message == null) {
                 message = new ChatMessage();
             }
+            Rooms.messagesByRoom[message.room].Add(message);
             string textMessage = JsonSerializer.Serialize<ChatMessage>(message);
             return Clients.Group(message.room).SendAsync("chat", textMessage);
         }
@@ -101,6 +102,7 @@ public class ChatHub : Hub
         if (eventName == "newRoom"){
             Rooms.rooms.Add(message.room);
             Rooms.usersByRoom[message.room] = new[] {message.name};
+            Rooms.messagesByRoom[message.room] = new List<ChatMessage> {message};
             return Clients.Group(message.room).SendAsync("chat", text);
         }
 
