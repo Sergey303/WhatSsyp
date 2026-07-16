@@ -81,7 +81,11 @@ public class ChatHub : Hub
                     string messagec = JsonSerializer.Serialize<ChatMessage>(messagect);
                     return Clients.Group(text).SendAsync("chat", messagec);
                 }
-                return Clients.Caller.SendAsync("messageHistory", Rooms.messagesByRoom[message.room]);
+                foreach (ChatMessage i in Rooms.messagesByRoom[message.room]){
+                    string textMessage = JsonSerializer.Serialize<ChatMessage>(i);
+                    Clients.Caller.SendAsync("messageHistory", textMessage).Wait();
+                }
+                return Clients.Caller.SendAsync("messageHistory", "last");
             } catch (Exception ex) {
                 Console.WriteLine($"Failed again: {ex.Message}");
             }
