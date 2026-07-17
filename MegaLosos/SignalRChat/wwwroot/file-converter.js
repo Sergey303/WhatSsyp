@@ -2,7 +2,7 @@ function getFileType(filePath) {
     const name = filePath.toLowerCase();
     
     // if (type.startsWith('image/')) return 'image';
-    if (['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico'].some(ext => name.endsWith(ext))) return '.tpl-img';
+    if (['.avif', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico'].some(ext => name.endsWith(ext))) return '.tpl-img';
     // if (type.startsWith('video/')) return 'video';
     if (['.mp4', '.webm', '.mov'].some(ext => name.endsWith(ext))) return '.tpl-video';
     
@@ -19,7 +19,7 @@ function getFileType(filePath) {
 }
 function activateMedia(fileMsg, fileUrl) {
     const type = getFileType(fileUrl);
-    
+
     if (type === '.tpl-img') {
         const img = fileMsg.querySelector(type);
         img.src = fileUrl;
@@ -41,16 +41,25 @@ function activateMedia(fileMsg, fileUrl) {
     } 
     
     else if (type === '.tpl-iframe') {
-        const iframe = document.querySelector(type);
+        const iframe = fileMsg.querySelector(type);
         iframe.src = fileUrl;
         iframe.style.display = 'block';
     } 
 
     else if (type === '.tpl-g-iframe') {
-        const giframe = document.querySelector(type);
+        const giframe = fileMsg.querySelector(type);
         giframe.src = fileUrl;
         giframe.style.display = 'block';
     } 
+    
+    else if (type === '.tpl-download-btn') {
+        const btn = fileMsg.querySelector(type);
+        if (btn) 
+        { 
+            btn.href = fileUrl; 
+            btn.style.display = 'block'; 
+        }
+    }
     
     
     // else if (type === 'embed') {  // MOZHET VSE SLOMAT!                                                    !!!!!
@@ -121,9 +130,10 @@ class FileUploadManager {
 
     handleFiles(fileList) {
         const newFiles = Array.from(fileList);
+        this.allFiles = [];
         
         if (this.files.length + newFiles.length > this.maxFiles) {
-            return;
+            return this.allFiles;
         }
         
         const totalSize = this.getTotalSize() + newFiles.reduce((sum, f) => sum + f.size, 0);

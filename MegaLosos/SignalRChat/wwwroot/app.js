@@ -21,10 +21,10 @@ function accountReg(name, login, password) {
 function sendMessage() {
     const inpMessage = document.getElementById("messageInp");
     const text = inpMessage.value.trim();
-    const name = "";
-    const filePath = "";
-    const date = "";
-    const jsonString = JSON.stringify({Name: name, text: text, filePath: filePath, date: date});
+    const room = ""
+    const jsonString = JSON.stringify(
+        {Name: "", text: text, filePath: "", date: "", room: ""});
+        
     if (text === "") {
         alert("FILL  IN  THE  TEXT!!!!");
         return;
@@ -35,7 +35,7 @@ function sendMessage() {
     // alert(name + ": " + text);
 }
 
-function showMessage(text, messageBlockId) {
+function showMessage(name, text, messageBlockId) {
     const messages = document.getElementById(messageBlockId);
     const block = document.createElement("div");
     block.className = "message";
@@ -54,10 +54,11 @@ function showFile(filePath, messageBlockId) {
 }
 
 Chat.receive("chat", function (text) {
+    console.log(text);
     const msgObj = JSON.parse(text);
-    showMessage(msgObj.text, "chatBox");
+    showMessage(msgObj.name, msgObj.text, "chatBox");
     if (msgObj.filePath) {
-        showFile("chatBox", msgObj.filePath)
+        showFile(msgObj.filePath, "chatBox")
     }
 });
 
@@ -89,7 +90,6 @@ const signInLogin = document.getElementById("loginInp");
 const signInPassword = document.getElementById("passwordInp");
 
 Auth.start(startApp);
-showFile("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAeefR4LoJQ_nFipMLNB3nVe5sWMnzvdIogIW05YVxaWDDrySuV8kduys&s=10","chatBox");
 
 function startApp() {
     Chat.connect();

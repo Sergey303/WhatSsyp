@@ -95,11 +95,15 @@ app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
         string name = loginData.name;
         string login = loginData.login;
         string password = loginData.password;
-        if (accountsList.Any(a => a.name == name ||
-        a.login == login))
+        if (name.Length > 20 || login.Length > 20 || password.Length > 20)
         {
             return Results.BadRequest();
         }
+        if (accountsList.Any(a => a.name == name ||
+            a.login == login))
+            {
+                return Results.BadRequest();
+            }
         AddAccountToList(name, login, password);
         AddAccountToFile(name, login, password);
         return Results.Ok();
