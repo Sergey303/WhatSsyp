@@ -135,3 +135,11 @@ button:hover {
 #messageInput {
     border-radius: 15px;
 }
+
+#serverAddBtn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+#gameBtn {
+    background: green;
+}
