@@ -74,14 +74,19 @@ function showList(items){
 Chat.receive("historyFirst", function(text){
     const message = document.getElementById("messages");
     message.innerHTML="";
+    const row = document.createElement("div");
+    row.className = "send-row";
+    row.id="send-row";
+    const rowid = document.getElementById("send-row"); 
+    message.appendChild(row);
     const block = document.createElement("input");
     block.placeholder="Сообщение";
     block.id="messageInput";
-    message.appendChild(block);
-    const block = document.createElement("button");
-    block.textContent="&#10550;";
-    block.onclick="sendMessage()";
-    message.appendChild(block);
+    rowid.appendChild(block);
+    const block1 = document.createElement("button");
+    block1.textContent="&#10550;";
+    block1.onclick="sendMessage()";
+    rowid.appendChild(block1);
 
 });
 
