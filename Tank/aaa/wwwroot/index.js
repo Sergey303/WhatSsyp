@@ -40,7 +40,7 @@ messages.appendChild(message);
 
 
 
-function hideMmm() {
+function openMmm() {
     const hidedtext = 
         document.getElementById(
             "mmm");
@@ -71,7 +71,7 @@ function startGame() {
     // hidedtext.classList.add('hide');
 }
 
-function hideMmm() {
+function openMmm() {
     const hidedtext = 
         document.getElementById(
             "mmm");
