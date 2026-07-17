@@ -10,9 +10,13 @@ public class ChatHub : Hub
     //private static Dictionary<string, List <string>> roomMembers = new Dictionary<string, List<string>>();
     public Task Send(string eventName, string text)
     {
+        
         if (eventName == "chat")
         {
-            return SendChat(text);
+            Message message = JsonSerializer.Deserialize<Message>(text);
+            string messageText = message.text;
+            string room = message.room;
+            return SendChat(messageText, room);
         }
         if (eventName == "joinRoom")
         {
@@ -20,7 +24,7 @@ public class ChatHub : Hub
         }
         return Clients.All.SendAsync(eventName, text);
     }
-    private Task SendChat(string text)
+    private Task SendChat(string text, string room)
     {
         string name = "";
         if (Context.User != null && Context.User.Identity != null && Context.User.Identity.Name != null)
@@ -39,7 +43,7 @@ public class ChatHub : Hub
         {
             return Clients.Caller.SendAsync("system", "Сначала войди");
         }
-        return Clients.All.SendAsync("chat", name + ": " + text);
+        return Clients.Group(room).SendAsync("chat", room + ":" + name + ": " + text);
     }
     private Task joinRoom(string json)
     {
