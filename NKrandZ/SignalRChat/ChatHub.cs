@@ -4,10 +4,10 @@ using System.Text.Json;
 using System.Collections.Generic;
 
 public class ChatMessage {
-    public string room { get; set; } = "general";
-    public string name { get; set; } = "";
-    public string text { get; set; } = "";
-    public string time { get; set; } = "";
+    public string group { get; set; } = "general";
+    public string user { get; set; } = "";
+    public string message { get; set; } = "";
+    public string dt { get; set; } = "";
 }
 
 public class LoginMessage {
@@ -64,25 +64,25 @@ public class ChatHub : Hub
 
         ChatMessage message = JsonSerializer.Deserialize<ChatMessage>(text);
         string realName = connectionList[Context.ConnectionId];
-        message.name = usernameList[realName];
+        message.user = usernameList[realName];
         if (eventName == "joinRoom"){
             try {
-                if (!(Rooms.usersByRoom[message.room].Contains(message.name))){
-                    string[] newNumbers = new string[Rooms.usersByRoom[message.room].Length + 1];
-                    Array.Copy(Rooms.usersByRoom[message.room], newNumbers, Rooms.usersByRoom[message.room].Length);
-                    newNumbers[newNumbers.Length - 1] = message.name;
-                    Rooms.usersByRoom[message.room] = newNumbers;
+                if (!(Rooms.usersByRoom[message.group].Contains(message.user))){
+                    string[] newNumbers = new string[Rooms.usersByRoom[message.group].Length + 1];
+                    Array.Copy(Rooms.usersByRoom[message.group], newNumbers, Rooms.usersByRoom[message.group].Length);
+                    newNumbers[newNumbers.Length - 1] = message.user;
+                    Rooms.usersByRoom[message.group] = newNumbers;
                     ChatMessage messagect = new ChatMessage();
                     messagect.name = "SoZVon System";
-                    messagect.room = message.room;
-                    messagect.text = message.name + " Вошел в " + message.room;
+                    messagect.room = message.group;
+                    messagect.text = message.user + " Вошел в " + message.group;
                     messagect.time = DateTime.Now.ToLongTimeString();
                     string messagec = JsonSerializer.Serialize<ChatMessage>(messagect);
                     return Clients.Group(text).SendAsync("chat", messagec);
                 }
                 Clients.Caller.SendAsync("historyFirst", "first").Wait();
-                Groups.AddToGroupAsync(Context.ConnectionId, message.room).Wait();
-                foreach (ChatMessage i in Rooms.messagesByRoom[message.room]){
+                Groups.AddToGroupAsync(Context.ConnectionId, message.group).Wait();
+                foreach (ChatMessage i in Rooms.messagesByRoom[message.group]){
                     string textMessage = JsonSerializer.Serialize<ChatMessage>(i);
                     Clients.Caller.SendAsync("messageHistory", textMessage).Wait();
                 }
@@ -99,18 +99,18 @@ public class ChatHub : Hub
             if (message == null) {
                 message = new ChatMessage();
             }
-            Rooms.messagesByRoom[message.room].Add(message);
+            Rooms.messagesByRoom[message.group].Add(message);
             string textMessage = JsonSerializer.Serialize<ChatMessage>(message);
-            return Clients.Group(message.room).SendAsync("chat", textMessage);
+            return Clients.Group(message.group).SendAsync("chat", textMessage);
         }
 
         if (eventName == "newRoom"){
-            Rooms.rooms.Add(message.room);
-            Rooms.usersByRoom[message.room] = new[] {message.name};
-            Rooms.messagesByRoom[message.room] = new List<ChatMessage> {message};
-            return Clients.Group(message.room).SendAsync("chat", text);
+            Rooms.rooms.Add(message.group);
+            Rooms.usersByRoom[message.group] = new[] {message.user};
+            Rooms.messagesByRoom[message.group] = new List<ChatMessage> {message};
+            return Clients.Group(message.group).SendAsync("chat", text);
         }
 
-        return Clients.Group(message.room).SendAsync("chat", text);
+        return Clients.Group(message.group).SendAsync("chat", text);
     }
 }
