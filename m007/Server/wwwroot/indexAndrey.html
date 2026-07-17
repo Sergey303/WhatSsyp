@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Scam</title>
+    <link rel="stylesheet" href="styleAndrey.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+</head>
+<body>
+    <div id="loginPanel">
+        <div class="chat-row">        
+            <div class="col-2">
+                <div class ="chats-container">
+                    <button id="serverAddBtn">+ Добавить Сервер</button>
+                    <p id="statusText" class="status-badge">Сервера</p>
+                    <p>🌍 Глобальный чат</p>
+                </div>
+            </div>
+            <div class="col-10">
+                <div class="chat-container">
+                    <h1>💬 Мессенджер скам</h1>
+                    <p id="statusText" class="status-badge">Статус: Установленно подключение с сервером</p>
+                    <div id="messages" class="messages-box">
+                        <div class="message system-message">Чат загружен. Ожидаю подключения к серверу...</div>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" id="nameInput" placeholder="Ваше имя" value="Егор" autocomplete="off">
+                        <input type="text" id="messageInput" placeholder="Сообщение..." autocomplete="off" style="flex: 1;">
+                        <button id="gameBtn" title="начать игру">🎲</button>
+                        <button id="fileBtn" title="отправить файл">📄</button>
+                        <button class="btn" id="sendBtn" onclick="sendMessage()" title="отправить">&#10550;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="assets\signalr.min.js"></script>
+    <script src="assets\workshop-chat-helper.js"></script>
+    <!-- <script src="assets\bootstrap.min.css"></script> -->
+    <!-- <script src="assets/auth-helper.js"></script> -->
+    <script src="appAndrey.js"></script>
+</body>
+</html>

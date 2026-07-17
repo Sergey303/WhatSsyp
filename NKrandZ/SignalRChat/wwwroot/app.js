@@ -74,20 +74,12 @@ function showList(items){
 Chat.receive("historyFirst", function(text){
     const message = document.getElementById("messages");
     message.innerHTML="";
-    const block = document.createElement("input");
-    block.placeholder="Сообщение";
-    block.id="messageInput";
-    message.appendChild(block);
-    const block = document.createElement("button");
-    block.textContent="&#10550;";
-    block.onclick="sendMessage()";
-    message.appendChild(block);
 
 });
 
 Chat.receive("messageHistory", function(json){
     const message = JSON.parse(json);
-    showMessage(message.room + ": " + message.name + ": " + message.text);
+    showMessage(message.group + ": " + message.user + ": " + message.message);
 });
 
 Chat.receive("loginResult", function (text) {
@@ -103,7 +95,7 @@ Chat.receive("loginResult", function (text) {
 Chat.receive("chat", function (json) {
     try {
         const message = JSON.parse(json);
-        showMessage(message.room + ": " + message.name + ": " + message.text);
+        showMessage(message.group + ": " + message.user + ": " + message.message);
     } catch (error) {
         showMessage("Failed to load Json");
     }
@@ -138,12 +130,12 @@ function loginlogin() {
 
 function joinRoom(rm) {
     const message = {
-        text: "",
-        name: document.getElementById("nameInput").value.trim(),
-        time: new Date().toLocaleTimeString(),
-        room: rm
+        message: "",
+        user: document.getElementById("nameInput").value.trim(),
+        dt: new Date().toLocaleTimeString(),
+        group: rm
     };
-    
+    document.getElementById("chatName").textContent=rm;
     const json = JSON.stringify(message);
     Chat.send("joinRoom", json);
 }
@@ -163,10 +155,10 @@ function appendRoom() {
     const name = document.getElementById("roomNameInput").value.trim();
     document.getElementById("roomNameInput").value = "";
     const message = {
-        text: "",
-        name: document.getElementById("nameInput").value.trim(),
-        time: new Date().toLocaleTimeString(),
-        room: name
+        message: "",
+        user: document.getElementById("nameInput").value.trim(),
+        dt: new Date().toLocaleTimeString(),
+        group: name
     };
     
     const json = JSON.stringify(message);
@@ -176,12 +168,12 @@ function appendRoom() {
 
 function sendMessage() {
     const message = {
-        text: document.getElementById("messageInput").value,
-        name: document.getElementById("nameInput").value.trim(),
-        time: new Date().toLocaleTimeString(),
-        room: document.getElementById('roomResult').value
+        message: document.getElementById("messageInput").value,
+        user: document.getElementById("nameInput").value.trim(),
+        dt: new Date().toLocaleTimeString(),
+        group: document.getElementById('roomResult').value
     };
-    if (message.text == ""){
+    if (message.message == ""){
         return;
     }
     const json = JSON.stringify(message);
