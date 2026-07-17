@@ -1,21 +1,22 @@
 function getFileType(filePath) {
     const name = filePath.toLowerCase();
     
-    // if (type.startsWith('image/')) return 'image';
-    if (['.avif', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico'].some(ext => name.endsWith(ext))) return '.tpl-img';
-    // if (type.startsWith('video/')) return 'video';
-    if (['.mp4', '.webm', '.mov'].some(ext => name.endsWith(ext))) return '.tpl-video';
+    if (['.avif', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico']
+        .some(ext => name.endsWith(ext))) return '.tpl-img';
+
+    if (['.mp4', '.webm', '.mov']
+        .some(ext => name.endsWith(ext))) return '.tpl-video';
     
-    // if (type.startsWith('audio/')) return 'audio';
-    if (['.mp3', '.wav', '.ogg', '.flac', '.aac', '.m4a'].some(ext => name.endsWith(ext))) return '.tpl-audio';
-    if (['.pdf', '.txt', '.html', '.htm', '.json', '.xml'].some(ext => name.endsWith(ext))) return '.tpl-iframe';
-    if (['.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.rtf', '.odt', '.ods', '.odp'].some(ext => name.endsWith(ext))) return '.tpl-g-iframe';
+    if (['.mp3', '.wav', '.ogg', '.flac', '.aac', '.m4a']
+        .some(ext => name.endsWith(ext))) return '.tpl-audio';
+
+    if (['.pdf', '.txt', '.html', '.htm', '.json', '.xml']
+        .some(ext => name.endsWith(ext))) return '.tpl-iframe';
+
+    if (['.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.rtf', '.odt', '.ods', '.odp']
+        .some(ext => name.endsWith(ext))) return '.tpl-g-iframe';
     
     return '.tpl-download-btn';
-    // if (['.zip', '.rar', '.7z', '.tar', '.gz'].some(ext => name.endsWith(ext))) return 'archive';
-    // if (['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx'].some(ext => name.endsWith(ext))) return 'document';
-    // if (type === 'text/plain' || name.endsWith('.txt')) return 'text';
-    // if (type === 'application/json' || name.endsWith('.json')) return 'json';
 }
 function activateMedia(fileMsg, fileUrl) {
     const type = getFileType(fileUrl);
@@ -74,7 +75,7 @@ function activateMedia(fileMsg, fileUrl) {
 class FileUploadManager {
     constructor(options = {}) {
         this.maxFiles = options.maxFiles || 5;
-        this.maxSizeBytes = options.maxSizeMB ? options.maxSizeMB * 1024 * 1024 : 10 * 1024 * 1024;
+        this.maxSizeBytes = options.maxSizeMB || 10 * 131072;
         this.allowedTypes = options.allowedTypes || null;
 
         this.allFiles = [];
@@ -114,76 +115,84 @@ class FileUploadManager {
     }
     handleFileSelect(event) {
         console.log(event);
-        this.handleFiles(event.target.files);
-        this.sendFile(this.allFiles[0]);
+        const _nfs = this.handleFiles(event.target.files)
+        for (_f in _nfs) {
+            this.files.append(_f);
+        }
         this.fileInput.value = '';
     }
     
     sendFile(file) {
         const formdata = new FormData();
         formdata.append("file", file);
-        const url = "api/upload";
-        Api.postFile(url, formdata, (filePath) => {
+        Api.postFile("api/upload", formdata, (filePath) => {
             showFile(filePath, "chatBox");
         });
     }
 
     handleFiles(fileList) {
         const newFiles = Array.from(fileList);
-        this.allFiles = [];
         
         if (this.files.length + newFiles.length > this.maxFiles) {
-            return this.allFiles;
+            alert(`file amount exceeded (${this.files.length + newFiles.length
+                }/${this.maxFiles}). New files were not uploaded!`);
+            return;
         }
         
-        const totalSize = this.getTotalSize() + newFiles.reduce((sum, f) => sum + f.size, 0);
+        const totalSize = this.getTotalSize() + newFiles.reduce(
+            (sum, f) => sum + f.size, 0);
+
         if (totalSize > this.maxSizeBytes) {
             const currentMB = (this.getTotalSize() / (1024 * 1024)).toFixed(2);
             const newMB = (newFiles.reduce((sum, f) => sum + f.size, 0) / (1024 * 1024)).toFixed(2);
+            alert(`file size exceeded (${currentMB + newMB}/${this.maxSizeMB
+                }). New files were not uploaded!`);
             return;
         }
         
         for (const file of newFiles) {
             if (file.size > this.maxSizeBytes) {
+                alert(`the ${file.name} esceeded max file size (${file.size
+                }/${this.maxSizeMB}).`)
                 return;
             }
         }
         
-        if (this.allowedTypes) {
-            for (const file of newFiles) {
-                if (!this.isFileTypeAllowed(file)) {
-                    return;
-                }
-            }
-        }
-        this.allFiles = fileList;
+        // if (this.allowedTypes) {
+        //     for (const file of newFiles) {
+        //         if (!this.isFileTypeAllowed(file)) {
+        //             return;
+        //         }
+        //     }
+        // }
+        return newFiles;
     }
     
-    isFileTypeAllowed(file) {
-        return this.allowedTypes.some(type => {
-            if (type.startsWith('.')) {
-                return file.name.toLowerCase().endsWith(type);
-            }
-            return file.type.startsWith(type);
-        });
-    }
+    // isFileTypeAllowed(file) {
+    //     return this.allowedTypes.some(type => {
+    //         if (type.startsWith('.')) {
+    //             return file.name.toLowerCase().endsWith(type);
+    //         }
+    //         return file.type.startsWith(type);
+    //     });
+    // }
     
     getTotalSize() {
         return this.files.reduce((sum, f) => sum + f.size, 0);
     }
     
-    getFileType(file) {
-        const type = file.type;
-        const name = file.name.toLowerCase();
+    // getFileType(file) {
+    //     const type = file.type;
+    //     const name = file.name.toLowerCase();
         
-        if (type.startsWith('image/')) return 'image';
-        if (type.startsWith('video/')) return 'video';
-        if (type.startsWith('audio/')) return 'audio';
-        if (type === 'text/plain' || name.endsWith('.txt')) return 'text';
-        if (type === 'application/json' || name.endsWith('.json')) return 'json';
-        if (['.zip', '.rar', '.7z', '.tar', '.gz'].some(ext => name.endsWith(ext))) return 'archive';
-        return 'other';
-    }
+    //     if (type.startsWith('image/')) return 'image';
+    //     if (type.startsWith('video/')) return 'video';
+    //     if (type.startsWith('audio/')) return 'audio';
+    //     if (type === 'text/plain' || name.endsWith('.txt')) return 'text';
+    //     if (type === 'application/json' || name.endsWith('.json')) return 'json';
+    //     if (['.zip', '.rar', '.7z', '.tar', '.gz'].some(ext => name.endsWith(ext))) return 'archive';
+    //     return 'other';
+    // }
     
     formatFileSize(bytes) {
         if (bytes === 0) return '0 Bytes';
@@ -195,52 +204,37 @@ class FileUploadManager {
     
     async uploadFiles() {
         if (this.files.length === 0) {
+            alert("No files were uploaded!"); //DISABLE AFTER!!!
             return;
         }
         
         const totalSize = this.getTotalSize();
         if (totalSize > this.maxSizeBytes) {
+            alert(`Total size esceeds the limit (${totalSize}/${this.maxSizeBytes})`)
             return;
         }
-        
         this.uploadBtn.disabled = true;
+
         this.uploadBtn.textContent = 'Uploading...';
         
         try {
-            // Method 1: Send as FormData
-            const formData = new FormData();
-            formData.append('totalFiles', this.files.length);
-            
-            for (const file of this.files) {
-                formData.append('files', file);
-            }
-            
-            const response = await fetch('/upload-multiple', {
-                method: 'POST',
-                body: formData
-            });
-            
-            const result = await response.json();
-            
-            if (result.success) {
-                this.files = [];
-            } else {
-            }
+            _resp = this.sendFile(_f);
         } catch (error) {
+            console.error(error);
         } finally {
             this.uploadBtn.disabled = false;
             this.uploadBtn.textContent = 'Upload Files';
         }
     }
     
-    readFileAsDataURL(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = (e) => resolve(e.target.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-        });
-    }
+    // readFileAsDataURL(file) {
+    //     return new Promise((resolve, reject) => {
+    //         const reader = new FileReader();
+    //         reader.onload = (e) => resolve(e.target.result);
+    //         reader.onerror = reject;
+    //         reader.readAsDataURL(file);
+    //     });
+    // }
 }
 
 // Initialize with custom limits
