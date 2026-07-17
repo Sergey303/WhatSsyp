@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Моя страница</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css">
+</head>
+<body>
+
+    <h1 class="title">Типа заголовок и тд</h1>
+    <p class="title"> Типа подзаголовок и тд</p> 
+<!--  р - показывает новый абзац  (перенос строки) (без этих штук текст плоский будет) -->
+
+<button class="bth bth-primary"
+        class="oform">
+    Проверка
+</button>
+
+
+
+<input
+    class="form-control"
+    placeholder="Сюда ответ вводить и">
+
+<ul class="list-group"></ul>
+    <li class="list-group-item">
+        Имя1
+    </li>
+    <li class="list-group-item">
+        Имя2
+    </li>
+
+<Li class="list-group-item">
+    Маша
+    <span class="badage text-bg-primary">
+        5
+    </span>
+</Li>
+</ul>
+
+
+<button class="btn btn-primary">
+    Отправить
+</button>
+
+<button class="btn btn-primary">
+    Готов
+</button>
+
+<button class="btn btn-primary">
+    Выйти
+</button>
+
+<div class="input-group">
+    <input
+        class="form-control"
+        aria-placeholder="Сообщение">
+
+    <button
+        class="btn btn-primary">
+    Отправить
+    </button>
+</div>
+
+<button onclick="sayHello">
+    Нажми пж
+</button>
+
+<div id="fdfd">
+    Пусто
+</div>
+
+<input
+    id="nameInput"
+    placeholder="Имя">
+
+<button onclick="dsds()">
+    Показать имя
+</button>
+
+<div id="messages"></div>
+
+
+
+<div id="mmm"
+    class="hide"> 
+
+        <h1 id="title">
+            Игра
+        </h1>
+
+        <div class="alert alert-info"> <!-- alert — готовый блок сообщения. -->
+            Таймерчик (по желанию)
+        </div>
+        
+        <select class="form-control">
+            <option> Играть с таймером</option>
+            <option> Игроть без таймера</option>
+        </select>
+
+        <p class="title"> Нажми "начать" (чтобы начать очев)</p> 
+        
+        <div id="afterStart"
+            class="hide">
+
+            <input
+            class="form-control"
+            placeholder="Сюда ответ вводить и тд">
+        </div>
+
+                <button onclick="startGame()">
+                    Начать
+                </button>
+
+ 
+</div>
+        
+        <button onclick="hideMmm()">
+            Нажми
+        </button>       
+        
+<script src="index.js"></script>
+</body>
+</html>
