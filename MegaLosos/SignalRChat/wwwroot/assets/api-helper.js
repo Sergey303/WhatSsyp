@@ -74,8 +74,30 @@
             .catch(fail);
     }
 
+    function postFile(url, data, done) {
+        fetch(
+            url,
+            {
+                method: "POST",
+                body: data
+            })
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error(
+                        "POST " + url + ": " + response.status);
+                }
+
+                return readBody(response);
+            })
+            .then(function (result) {
+                finish(done, result);
+            })
+            .catch(fail);
+    }
+
     window.Api = {
         get: get,
-        post: post
+        post: post,
+        postFile: postFile
     };
 })();

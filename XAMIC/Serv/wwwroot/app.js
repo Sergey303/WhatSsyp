@@ -4,14 +4,27 @@ const UserName = document.getElementById("username");
 var nameI;
 function startApp() {
     Chat.connect();
+    console.log("1");
 }
 function login() {
     const name = loginName.value;
     const password = loginPassword.value;
-    Auth.login(name, password, startApp);
+    const username = UserName.value;
+    Auth.login(name, password, username, startApp);
     nameI = UserName.value;
 }
-
+function registration() {
+    const name = loginName.value;
+    const password = loginPassword.value;
+    const username = UserName.value;
+    Api.post("/olele", {Name:name, Password:password, UserName: username}, function(response) {
+        if (response.ok) {
+            alert("Успешная регистрация");
+        } else {
+            alert("Регситрация не удалась");
+        }
+    });
+}
 
 
 

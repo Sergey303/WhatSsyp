@@ -5,6 +5,7 @@
     <title>Печатает...</title>
     <link rel="stylesheet" href="assets/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/files-style.css">
 </head>
 <body>
     <div class="card">
@@ -40,6 +41,41 @@
     <br>
     <div class="chat-box" id="chatBox">
         Блок чатв
+        <template id="file-template">
+            <div class="message" style="display: none">
+                <!--siple test file downloader, old version:
+                <a class="fileHA" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAeefR4LoJQ_nFipMLNB3nVe5sWMnzvdIogIW05YVxaWDDrySuV8kduys&s=10">download file</a>
+                -->
+                <div class="download-block">
+                    <a class="tpl-download-btn" href="#" download>
+                        Скачать файл
+                    </a>
+                </div>
+
+                <!-- IMG: empty 1x1 (0 bytes, hidden)-->
+                <img class="tpl-img" 
+                    src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" 
+                    data-src="" alt="" >
+
+                <!-- VID: no link (empty, hidden) -->
+                <video class="tpl-video" controls>
+                    <source src="" type="video/mp4">
+                </video>
+
+                <!-- AUD: no link (empty, hidden) -->
+                <audio class="tpl-audio" controls>
+                    <source src="" type="audio/mpeg">
+                </audio>
+
+                <!-- IFrame: safe link (empty, hidden) -->
+                <iframe class="tpl-iframe" src="about:blank" sandbox="" allow-downloads data-src=""></iframe>
+                <iframe class="tpl-g-iframe" src="about:blank" sandbox="" data-src=""></iframe>
+            </div>
+        </template>
+        <div class="message">
+            <a class="fileHA" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAeefR4LoJQ_nFipMLNB3nVe5sWMnzvdIogIW05YVxaWDDrySuV8kduys&s=10">file</a>
+
+        </div>
     </div>
     <div class="card">
         <div class="card-body">
@@ -47,9 +83,42 @@
             <!-- Поле ввода: ученик пишет сюда текст. -->
             <input class="form-control" id="messageInp" placeholder="Message">
             <!-- Кнопка запускает действие. -->
-            <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+            <div class="row">
+                <div class="col-2">
+                    <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+                </div>
+                <div class="col-4">
+                    <input type="file" id="fileInp" placeholder="File">
+                    <div id="fileList" class="file-list"></div>
+                </div>
+                <div id="stats" class="stats"></div>
+            </div>
         </div>
     </div>
+
+    <div id="uploadContainer">
+        <h2>Upload Files (Max: 5 files, 10MB total)</h2>
+        
+        <div class="file-input-wrapper" onclick="document.getElementById('fileInput').click()">
+            <p>dgfdgdfg</p>
+            <p style="font-size: 0.8em; color: #888;">Max 5 files, 10MB total</p>
+            <input type="file" id="fileInput" multiple style="display: none;">
+        </div>
+        <div id="stats" class="stats"></div>
+        <div id="fileList" class="file-list"></div>
+    </div>
+    
+    <div id="fileMessages">
+        <div class="success-message">File uploaded successfully!</div>
+        <div class="error-message">File is too large (max 10MB)</div>
+        <div class="info-message">Please select at least one file</div>
+    </div>
+
+    <a href="..\uploads\8523ed99-28d6-4eb5-86fa-b4ed3d00983d\x6jc2gc68ph81.mp4">Download vid</a>
+
+    <button class="upload-btn" id="fileUploadBtn" disabled>Upload Files</button>
+    
+    <script src="file-converter.js"></script>
     <script src="assets/auth-helper.js"></script>
     <script src="assets/signalr.min.js"></script>
     <script src="assets/workshop-chat-helper.js"></script>

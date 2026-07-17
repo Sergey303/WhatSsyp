@@ -1,4 +1,4 @@
-
+const name = "";
 function sayHello() {
     alert("sup");
 }
@@ -8,7 +8,7 @@ function accountReg(name, login, password) {
         alert("Login must be at least 3 characters and not exceed 20 characters!");
         return;
     }
-    else if (length(name) > 16) {
+    else if (name.length > 16) {
         alert("Name must not exceed 16 characters!");
         return;
     }
@@ -16,33 +16,71 @@ function accountReg(name, login, password) {
         alert("password must not exceed 20 characters!");
         return;
     }
-
 }
 
 function sendMessage() {
     const inpMessage = document.getElementById("messageInp");
     const text = inpMessage.value.trim();
+    const name = "";
+    const filePath = "";
+    const date = "";
+    const jsonString = JSON.stringify({Name: name, text: text, filePath: filePath, date: date});
     if (text === "") {
         alert("FILL  IN  THE  TEXT!!!!");
         return;
     }
-    Chat.send("chat", text);
+    Chat.send("chat", jsonString);
     document.getElementById("messageInp").value = "";
+
     // alert(name + ": " + text);
 }
 
 function showMessage(text, messageBlockId) {
     const messages = document.getElementById(messageBlockId);
     const block = document.createElement("div");
-
     block.className = "message";
     block.textContent = text;
     messages.appendChild(block);
 }
 
+function showFile(filePath, messageBlockId) {
+    const fileUrl = "http://172.16.47.22:8080/api/fileR?filePath=" + filePath;
+    const messages = document.getElementById(messageBlockId);
+    const fileMTemp = document.getElementById("file-template");
+    const newFileMsg = fileMTemp.content.cloneNode(true);
+    activateMedia(newFileMsg, fileUrl);
+    console.log(fileUrl);
+    messages.appendChild(newFileMsg);
+}
+
 Chat.receive("chat", function (text) {
-    showMessage(text, "chatBox");
+    const msgObj = JSON.parse(text);
+    showMessage(msgObj.text, "chatBox");
+    if (msgObj.filePath) {
+        showFile("chatBox", msgObj.filePath)
+    }
 });
+
+// document.getElementById("fileInp").addEventListener("change", function (event) {
+//     const file = document.getElementById("fileInp").file;
+    
+//     if (file) {
+//         const reader = new FileReader();
+        
+//         reader.onload = function(e) {
+//             try {
+//                 const jsonData = JSON.parse(e.target.result);
+//                 console.log('JSON data:', jsonData);
+//             } catch (error) {
+//                 console.error('Invalid JSON file:', error);
+//             }
+//         };
+        
+//         reader.readAsText(file);
+//     }
+
+//     console.log(fileJSON);
+// });
 
 const signInName = document.getElementById("nameInp");
 
@@ -51,6 +89,7 @@ const signInLogin = document.getElementById("loginInp");
 const signInPassword = document.getElementById("passwordInp");
 
 Auth.start(startApp);
+showFile("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAeefR4LoJQ_nFipMLNB3nVe5sWMnzvdIogIW05YVxaWDDrySuV8kduys&s=10","chatBox");
 
 function startApp() {
     Chat.connect();
