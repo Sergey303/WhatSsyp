@@ -30,4 +30,4 @@ app.UseStaticFiles(new StaticFileOptions
 
 //app.MapGet("/", () => "Hello World!");
 app.MapHub<ChatHub>("/chatHub");
-app.Run();
+app.Run("http://0.0.0.0:8080");

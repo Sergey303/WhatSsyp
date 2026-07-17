@@ -1,0 +1,145 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #eef2ff;
+    color: #172033;
+    margin: 0;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.chat-container {
+    height: auto;
+    min-height: calc(100vh - 100px);
+    min-width: 1000px;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chats-container {
+    height: auto;
+    min-height: calc(100vh - 100px);
+    min-width: 200px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 20px;
+    overflow-y: auto;
+}
+
+h1 {
+    color: #2563eb;
+    text-align: center;
+}
+
+#messages {
+    height: 600px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    padding: 15px;
+    background-image: url(https://img.magnific.com/free-vector/modern-artistic-white-floral-pattern-background-classical-style_1017-61593.jpg?semt=ais_hybrid&w=740&q=80);
+    background-position: center;
+    background-repeat: repeat;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 12px;
+    background: #e0f2fe;
+    border: 1px solid #bfdbfe;
+}
+
+.system-message {
+    background: #fef3c7 !important;
+    border-color: #fcd34d;
+    color: #92400e;
+    font-weight: 600;
+}
+
+.input-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.chat-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+input[type="text"] {
+    flex: 1;
+    min-width: 150px;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+}
+
+input[type="text"]:focus {
+    border-color: #2563eb;
+}
+
+button {
+    padding: 10px 16px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+#rollBtn {
+    background: #16a34a;
+}
+
+#fileBtn {
+    background: #fcd34d; 
+}
+
+#rollBtn:hover {
+    background: #15803d;
+}
+
+#statusText {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+#login {
+    text-decoration: none;
+    color: #000;
+    padding: 8px 16px;
+    border: 1px solid #000;
+    border-radius: 4px;
+    text-align: center;
+}
+
+#messageInput {
+    border-radius: 15px;
+}
+
+#serverAddBtn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+#gameBtn {
+    background: green;
+}

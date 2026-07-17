@@ -1,7 +1,7 @@
 Chat.connect();
 
 Chat.receive("chat", (text) => {
-    const chatBox = document.getElementById("chatBox");
+    const chatBox = document.getElementById("messages-box");
     const messageTemp = document.getElementById("message-template");
     const message = messageTemp.content.cloneNode(true);
     message.querySelector(".text").innerText = text;
