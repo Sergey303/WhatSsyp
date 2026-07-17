@@ -15,11 +15,12 @@ public class ChatHub : Hub
         {
             return Clients.Caller.SendAsync("429");
         }
+        text = AddNameToMsg(text, name);
         if (eventName == "chat")
         {
             return SendChat(text);
         }
-        return Clients.All.SendAsync("chat", name + ": " + text);
+        return Clients.All.SendAsync("chat", text);
     }
 
     private Task SendChat(string text)
@@ -35,7 +36,14 @@ public class ChatHub : Hub
             return Clients.Caller.SendAsync("system", "Сначала войди");
         }
 
-        return Clients.All.SendAsync("chat", name + ": " + text);
+        return Clients.All.SendAsync("chat", AddNameToMsg(text, name));
+    }
+
+    private string AddNameToMsg(string jsnMsg, string name)
+    {
+        jsonMessage? msg = JsonSerializer.Deserialize<jsonMessage>(jsnMsg);
+        msg.name = name;
+        return JsonSerializer.Serialize(msg);
     }
 
     public bool isIpBlocked(string name)

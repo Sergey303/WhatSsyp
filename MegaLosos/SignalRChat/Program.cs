@@ -54,6 +54,7 @@ app.MapGet("api/fileR", (string filePath) =>
     //return Results.File(Path.Combine(Directory.GetCurrentDirectory(), "uploads", filePath), "", );
     return Results.File(filePath, "application/octet-stream", filePath.Split("\\").Last());
 });
+
 app.MapPost("/api/logout", (HttpContext context) =>
 {
     context.SignOutAsync().Wait();
@@ -94,11 +95,15 @@ app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
         string name = loginData.name;
         string login = loginData.login;
         string password = loginData.password;
-        if (accountsList.Any(a => a.name == name ||
-        a.login == login))
+        if (name.Length > 20 || login.Length > 20 || password.Length > 20)
         {
             return Results.BadRequest();
         }
+        if (accountsList.Any(a => a.name == name ||
+            a.login == login))
+            {
+                return Results.BadRequest();
+            }
         AddAccountToList(name, login, password);
         AddAccountToFile(name, login, password);
         return Results.Ok();
@@ -122,7 +127,6 @@ app.MapPost("api/upload", async (IFormFile file) =>
     }
     return Results.Ok(filePath);
 }).DisableAntiforgery();
-
 
 app.Run("http://0.0.0.0:8080");
 

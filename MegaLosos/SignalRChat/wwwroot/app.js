@@ -1,5 +1,4 @@
-const fileJSON = "";
-
+const name = "";
 function sayHello() {
     alert("sup");
 }
@@ -9,7 +8,7 @@ function accountReg(name, login, password) {
         alert("Login must be at least 3 characters and not exceed 20 characters!");
         return;
     }
-    else if (length(name) > 16) {
+    else if (name.length > 16) {
         alert("Name must not exceed 16 characters!");
         return;
     }
@@ -22,39 +21,46 @@ function accountReg(name, login, password) {
 function sendMessage() {
     const inpMessage = document.getElementById("messageInp");
     const text = inpMessage.value.trim();
+    const room = ""
+    const jsonString = JSON.stringify(
+        {Name: "", text: text, filePath: "", date: "", room: ""});
+        
     if (text === "") {
         alert("FILL  IN  THE  TEXT!!!!");
         return;
     }
-    Chat.send("chat", text);
+    Chat.send("chat", jsonString);
     document.getElementById("messageInp").value = "";
 
     // alert(name + ": " + text);
 }
 
-function showMessage(text, messageBlockId) {
+function showMessage(name, text, messageBlockId) {
     const messages = document.getElementById(messageBlockId);
     const block = document.createElement("div");
-
     block.className = "message";
     block.textContent = text;
     messages.appendChild(block);
 }
 
-function showFile(file, messageBlockId) {
+function showFile(filePath, messageBlockId) {
+    const fileUrl = "http://172.16.47.22:8080/api/fileR?filePath=" + filePath;
     const messages = document.getElementById(messageBlockId);
     const fileMTemp = document.getElementById("file-template");
-    const newFileMsg = fileMTemp.cloneNode();
-    messages.appendChild(block);
+    const newFileMsg = fileMTemp.content.cloneNode(true);
+    activateMedia(newFileMsg, fileUrl);
+    console.log(fileUrl);
+    messages.appendChild(newFileMsg);
 }
 
 Chat.receive("chat", function (text) {
-    showMessage(text, "chatBox");
+    console.log(text);
+    const msgObj = JSON.parse(text);
+    showMessage(msgObj.name, msgObj.text, "chatBox");
+    if (msgObj.filePath) {
+        showFile(msgObj.filePath, "chatBox")
+    }
 });
-
-Chat.receiveFile("chat", function (file) {
-    showFile(file, "chatBox");
-})
 
 // document.getElementById("fileInp").addEventListener("change", function (event) {
 //     const file = document.getElementById("fileInp").file;
