@@ -1,0 +1,51 @@
+body {
+    font-size: 18px;
+}
+/* #score {
+    font-size: 30px;
+}
+.chat {
+    width: 400;
+}
+.page {
+    max-width: 900px;
+}
+.messages {
+    min-height: 200px;
+}
+.game {
+    width: 400px;
+    height: 300px;
+}
+.message {
+    border: 1px solid rgb(0, 0, 0);
+    padding: 12px;
+    margin: 8px;
+    border-radius: 12px;
+    box-shadow:
+        0 4px 12 px gray;
+    background: lightblue;
+    color: darkblue;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+button {
+    cursor: pointed;
+}
+
+button:hover{
+    opacity: 0.8;
+} */
+ .send-row {
+    display: flex;
+    gap: 8px;
+    border:1px solid black;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px black;
+
+ }
+ .send-row input {
+    flex: 1;
+ }

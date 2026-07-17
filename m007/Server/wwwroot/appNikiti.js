@@ -177,26 +177,3 @@ function signOut() {
 
 Auth.start(startApp);
 Chat.send("chat", "Пользователь подключился к серверу!");
-
-// document.getElementById("fileInp").addEventListener("change", function (event) {
-//     const file = document.getElementById("fileInp").file;
-    
-//     if (file) {
-//         const reader = new FileReader();
-        
-//         reader.onload = function(e) {
-//             try {
-//                 const jsonData = JSON.parse(e.target.result);
-//                 console.log('JSON data:', jsonData);
-//             } catch (error) {
-//                 console.error('Invalid JSON file:', error);
-//             }
-//         };
-        
-//         reader.readAsText(file);
-//     }
-
-//     console.log(fileJSON);
-// });
-
-//showFile("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAeefR4LoJQ_nFipMLNB3nVe5sWMnzvdIogIW05YVxaWDDrySuV8kduys&s=10","chatBox");

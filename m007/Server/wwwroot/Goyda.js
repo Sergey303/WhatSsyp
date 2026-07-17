@@ -6,7 +6,7 @@ Chat.receive("chat", (text) => {
 });
 
 function showMessage(text){
-    const messages = document.getElementById("messages");
+    const messages = document.getElementById("messages-box");
     const message = document.createElement("div");
     const mes = JSON.parse(text);
     message.innerHTML = mes.user + ": " + mes.message;
@@ -16,7 +16,8 @@ function showMessage(text){
 function sendBtn() {
     const name = document.getElementById("nameInput").value;
     const text = document.getElementById("messageInput").value;
-    const group = document.getElementById("groupInput").value;
+    //const group = document.getElementById("groupInput").value;
+    const group = "global";
     const messageJson = "{\"user\": "+"\""+ name+"\"" + ", \"group\": " + "\""+ group +"\"" + 
     ", \"message\": "+"\""+ text+"\"" + ", \"dt\": " + "\""+ "" +"\"}"; 
     //alert(messageJson);
