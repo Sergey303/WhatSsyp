@@ -116,6 +116,7 @@
         connection =
             new signalR.HubConnectionBuilder()
                 .withUrl(url)
+                .withAutomaticReconnect()
                 .build();
 
         for (const name in receivers) {
@@ -135,6 +136,7 @@
             .then(function () {
                 state = "connected";
                 demoMode = false;
+                console.log(connection.connectionId);
 
                 localReceive(
                     "system",

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+	<title>Расписание</title>
+    <link
+    rel="stylesheet"
+    href="/assets/bootstrap.min.css">
+    <link
+        rel="stylesheet"
+        href="/assets/style1.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1 class="mb-5 headline">Ваше расписание</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title our-title">
+                            Время
+                        </h1>
+                        <ul class="list-group" id="times">
+                            <template id="timesTemplate">
+                                <li class="list-group-item">
+                                <div class="time-item">Введите время задачи</div>
+                                </li>
+                            </template>
+                        </ul>
+                        <div class="d-flex gap-2 mt-4">
+                            <input
+                                class="form-control"
+                                placeholder="Время (часы:минуты)"
+                                id="timeInput">
+
+                            <!-- <button
+                                class="btn btn-primary">
+                                Отправить
+                            </button> -->
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title our-title">
+                            Задачи
+                        </h1>
+                        <ul class="list-group" id="tasks">
+                            <template id="tasksTemplate">
+                                <li class="list-group-item">
+                                <div class="task-item">Введите название задачи</div>
+                                </li>
+                            </template>
+                        </ul>
+                        <div class="d-flex gap-2 mt-4">
+                            <input
+                                class="form-control"
+                                placeholder="Задача"
+                                id="tasksInput">
+
+                            <button
+                                class="btn btn-primary"
+                                onclick="sendPair()">
+                                Отправить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/assets/signalr.min.js"></script>
+    <script src="/assets/workshop-chat-helper.js"></script>
+    <script src="/assets/appForShedule.js"></script>
+</body>
+</html>

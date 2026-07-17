@@ -41,13 +41,14 @@ app.MapPost("/api/rooms", (Room room) =>
 });
 
 app.MapGet("/api/dice", () => random.Next(1, 7));
-app.UseDefaultFiles();
+// app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.MapHub<ChatHub>("/chatHub");
 string str = File.ReadAllText(@"wwwroot\index.html");
+// string str1 = File.ReadAllText(@"wwwroot\assets\schedule.html");
 app.MapGet("/", () => Results.Content(str, "text/html"));
-
+// app.MapGet("/", () => Results.Content(str1, "text/html"));
 
 app.Run("http://0.0.0.0:5000");
 

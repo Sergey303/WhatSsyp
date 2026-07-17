@@ -1,0 +1,15 @@
+body {
+    font-size: 18;
+}
+
+.headline {
+    color: darkblue;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    font-size: 45px;
+}
+
+.our-title{
+    color: darkblue;
+}
