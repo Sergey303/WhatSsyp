@@ -74,14 +74,6 @@ function showList(items){
 Chat.receive("historyFirst", function(text){
     const message = document.getElementById("messages");
     message.innerHTML="";
-    const block = document.createElement("input");
-    block.placeholder="Сообщение";
-    block.id="messageInput";
-    message.appendChild(block);
-    const block = document.createElement("button");
-    block.textContent="&#10550;";
-    block.onclick="sendMessage()";
-    message.appendChild(block);
 
 });
 

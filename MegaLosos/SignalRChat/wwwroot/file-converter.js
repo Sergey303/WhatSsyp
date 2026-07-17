@@ -1,32 +1,63 @@
-function getFileType(file) {
-    const type = file.type;
-    const name = file.name.toLowerCase();
+function getFileType(filePath) {
+    const name = filePath.toLowerCase();
     
-    // Images
-    if (type.startsWith('image/')) return 'image';
-    if (['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'].some(ext => name.endsWith(ext))) return 'image';
+    // if (type.startsWith('image/')) return 'image';
+    if (['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico'].some(ext => name.endsWith(ext))) return '.tpl-img';
+    // if (type.startsWith('video/')) return 'video';
+    if (['.mp4', '.webm', '.mov'].some(ext => name.endsWith(ext))) return '.tpl-video';
     
-    // Videos
-    if (type.startsWith('video/')) return 'video';
-    if (['.mp4', '.avi', '.mov', '.wmv', '.flv', '.webm', '.mkv'].some(ext => name.endsWith(ext))) return 'video';
+    // if (type.startsWith('audio/')) return 'audio';
+    if (['.mp3', '.wav', '.ogg', '.flac', '.aac', '.m4a'].some(ext => name.endsWith(ext))) return '.tpl-audio';
+    if (['.pdf', '.txt', '.html', '.htm', '.json', '.xml'].some(ext => name.endsWith(ext))) return '.tpl-iframe';
+    if (['.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.rtf', '.odt', '.ods', '.odp'].some(ext => name.endsWith(ext))) return '.tpl-g-iframe';
     
-    // Audio
-    if (type.startsWith('audio/')) return 'audio';
-    if (['.mp3', '.wav', '.ogg', '.flac', '.aac'].some(ext => name.endsWith(ext))) return 'audio';
+    return '.tpl-download-btn';
+    // if (['.zip', '.rar', '.7z', '.tar', '.gz'].some(ext => name.endsWith(ext))) return 'archive';
+    // if (['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx'].some(ext => name.endsWith(ext))) return 'document';
+    // if (type === 'text/plain' || name.endsWith('.txt')) return 'text';
+    // if (type === 'application/json' || name.endsWith('.json')) return 'json';
+}
+function activateMedia(fileMsg, fileUrl) {
+    const type = getFileType(fileUrl);
     
-    // Archives
-    if (['.zip', '.rar', '.7z', '.tar', '.gz'].some(ext => name.endsWith(ext))) return 'archive';
+    if (type === '.tpl-img') {
+        const img = fileMsg.querySelector(type);
+        img.src = fileUrl;
+        img.style.display = 'block';
+    } 
     
-    // Documents
-    if (['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx'].some(ext => name.endsWith(ext))) return 'document';
+    else if (type === '.tpl-video') {
+        const video = fileMsg.querySelector(type);
+        video.src = fileUrl;
+        video.style.display = 'block';
+        video.load();
+    } 
     
-    // Text files
-    if (type === 'text/plain' || name.endsWith('.txt')) return 'text';
+    else if (type === '.tpl-audio') {
+        const audio = fileMsg.querySelector(type);
+        audio.src = fileUrl;
+        audio.style.display = 'block';
+        audio.load();
+    } 
     
-    // JSON
-    if (type === 'application/json' || name.endsWith('.json')) return 'json';
+    else if (type === '.tpl-iframe') {
+        const iframe = document.querySelector(type);
+        iframe.src = fileUrl;
+        iframe.style.display = 'block';
+    } 
+
+    else if (type === '.tpl-g-iframe') {
+        const giframe = document.querySelector(type);
+        giframe.src = fileUrl;
+        giframe.style.display = 'block';
+    } 
     
-    return 'other';
+    
+    // else if (type === 'embed') {  // MOZHET VSE SLOMAT!                                                    !!!!!
+        //   const placeholder = document.getElementById('tpl-embed-placeholder');
+        //   placeholder.innerHTML = `<embed src="${fileUrl}" type="application/pdf" width="100%" height="500px">`;
+        //   placeholder.style.display = 'block';
+    // }
 }
 
 //formdata
@@ -37,6 +68,7 @@ class FileUploadManager {
         this.maxSizeBytes = options.maxSizeMB ? options.maxSizeMB * 1024 * 1024 : 10 * 1024 * 1024;
         this.allowedTypes = options.allowedTypes || null;
 
+        this.allFiles = [];
         this.files = [];
             
         this.fileInput = document.getElementById('fileInp');
@@ -74,17 +106,16 @@ class FileUploadManager {
     handleFileSelect(event) {
         console.log(event);
         this.handleFiles(event.target.files);
-        this.sendFile(event.target.files[0]);
+        this.sendFile(this.allFiles[0]);
         this.fileInput.value = '';
     }
     
     sendFile(file) {
-        console.log(file.name);
         const formdata = new FormData();
         formdata.append("file", file);
         const url = "api/upload";
-        Api.postFile(url, formdata, () => {
-            console.log('file sent successfully');
+        Api.postFile(url, formdata, (filePath) => {
+            showFile(filePath, "chatBox");
         });
     }
 
@@ -115,6 +146,7 @@ class FileUploadManager {
                 }
             }
         }
+        this.allFiles = fileList;
     }
     
     isFileTypeAllowed(file) {
@@ -207,3 +239,5 @@ const uploadManager = new FileUploadManager({
     maxSizeMB: 10,
     allowedTypes: null // Set to ['image/', '.pdf'] to limit types
 });
+
+

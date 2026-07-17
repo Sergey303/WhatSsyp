@@ -54,6 +54,7 @@ app.MapGet("api/fileR", (string filePath) =>
     //return Results.File(Path.Combine(Directory.GetCurrentDirectory(), "uploads", filePath), "", );
     return Results.File(filePath, "application/octet-stream", filePath.Split("\\").Last());
 });
+
 app.MapPost("/api/logout", (HttpContext context) =>
 {
     context.SignOutAsync().Wait();
@@ -122,7 +123,6 @@ app.MapPost("api/upload", async (IFormFile file) =>
     }
     return Results.Ok(filePath);
 }).DisableAntiforgery();
-
 
 app.Run("http://0.0.0.0:8080");
 

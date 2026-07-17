@@ -66,3 +66,17 @@
     max-height: 80px;
     object-fit: cover;
 }
+
+.download-block {
+    display: none; 
+    padding: 20px; 
+    text-align: center; 
+    border: 2px dashed #ccc; 
+    background: #f9f9f9;
+}
+
+.download-text {
+    margin-bottom: 12px; 
+    font-family: sans-serif; 
+    color: #333;
+}
