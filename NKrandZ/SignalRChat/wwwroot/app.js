@@ -135,7 +135,7 @@ function joinRoom(rm) {
         dt: new Date().toLocaleTimeString(),
         group: rm
     };
-    
+    document.getElementById("chatName").textContent=rm;
     const json = JSON.stringify(message);
     Chat.send("joinRoom", json);
 }

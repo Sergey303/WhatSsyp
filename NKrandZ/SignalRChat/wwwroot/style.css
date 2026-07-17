@@ -81,6 +81,8 @@ h1 {
 }
 
 .chatInfo {
+    display: flex;
+    position: relative;
     width: calc(100% - 16px);
     height: 60px;
     background: white;
@@ -88,6 +90,21 @@ h1 {
     padding: 16px;
 }
 
+.chatName {
+    position: absolute;
+    top: 10px;
+    font-size: 26px;
+    align-items: center;
+}
+
+.chatResult {
+    margin-left: auto;
+    right: 20px;
+}
+
+.dCInfo {
+    height: 30px;
+}
 .chat-select {
     position: relative;
     width: 300px;

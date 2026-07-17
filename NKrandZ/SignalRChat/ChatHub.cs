@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Collections.Generic;
 
 public class ChatMessage {
-    public string group { get; set; } = "general";
+    public string group { get; set; } = "General";
     public string user { get; set; } = "";
     public string message { get; set; } = "";
     public string dt { get; set; } = "";
