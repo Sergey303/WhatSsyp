@@ -12,7 +12,7 @@ public class ChatHub : Hub {
         var db = JsonSerializer.Deserialize<List<DbRecord>>(fileInString);
         //message = jtext, dt = DateTime.Now.ToString("d")
         
-        db.Add(new DbRecord() {message = jmes.message, user = jmes.user, group = jmes.group, dt = DateTime.Now.ToString("d")});
+        db.Add(new DbRecord() {message = jmes.message, user = jmes.user, group = jmes.group, dt = DateTime.Now.ToString()});
         var newText = JsonSerializer.Serialize<List<DbRecord>>(db, new JsonSerializerOptions(){WriteIndented=true});
         File.WriteAllText("DataBase.json", newText);
         return Clients.All.SendAsync("chat", jtext);

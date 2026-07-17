@@ -27,7 +27,7 @@ app.UseStaticFiles(new StaticFileOptions
     }
 });
 
-
 //app.MapGet("/", () => "Hello World!");
 app.MapHub<ChatHub>("/chatHub");
+app.MapGet("/", () => "/indexAndrey.html");
 app.Run("http://0.0.0.0:8080");
