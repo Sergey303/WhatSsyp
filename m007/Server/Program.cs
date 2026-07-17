@@ -52,4 +52,5 @@ app.MapGet("/api/rooms/{roomName}/users",  (string roomName) =>
 
 //app.MapGet("/", () => "Hello World!");
 app.MapHub<ChatHub>("/chatHub");
+app.MapGet("/", () => "/indexAndrey.html");
 app.Run("http://0.0.0.0:8080");

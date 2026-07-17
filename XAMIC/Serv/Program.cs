@@ -11,15 +11,21 @@ using System.ComponentModel;
 using System.Net.Cache;
 
 
-List<Room> rooms = new List<Room>();
-Room general = new Room();
+List<Room> rooms = JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("Rooms.json"));
 
 
+//user.json
 List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsers.json"));
-Users.Add(new LoginRequest() { Name = "Men1", Password = "1234", UserName = "Андрей" });
-string output = JsonSerializer.Serialize(Users);
-File.WriteAllText("DataUsers.json", output);
+
+// Users.Add(new LoginRequest() { Name = "Men1", Password = "1234", UserName = "Андрей" });
+// string output1 = JsonSerializer.Serialize(Users);
+// File.WriteAllText("DataUsers.json", output1);
+// Users.Add(new LoginRequest() { Name = "Men2", Password = "1234", UserName = "Артем" });
+// string output2 = JsonSerializer.Serialize(Users);
+// File.WriteAllText("DataUsers.json", output2);
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 builder.Services.AddAuthorization();
@@ -27,14 +33,37 @@ builder.Services.AddAuthorization();
 builder.Services.AddSignalR();
 var app = builder.Build();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        if (ctx.File.Name.EndsWith(".html", StringComparison.OrdinalIgnoreCase))
+        {
+            ctx.Context.Response.Headers.Append("Cache-Control", "no-cache, no-store, must-revalidate");
+            ctx.Context.Response.Headers.Append("Pragma", "no-cache");
+            ctx.Context.Response.Headers.Append("Expires", "0");
+        }
+    }
+});
 
+//rooms
 app.MapGet("/api/rooms", () => rooms);
 app.MapPost("/api/rooms", (Room room) =>
 {
-    rooms.Add(room); return Results.Ok();
+    if (rooms.FirstOrDefault(x => x.name == room.name) == null)
+    {
+        rooms.Add(room);
+        string convert = JsonSerializer.Serialize(rooms);
+        File.WriteAllText("Rooms.json", convert);
+    }
+    return Results.Ok();
 });
+
+
 app.MapPost("/olele", (LoginRequest request) =>
 {
     if (Users.FirstOrDefault(x=>x.UserName==request.UserName)==null)
@@ -52,7 +81,7 @@ app.MapPost("/olele", (LoginRequest request) =>
 });
 app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
 {
-    if (Users.FirstOrDefault(x=>x.UserName == login.UserName && x.Password == login.Password && x.UserName == login.UserName)==null)
+    if (Users.FirstOrDefault(x=>x.Name == login.Name && x.Password == login.Password && x.UserName == login.UserName)==null)
     {
         return Results.Unauthorized();
     }
@@ -83,8 +112,6 @@ app.MapGet("/api/me", (HttpContext context) =>
 });
 app.MapPost("/api/logout", (HttpContext context) => { context.SignOutAsync().Wait(); return Results.Ok(); });
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
 
 app.MapHub<ChatHub>("/ChatHub");
 app.Run("http://0.0.0.0:8080");

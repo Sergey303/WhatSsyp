@@ -1,3 +1,4 @@
+Auth.start(startApp);
 const loginName = document.getElementById("loginName");
 const loginPassword = document.getElementById("password");
 const UserName = document.getElementById("username");
@@ -34,11 +35,13 @@ Chat.receive("chat", function(text) {
 
 function sendMessage() {
     const text = document.getElementById("messageInput").value;
+    const room = document.getElementById("messageRoom").value;
+    
     if (text==="") {
         alert("Сообщение");
         return;
     }
-    Chat.send("chat", text);
+    Chat.send("chat", JSON.stringify({text:text, room:room}));
     document.getElementById("messageInput").value = "";   
 }
 function showMessage(text) {
@@ -77,7 +80,7 @@ function createRoom() {
     if (name === "") {
         return;
     }
-    Api.post("/api/rooms", {name: name}, roomCreated);
+    Api.post("/api/rooms", {name: name, Members:[]}, roomCreated);
 }
 Chat.receive("roomMembers", function(text){const members = JSON.parse(text); console.log(members);});
 
