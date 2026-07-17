@@ -73,10 +73,10 @@ public class ChatHub : Hub
                     newNumbers[newNumbers.Length - 1] = message.user;
                     Rooms.usersByRoom[message.group] = newNumbers;
                     ChatMessage messagect = new ChatMessage();
-                    messagect.name = "SoZVon System";
-                    messagect.room = message.group;
-                    messagect.text = message.user + " Вошел в " + message.group;
-                    messagect.time = DateTime.Now.ToLongTimeString();
+                    messagect.user = "SoZVon System";
+                    messagect.group = message.group;
+                    messagect.message = message.user + " Вошел в " + message.group;
+                    messagect.dt = DateTime.Now.ToLongTimeString();
                     string messagec = JsonSerializer.Serialize<ChatMessage>(messagect);
                     return Clients.Group(text).SendAsync("chat", messagec);
                 }
