@@ -63,6 +63,8 @@ function activateMedia(fileMsg, fileUrl) {
             btn.textContent = fileName;
         }
     }
+
+    
     
     
     // else if (type === 'embed') {  // MOZHET VSE SLOMAT!                                                    !!!!!

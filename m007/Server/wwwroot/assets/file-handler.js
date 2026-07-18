@@ -15,16 +15,19 @@ function getFileType(filePath) {
 
     if (['.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.rtf', '.odt', '.ods', '.odp']
         .some(ext => name.endsWith(ext))) return '.tpl-g-iframe';
-    
-    return '.tpl-download-btn';
+    if (filePath) {
+        return '';
+    }
+    return '.tpl-download-btn'
 }
+
 function activateMedia(fileUrl, text, name, date) {
+    console.log("2");
     const type = getFileType(fileUrl);
     const fileName = fileUrl.trim().split("\\").at(-1);
     const messages = document.getElementById("chatBox");
     const fileMTemp = document.getElementById("file-template");
     const fileMsg = fileMTemp.content.cloneNode(true);
-
     if (type === '.tpl-img') {
         const img = fileMsg.querySelector(type);
         img.src = fileUrl;
