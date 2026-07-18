@@ -3,92 +3,189 @@ const signInLogin = document.getElementById("loginInp");
 const signInPassword = document.getElementById("passwordInp");
 const roomNameInput = document.getElementById("roomNameInput");
 const roomsBlock = document.getElementById("rooms");
+const messagesBlock = document.getElementById("messages");
 
-function startApp() {
-    Chat.connect();
+function clearMessages() {
+    messagesBlock.innerHTML = '';
 }
-
-function sendPct() {
-    const text = document.getElementById("messageInput").value.trim();
-    const block = document.createElement("image");
-    block.className = "image";
-    block.src = text;
-    block.width = 300;
-    block.height = 200;
-    Chat.send("pct", text);
-}
-
-Chat.receive("pct", function (json) {
-    showPct(json);
-});
-
-Chat.receive("chat", function (text) {
-    const msgObj = JSON.parse(text);
-    showMessage(msgObj.text, "chatBox");
-    if (msgObj.filePath) {
-        showFile("chatBox", msgObj.filePath)
-    }
-});
 
 function showMessage(text) {
-    const messages = document.getElementById("messages");
     const block = document.createElement("div");
     block.className = "message";
     block.textContent = text;
-    messages.appendChild(block);
+    messagesBlock.appendChild(block);
+    messagesBlock.scrollTop = messagesBlock.scrollHeight;
 }
 
+function showSystemMessage(text) {
+    const block = document.createElement("div");
+    block.className = "message system-message";
+    block.textContent = text;
+    messagesBlock.appendChild(block);
+    messagesBlock.scrollTop = messagesBlock.scrollHeight;
+}
+
+Chat.receive("chat", function (text) {
+    showMessage(text);
+});
+
+Chat.receive("system", function (text) {
+    showSystemMessage(text);
+});
+
 function sendMessage() {
-    const name = document.getElementById("nameInput").value.trim();
     const text = document.getElementById("messageInput").value.trim();
-    const inpMessage = document.getElementById("messageInp");
-    const text = inpMessage.value.trim();
-    const name = "";
-    const filePath = "";
-    const date = "";
-    const jsonString = JSON.stringify({Name: name, text: text, filePath: filePath, date: date});
-    if (text === "" || name === "") {
-        alert("Нужно имя и сообщение");
+    if (text === "") {
         return;
     }
     if (text === "/roll") {
-        Chat.send(text);
+        rollDice();
+        document.getElementById("messageInput").value = "";
         return;
     }
-    //Chat.send("chat", name + ": " + text);
-    Chat.send("chat", jsoNSrting);
+    Chat.send("chat", text);
     document.getElementById("messageInput").value = "";
-    text.value = "";
 }
 
 function rollDice() {
-    const name = document.getElementById("nameInput").value.trim();
     const num1 = Math.floor(Math.random() * 1000) + 1;
     const num2 = Math.floor(Math.random() * 1000) + 1;
     const num3 = Math.floor(Math.random() * 3) + 1;
-    if (num3==1) {
-        Chat.send("chat", name + " начал(а) игру, сколько будет " + num1 + " + " + num2 + "?");
+    if (num3 == 1) {
+        Chat.send("chat", "начал(а) игру, сколько будет " + num1 + " + " + num2 + "?");
     }
-    if (num3==2) {
-        num4 = Math.floor(Math.random() * 20) + 1;
-        num5 = Math.floor(Math.random() * 20) + 1;
-        Chat.send("chat", name + " начал(а) игру, сколько будет " + num4 + " * " + num5 + "?");
+    if (num3 == 2) {
+        var num4 = Math.floor(Math.random() * 20) + 1;
+        var num5 = Math.floor(Math.random() * 20) + 1;
+        Chat.send("chat", "начал(а) игру, сколько будет " + num4 + " * " + num5 + "?");
     }
-    if (num3==3) {
-        if (num1>=num2) {
-            Chat.send("chat", name + " начал(а) игру, сколько будет " + num1 + " - " + num2 + "?");
+    if (num3 == 3) {
+        if (num1 >= num2) {
+            Chat.send("chat", "начал(а) игру, сколько будет " + num1 + " - " + num2 + "?");
         } else {
-            Chat.send("chat", name + " начал(а) игру, сколько будет " + num2 + " - " + num1 + "?");
+            Chat.send("chat", "начал(а) игру, сколько будет " + num2 + " - " + num1 + "?");
         }
     }
 }
 
+function showFile(filePath) {
+    const messages = document.getElementById("messages");
+    const fileUrl = "/" + filePath;
+    const type = getFileType(filePath);
+    const fileName = filePath.split("/").pop().split("\\").pop();
+
+    const container = document.createElement("div");
+    container.style.margin = "5px 0";
+
+    if (type === '.tpl-img') {
+        const img = document.createElement("img");
+        img.src = fileUrl;
+        img.style.maxWidth = "300px";
+        img.style.maxHeight = "200px";
+        img.style.display = "block";
+        img.style.borderRadius = "8px";
+        container.appendChild(img);
+
+        const downloadRow = document.createElement("div");
+        downloadRow.style.marginTop = "5px";
+        const link = document.createElement("a");
+        link.href = fileUrl;
+        link.textContent = "Скачать " + fileName;
+        link.download = fileName;
+        link.style.color = "#2563eb";
+        link.style.fontSize = "13px";
+        downloadRow.appendChild(link);
+        container.appendChild(downloadRow);
+    } else if (type === '.tpl-video') {
+        const video = document.createElement("video");
+        video.src = fileUrl;
+        video.controls = true;
+        video.style.maxWidth = "400px";
+        video.style.display = "block";
+        video.style.borderRadius = "8px";
+        container.appendChild(video);
+
+        const downloadRow = document.createElement("div");
+        downloadRow.style.marginTop = "5px";
+        const link = document.createElement("a");
+        link.href = fileUrl;
+        link.textContent = "Скачать " + fileName;
+        link.download = fileName;
+        link.style.color = "#2563eb";
+        link.style.fontSize = "13px";
+        downloadRow.appendChild(link);
+        container.appendChild(downloadRow);
+    } else if (type === '.tpl-audio') {
+        const audio = document.createElement("audio");
+        audio.src = fileUrl;
+        audio.controls = true;
+        audio.style.display = "block";
+        container.appendChild(audio);
+
+        const downloadRow = document.createElement("div");
+        downloadRow.style.marginTop = "5px";
+        const link = document.createElement("a");
+        link.href = fileUrl;
+        link.textContent = "Скачать " + fileName;
+        link.download = fileName;
+        link.style.color = "#2563eb";
+        link.style.fontSize = "13px";
+        downloadRow.appendChild(link);
+        container.appendChild(downloadRow);
+    } else {
+        const fileContainer = document.createElement("div");
+        fileContainer.style.display = "flex";
+        fileContainer.style.alignItems = "center";
+        fileContainer.style.gap = "10px";
+        fileContainer.style.padding = "10px";
+        fileContainer.style.background = "#f3f4f6";
+        fileContainer.style.borderRadius = "8px";
+
+        const icon = document.createElement("span");
+        icon.textContent = "📎";
+        icon.style.fontSize = "24px";
+
+        const info = document.createElement("div");
+        info.style.flex = "1";
+
+        const nameEl = document.createElement("div");
+        nameEl.textContent = fileName;
+        nameEl.style.fontWeight = "bold";
+        nameEl.style.fontSize = "14px";
+
+        const link = document.createElement("a");
+        link.href = fileUrl;
+        link.textContent = "Скачать";
+        link.download = fileName;
+        link.style.color = "#2563eb";
+        link.style.fontSize = "13px";
+
+        info.appendChild(nameEl);
+        info.appendChild(link);
+        fileContainer.appendChild(icon);
+        fileContainer.appendChild(info);
+        container.appendChild(fileContainer);
+    }
+
+    messages.appendChild(container);
+    messages.scrollTop = messages.scrollHeight;
+}
+
 function showRooms(rooms) {
-    roomsBlock.textContent = "";
+    roomsBlock.innerHTML = '';
+
+    var generalItem = document.createElement("li");
+    generalItem.className = "list-group-item";
+    generalItem.textContent = "🌍 Глобальный чат";
+    generalItem.style.fontWeight = "bold";
+    generalItem.onclick = function() { joinRoom("Общий"); };
+    roomsBlock.appendChild(generalItem);
+
     for (const room of rooms) {
         const item = document.createElement("li");
-        item.classname = "list-group-item";
+        item.className = "list-group-item";
         item.textContent = room.name;
+        item.onclick = function() { joinRoom(room.name); };
         roomsBlock.appendChild(item);
     }
 }
@@ -103,100 +200,78 @@ function roomCreated() {
 }
 
 function createRoom() {
-    const name = roomNameInput.value;
-    Api.get("api/rooms",()=>{});
+    const name = roomNameInput.value.trim();
     if (name === "") {
         return;
     }
     Api.post("/api/rooms", {name: name}, roomCreated);
 }
 
-Chat.receive("roomMembers", function(text){const members = JSON.parse(text); console.log(members);});
+Chat.receive("roomMembers", function(text) {
+    const members = JSON.parse(text); 
+    console.log("Участники комнаты:", members);
+});
 
-function joinR() {
-    const room = document.getElementById("roomNameInput").value.trim();
-    const data = {RoomName:room, UserName:nameI};
+function joinRoom(roomName) {
+    clearMessages();
+    const data = {RoomName: roomName, UserName: ""};
     Chat.send("joinRoom", JSON.stringify(data));
-}
-
-function sayHello() {
-    alert("sup");
 }
 
 function accountReg(name, login, password) {
     if (login.length < 3 || login.length > 20) {
         alert("Login must be at least 3 characters and not exceed 20 characters!");
-        return;
+        return false;
     }
-    else if (length(name) > 16) {
+    if (name.length > 16) {
         alert("Name must not exceed 16 characters!");
-        return;
+        return false;
     }
-    else if (password.length > 20) {
-        alert("password must not exceed 20 characters!");
-        return;
+    if (password.length > 20) {
+        alert("Password must not exceed 20 characters!");
+        return false;
     }
+    return true;
 }
 
-function showFile(filePath, messageBlockId) {
-    console.log("1");
-    const fileUrl = "http://172.16.47.22:8080/" + filePath;
-    console.log("2");
-    const messages = document.getElementById(messageBlockId);
-    console.log("3");
-    const fileMTemp = document.getElementById("file-template");
-    console.log("4");
-    const newFileMsg = fileMTemp.content.cloneNode(true);
-    console.log("5");
-    activateMedia(fileUrl, newFileMsg);
-    console.log("6");
-    messages.appendChild(newFileMsg);
-    console.log("7");
-}
-
-function startApp() {
-    Chat.connect();
-}
 function regin() {
-    const name_ = signInName.value;
-    const login_ = signInLogin.value;
-    const password_ = signInPassword.value;
-    Auth.regin(name_, login_, password_, login)
+    const name_ = signInName.value.trim();
+    const login_ = signInLogin.value.trim();
+    const password_ = signInPassword.value.trim();
+    if (!accountReg(name_, login_, password_)) {
+        return;
+    }
+    Auth.regin(name_, login_, password_, function() {
+        window.location.assign('http://localhost:8080/index.html');
+    });
 }
 
 function login() {
-    const login = signInLogin.value;
-    const password = signInPassword.value;
-
-    Auth.login(login, password, startApp);
+    const login_ = signInLogin.value.trim();
+    const password_ = signInPassword.value.trim();
+    Auth.login(login_, password_, function() {
+        window.location.assign('http://localhost:8080/index.html');
+    });
 }
 
 function signOut() {
     Auth.logout();
 }
 
+function startApp() {
+    Chat.connect();
+    loadRooms();
+}
+
+document.getElementById("sendBtn").onclick = sendMessage;
+document.getElementById("messageInput").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        sendMessage();
+    }
+});
+document.getElementById("gameBtn").onclick = rollDice;
+document.getElementById("fileBtn").onclick = function() {
+    document.getElementById("fileInp").click();
+};
+
 Auth.start(startApp);
-Chat.send("chat", "Пользователь подключился к серверу!");
-
-// document.getElementById("fileInp").addEventListener("change", function (event) {
-//     const file = document.getElementById("fileInp").file;
-    
-//     if (file) {
-//         const reader = new FileReader();
-        
-//         reader.onload = function(e) {
-//             try {
-//                 const jsonData = JSON.parse(e.target.result);
-//                 console.log('JSON data:', jsonData);
-//             } catch (error) {
-//                 console.error('Invalid JSON file:', error);
-//             }
-//         };
-        
-//         reader.readAsText(file);
-//     }
-
-//     console.log(fileJSON);
-// });
-
-//showFile("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAeefR4LoJQ_nFipMLNB3nVe5sWMnzvdIogIW05YVxaWDDrySuV8kduys&s=10","chatBox");
