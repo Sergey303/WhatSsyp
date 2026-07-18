@@ -9,11 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.ComponentModel;
 using System.Net.Cache;
+using System.Text;
 
 List<Room> rooms = JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("RoomsAlexander.json"));
 
 List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsersAlexander.json"));
 
+List<Account> accountsList = new();
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
@@ -124,10 +126,121 @@ app.MapGet("/api/me", (HttpContext context) =>
 });
 app.MapPost("/api/logout", (HttpContext context) => { context.SignOutAsync().Wait(); return Results.Ok(); });
 
+//MEGA LOSOS!!!!!!
+app.MapGet("/api/fish", (HttpContext context) =>
+{
+    string name = "";
+    // string login = "";
 
+    if (context.User?.Identity?.Name != null)
+    {
+        name = context.User.Identity.Name;
+        // var claims = context.User.Claims;
+        // login = claims.FirstOrDefault(a =>
+        //     a.GetType().ToString() == ClaimTypes.NameIdentifier).Value;
+    }
 
+    if (name == "")
+    {
+        return Results.Unauthorized();
+    }
+    return Results.Ok(new { name = name});
+});
+
+app.MapGet("api/MLfile", (string filePath) =>
+{
+    // Console.WriteLine(filePath.Split("\\").Last());
+    return Results.File(filePath, "application/octet-stream", filePath.Split("\\").Last());
+});
+
+app.MapPost("/api/MLlogout", (HttpContext context) =>
+{
+    context.SignOutAsync().Wait();
+    return Results.Ok();
+});
+
+app.MapPost("/api/MLlogin", async (LoginRequest loginData, HttpContext context) =>
+{
+    if (!accountsList.Any(a =>
+    a.login == loginData.UserName && a.password == loginData.Password))
+    {
+        return Results.Unauthorized();
+    }
+
+    Account? _logAcc = accountsList.Find(a => a.login == loginData.UserName);
+
+    Claim nameClaim = new Claim(ClaimTypes.Name, _logAcc.name);
+    Claim loginClaim = new Claim(ClaimTypes.NameIdentifier, _logAcc.login);
+    Claim passwordClaim = new Claim(ClaimTypes.SerialNumber, _logAcc.login);
+    List<Claim> claims = new();
+    claims.Add(nameClaim);
+    claims.Add(loginClaim);
+    claims.Add(passwordClaim);
+
+    ClaimsIdentity identity = new ClaimsIdentity(claims,
+        CookieAuthenticationDefaults.AuthenticationScheme);
+    ClaimsPrincipal user = new ClaimsPrincipal(identity);
+
+    await context.SignInAsync(user);
+
+    return Results.Ok();
+});
+
+app.MapPost("api/MLregin", (LoginRequest loginData, HttpContext context) =>
+{
+    try
+    {
+        string name = loginData.Name;
+        string login = loginData.UserName;
+        string password = loginData.Password;
+        if (name.Length > 20 || login.Length > 20 || password.Length > 20)
+        {
+            return Results.BadRequest();
+        }
+        if (accountsList.Any(a => a.name == name ||
+            a.login == login))
+            {
+                return Results.BadRequest();
+            }
+        AddAccountToList(name, login, password);
+        AddAccountToFile(name, login, password);
+        return Results.Ok();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+        return Results.Problem();
+    }
+});
+
+app.MapPost("api/MLupload", async (IFormFile file) =>
+{
+    string dir = Path.Combine(Directory.GetCurrentDirectory(), "uploads", Guid.NewGuid().ToString());
+    string filePath = Path.Combine(dir, file.FileName);
+    Directory.CreateDirectory(dir);
+
+    using (var stream = new FileStream(filePath, FileMode.Create))
+    {
+        await file.CopyToAsync(stream);
+    }
+    return Results.Ok(filePath);
+}).DisableAntiforgery();
+//end MEGA LOSOS...
 
 
 //app.MapGet("/", () => "Hello World!");
 app.MapHub<ChatHub>("/chatHub");
 app.Run("http://0.0.0.0:8080");
+
+
+void AddAccountToList(string name, string login, string password)
+{
+    Account _acc = new Account {name = name, login = login, password = password};
+    accountsList.Add(_acc);
+}
+
+void AddAccountToFile(string name, string login, string password)
+{
+    string jsn = JsonSerializer.Serialize(accountsList);
+    File.WriteAllText(AccountProcessor.filePath, jsn, Encoding.UTF8);
+}

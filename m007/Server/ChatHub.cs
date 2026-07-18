@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Security.Claims;
+using System.Text;
 
 public class ChatMessage {
     public string group { get; set; } = "general";
@@ -16,6 +17,15 @@ public class LoginMessage {
     public string login { get; set; } = "";
     public string password { get; set; } = "";
     
+}
+
+class jsonMsg
+{
+    public string name { get; set; } = "";
+    public string text { get; set; } = "";
+    public string filePath { get; set; } = "";
+    public string date { get; set; } = "";
+    public string room { get; set; } = "";
 }
 
 public class ChatHub : Hub {
@@ -123,6 +133,25 @@ public class ChatHub : Hub {
             string room = message.room;
             return SendChat(messageText, room);
         }
+        
+        else if (eventName == "MLChat") {
+            string? name = this.Context.GetHttpContext().User?.Identity?.Name?.ToString();
+            if (name == null)
+            {
+                return Clients.Caller.SendAsync("429");
+            }
+            if (isIpBlocked())
+            {
+                return Clients.Caller.SendAsync("429");
+            }
+            jtext = JsonSerializer.Serialize(
+                JsonSerializer.Deserialize<jsonMsg>(jtext).name = name);
+            if (eventName == "MLChat")
+            {
+                return OldSendChat(jtext);
+            }
+            return Clients.All.SendAsync("chat", jtext);
+        }
 
 
         var jmes = JsonSerializer.Deserialize<DbRecord>(jtext);
@@ -155,6 +184,30 @@ public class ChatHub : Hub {
             return Clients.Caller.SendAsync("system", "Сначала войди");
         }
         return Clients.Group(room).SendAsync("chat", room + ":" + name + ": " + text);
+    }
+    
+    private Task OldSendChat(string text)
+    {
+        string name = "";
+        if (Context?.User?.Identity?.Name != null)
+        {
+            name = Context.User.Identity.Name;
+        }
+
+        if (name == "")
+        {
+            return Clients.Caller.SendAsync("system", "Сначала войди");
+        }
+
+        return Clients.All.SendAsync("chat", JsonSerializer.Serialize(
+                JsonSerializer.Deserialize<jsonMsg>(text).name = name));
+    }
+    public bool isIpBlocked()
+    {
+        string jsnBlockedIPs = File.ReadAllText("wwwroot/BlockedIPs.json", Encoding.UTF8);
+        List<string>? blockedIPs = JsonSerializer.Deserialize<List<string>>(jsnBlockedIPs);
+        string? requestIP = this.Context.GetHttpContext()?.Connection.RemoteIpAddress?.ToString();
+        return blockedIPs.Contains(requestIP);
     }
     private Task joinRoom(string json)
     {
