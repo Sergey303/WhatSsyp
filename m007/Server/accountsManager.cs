@@ -6,7 +6,7 @@ using System.Text.Json;
 
 public class AccountProcessor
 {
-    public static string filePath = "wwwroot/accounts.json";
+    public static string filePath = "accounts.json";
     public List<Account> LoadAccounts()
     {
         try

@@ -145,8 +145,6 @@ public class ChatHub : Hub {
             {
                 return Clients.Caller.SendAsync("429");
             }
-            jtext = JsonSerializer.Serialize(
-                JsonSerializer.Deserialize<jsonMsg>(jtext).name = name);
             if (eventName == "MLChat")
             {
                 return OldSendChat(jtext);
@@ -189,19 +187,18 @@ public class ChatHub : Hub {
     
     private Task OldSendChat(string text)
     {
-        string name = "";
         if (Context?.User?.Identity?.Name != null)
         {
-            name = Context.User.Identity.Name;
+            var jsonMsg_ = JsonSerializer.Deserialize<jsonMsg>(text);
+            jsonMsg_.name = Context.User.Identity.Name;
+            text = JsonSerializer.Serialize(jsonMsg_);
         }
-
-        if (name == "")
+        else
         {
             return Clients.Caller.SendAsync("system", "Сначала войди");
         }
-
-        return Clients.All.SendAsync("chat", JsonSerializer.Serialize(
-                JsonSerializer.Deserialize<jsonMsg>(text).name = name));
+        Console.WriteLine(text);
+        return Clients.All.SendAsync("chat", text);
     }
     public bool isIpBlocked()
     {

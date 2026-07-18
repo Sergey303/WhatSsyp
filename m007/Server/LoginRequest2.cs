@@ -1,4 +1,4 @@
-class LoginRequest
+class LoginRequest2
 {
     public string name { get; set; } = "";
     public string login { get; set; } = "";

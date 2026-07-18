@@ -15,7 +15,8 @@ List<Room> rooms = JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("Room
 
 List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsersAlexander.json"));
 
-List<Account> accountsList = new();
+var processor = new AccountProcessor();
+var accountsList = processor.LoadAccounts();
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
@@ -159,15 +160,15 @@ app.MapPost("/api/MLlogout", (HttpContext context) =>
     return Results.Ok();
 });
 
-app.MapPost("/api/MLlogin", async (LoginRequest loginData, HttpContext context) =>
+app.MapPost("/api/MLlogin", async (LoginRequest2 loginData, HttpContext context) =>
 {
     if (!accountsList.Any(a =>
-    a.login == loginData.UserName && a.password == loginData.Password))
+    a.login == loginData.login && a.password == loginData.password))
     {
         return Results.Unauthorized();
     }
 
-    Account? _logAcc = accountsList.Find(a => a.login == loginData.UserName);
+    Account? _logAcc = accountsList.Find(a => a.login == loginData.login);
 
     Claim nameClaim = new Claim(ClaimTypes.Name, _logAcc.name);
     Claim loginClaim = new Claim(ClaimTypes.NameIdentifier, _logAcc.login);
@@ -186,22 +187,23 @@ app.MapPost("/api/MLlogin", async (LoginRequest loginData, HttpContext context) 
     return Results.Ok();
 });
 
-app.MapPost("api/MLregin", (LoginRequest loginData, HttpContext context) =>
+app.MapPost("api/MLregin", (LoginRequest2 loginData, HttpContext context) =>
 {
     try
     {
-        string name = loginData.Name;
-        string login = loginData.UserName;
-        string password = loginData.Password;
+        string name = loginData.name;
+        string login = loginData.login;
+        string password = loginData.password;
         if (name.Length > 20 || login.Length > 20 || password.Length > 20)
         {
             return Results.BadRequest();
         }
         if (accountsList.Any(a => a.name == name ||
             a.login == login))
-            {
-                return Results.BadRequest();
-            }
+        {
+            Console.WriteLine(name, login);
+            return Results.BadRequest();
+        }
         AddAccountToList(name, login, password);
         AddAccountToFile(name, login, password);
         return Results.Ok();

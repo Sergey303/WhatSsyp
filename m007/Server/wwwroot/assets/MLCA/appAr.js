@@ -41,7 +41,7 @@ function showMessage(name, text, messageBlockId) {
 }
 
 function showFile(filePath, messageBlockId) {
-    const fileUrl = "http://172.16.47.22:8080/api/fileR?filePath=" + filePath;
+    const fileUrl = "http://172.16.47.27:8080/api/MLfile?filePath=" + filePath;
     const messages = document.getElementById(messageBlockId);
     const fileMTemp = document.getElementById("file-template");
     const newFileMsg = fileMTemp.content.cloneNode(true);
@@ -50,10 +50,12 @@ function showFile(filePath, messageBlockId) {
     messages.appendChild(newFileMsg);
 }
 
-Chat.receive("MLChat", function (text) {
+Chat.receive("chat", function (text) {
     console.log(text);
     const msgObj = JSON.parse(text);
-    showMessage(msgObj.name, msgObj.text, "chatBox");
+    if (msgObj.text) {
+        showMessage(msgObj.name, msgObj.text, "chatBox");
+    }
     if (msgObj.filePath) {
         showFile(msgObj.filePath, "chatBox")
     }

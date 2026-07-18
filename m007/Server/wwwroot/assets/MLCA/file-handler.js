@@ -171,7 +171,8 @@ class FileUploadManager {
         const formdata = new FormData();
         formdata.append("file", file);
         Api.postFile("api/MLupload", formdata, (filePath) => {
-            showFile(filePath, "chatBox");
+            Chat.send("MLChat", JSON.stringify({name:"", text: "",
+            date:"", filePath: filePath}));
         });
     }
 
