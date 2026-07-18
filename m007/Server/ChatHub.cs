@@ -117,7 +117,7 @@ public class ChatHub : Hub {
             }
 
             if (eventName == "SoZVoNnewRoom"){
-                if (Rooms.rooms.Contains(message.group)){return Clients.Group(message.group).SendAsync("chat", text);}
+                if (Rooms.rooms.Contains(message.group)){return Clients.Group(message.group).SendAsync("chat", jtext);}
                 Rooms.rooms.Add(message.group);
                 Rooms.usersByRoom[message.group] = new[] {message.user};
                 Rooms.messagesByRoom[message.group] = new List<ChatMessage> {message};
