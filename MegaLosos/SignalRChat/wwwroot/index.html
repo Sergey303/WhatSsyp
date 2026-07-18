@@ -46,11 +46,9 @@
                 <!--siple test file downloader, old version:
                 <a class="fileHA" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAeefR4LoJQ_nFipMLNB3nVe5sWMnzvdIogIW05YVxaWDDrySuV8kduys&s=10">download file</a>
                 -->
-                <div class="download-block" style="display: none">
-                    <a class="tpl-download-btn" href="#" download>
-                        Скачать файл
-                    </a>
-                </div>
+                <a class="tpl-download-btn" href="#" download style="display: none">
+                    Скачать файл
+                </a>
 
                 <!-- IMG: empty 1x1 (0 bytes, hidden)-->
                 <img class="tpl-img" 
@@ -94,7 +92,7 @@
                 </div>
                 <div class="col-4">
                     <input type="file" id="fileInp" placeholder="File">
-                    <div id="fileList" class="file-list"></div>
+                    <ul id="fileList" class="file-list"></ul>
                 </div>
                 <div id="stats" class="stats"></div>
             </div>
@@ -110,14 +108,8 @@
             <input type="file" id="fileInput" multiple style="display: none;">
         </div>
         <div id="stats" class="stats"></div>
-        <div id="fileList" class="file-list"></div>
+        
     </div> -->
-    
-    <div id="fileMessages">
-        <div class="success-message" style="display:none">File uploaded successfully!</div>
-        <div class="error-message" style="display:none">File is too large (max 10MB)</div>
-        <div class="info-message" style="display:none">Please select at least one file</div>
-    </div>
     
     <script src="file-converter.js"></script>
     <script src="assets/auth-helper.js"></script>
