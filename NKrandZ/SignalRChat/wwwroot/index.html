@@ -30,13 +30,13 @@
         <div class="scn">
             <div class="chatCtrl">
                 <button onclick="loadRooms(); joinRoom('General'); loadRoomUsers('General')">&#9776;</button>
-                <button onclick="loadRoomUsers(document.getElementById('roomResult').value)">&#8634;</button>
+                <button onclick="loadRoomUsers(document.getElementById('roomResult').value)" class="reload">&#8634;</button>
                 
             </div>
             <div id="chatInfo" class="chatInfo">
                 <div id="chatName" class="chatName"></div>
-                <select id="chatResult" class="chatResult"></select>
-                <button onclick="displayChatInfo()" class="dCInfo">&#9776;</button>
+                <select id="chatResult" class="chatResult" hidden></select>
+                <button onclick="displayChatInfo()" class="dCInfo">&#8942;</button>
             </div>
         </div>
         <div class="scrn">

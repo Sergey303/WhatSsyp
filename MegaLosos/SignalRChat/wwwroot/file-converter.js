@@ -20,6 +20,7 @@ function getFileType(filePath) {
 }
 function activateMedia(fileMsg, fileUrl) {
     const type = getFileType(fileUrl);
+    const fileName = fileUrl.trim().split("\\").at(-1);
 
     if (type === '.tpl-img') {
         const img = fileMsg.querySelector(type);
@@ -41,24 +42,25 @@ function activateMedia(fileMsg, fileUrl) {
         audio.load();
     } 
     
-    else if (type === '.tpl-iframe') {
-        const iframe = fileMsg.querySelector(type);
-        iframe.src = fileUrl;
-        iframe.style.display = 'block';
-    } 
+    // else if (type === '.tpl-iframe') {
+    //     const iframe = fileMsg.querySelector(type);
+    //     iframe.src = fileUrl;
+    //     iframe.style.display = 'block';
+    // } 
 
-    else if (type === '.tpl-g-iframe') {
-        const giframe = fileMsg.querySelector(type);
-        giframe.src = fileUrl;
-        giframe.style.display = 'block';
-    } 
+    // else if (type === '.tpl-g-iframe') {
+    //     const giframe = fileMsg.querySelector(type);
+    //     giframe.src = fileUrl;
+    //     giframe.style.display = 'block';
+    // } 
     
-    else if (type === '.tpl-download-btn') {
-        const btn = fileMsg.querySelector(type);
+    else {
+        const btn = fileMsg.querySelector('.tpl-download-btn');
         if (btn) 
         { 
             btn.href = fileUrl; 
-            btn.style.display = 'block'; 
+            btn.style.display = 'block';
+            btn.textContent = fileName;
         }
     }
     
@@ -135,11 +137,22 @@ class FileUploadManager {
         }
     }
 
+    addFileToList(text) {
+        if (text.length > 20) {
+            text = text.slice(0, 16);
+            text += '...';
+        }
+        const newItem = document.createElement('li');
+        newItem.textContent = text;
+        this.fileList.appendChild(newItem);
+    }
+
     handleFileSelect(event) {
         console.log(event);
         const _nfs = this.handleFiles(event.target.files)
         for (const _f of _nfs) {
             this.files.push(_f);
+            this.addFileToList(_f.name);
         }
         this.fileInput.value = '';
         this.uploadBtn.disabled = false;
@@ -250,13 +263,11 @@ class FileUploadManager {
             for (const _f of this.files) {
                 this.sendFile(_f);
             }
-            this.files = [];
         } catch (error) {
-            this.files = [];
-            this.uploadBtn.disabled = true;
-            this.uploadBtn.textContent = 'Send';
             console.error(error);
         } finally {
+            this.fileList.replaceChildren(); 
+            this.files = [];
             this.uploadBtn.disabled = true;
             this.uploadBtn.textContent = 'Send';
         }
