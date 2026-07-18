@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Primitives;
 public class ChatHub : Hub
 {
-    List<Room> roomMembers=JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("Rooms.json"));
     //private static Dictionary<string, List <string>> roomMembers = new Dictionary<string, List<string>>();
     public Task Send(string eventName, string text)
     {
-        
+
         if (eventName == "chat")
         {
             Message message = JsonSerializer.Deserialize<Message>(text);
@@ -20,7 +20,12 @@ public class ChatHub : Hub
         }
         if (eventName == "joinRoom")
         {
-            return joinRoom(text);
+            RoomJoin join = JsonSerializer.Deserialize<RoomJoin>(text);
+            return joinRoom(JsonSerializer.Serialize(new List<string> { join.RoomName, Context.User.FindFirst("UserName").Value }));
+        }
+        if (eventName == "connected")
+        {
+            OnConnectedAsync();
         }
         return Clients.All.SendAsync(eventName, text);
     }
@@ -38,7 +43,7 @@ public class ChatHub : Hub
                 Console.WriteLine(item.Type);
             }
         }
-        
+
         if (name == "")
         {
             return Clients.Caller.SendAsync("system", "Сначала войди");
@@ -47,31 +52,47 @@ public class ChatHub : Hub
     }
     private Task joinRoom(string json)
     {
-        RoomJoin join = JsonSerializer.Deserialize<RoomJoin>(json) ?? new RoomJoin();
-        if (join.RoomName == "" || join.UserName == "")
+        List<Room> roomMembers = JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("Rooms.json"));
+
+        List<string> convert = JsonSerializer.Deserialize<List<string>>(json);
+        string RoomName = convert[0];
+        string UserName = convert[1];
+        if (RoomName == "" || UserName == "")
         {
             return Clients.Caller.SendAsync("system", "нужное имя и название комнаты");
         }
-        Groups.AddToGroupAsync(Context.ConnectionId, join.RoomName).Wait();
-        if (roomMembers.FirstOrDefault(x => join.RoomName == x.name) != null)
+        Groups.AddToGroupAsync(Context.ConnectionId, RoomName).Wait();
+        Room room = roomMembers.FirstOrDefault(x => RoomName == x.name);
+        if (room != null)
         {
             //List<string> members = roomMembers[join.RoomName];
-            List<string> members = roomMembers.FirstOrDefault(x => join.RoomName == x.name).Members;
-            if (members.Contains(join.UserName) == false)
+            if (room.Members.Contains(UserName) == false)
             {
-                members.Add(join.UserName);
+                room.Members.Add(UserName);
             }
-            roomMembers.FirstOrDefault(x => join.RoomName == x.name).Members = members;
             string output = JsonSerializer.Serialize(roomMembers);
             File.WriteAllText("Rooms.json", output, Encoding.UTF8);
-            string membersJson = JsonSerializer.Serialize(members);
-            return Clients.Group(join.RoomName).SendAsync("roomMembers", membersJson);
+            string membersJson = JsonSerializer.Serialize(room.Members);
+            return Clients.Group(RoomName).SendAsync("roomMembers", membersJson);
         }
         else
         {
             return Task.CompletedTask;
         }
-        
     }
+    public override async Task OnConnectedAsync()
+    {
+        List<Room> roomMembers = JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("Rooms.json"));
+        string connectionId = Context.ConnectionId;
+        foreach (Room item in roomMembers)
+        {
+            if (item.Members.Contains(Context.User.FindFirst("UserName").Value))
+            {
+                await Groups.AddToGroupAsync(connectionId, item.name);
+            }
+        }
+        await base.OnConnectedAsync();
+    }
+
 }
 

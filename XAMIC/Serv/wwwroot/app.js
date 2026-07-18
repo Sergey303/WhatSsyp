@@ -4,6 +4,7 @@ const loginPassword = document.getElementById("password");
 const UserName = document.getElementById("username");
 var nameI;
 function startApp() {
+    Chat.send("connected");
     Chat.connect();
     console.log("1");
 }
@@ -87,6 +88,6 @@ Chat.receive("roomMembers", function(text){const members = JSON.parse(text); con
 function joinR() {
     //const name = document.getElementById("nameInput").value.trim();
     const room = document.getElementById("roomNameInput").value.trim();
-    const data = {RoomName:room, UserName:nameI};
+    const data = {RoomName:room};
     Chat.send("joinRoom", JSON.stringify(data));
 }
