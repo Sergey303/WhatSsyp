@@ -74,7 +74,7 @@
                 method: "POST"
             })
             .then(function () {
-                window.location.assign('http://localhost:8080/');
+                window.location.assign('/');
             })
             .catch(function (error) {
                 console.error(error);

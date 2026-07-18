@@ -82,6 +82,13 @@ app.MapGet("/api/me", (HttpContext context) =>
     return Results.Ok(new { name = name});
 });
 
+// app.MapPost("/x"+groupName, (message) => {
+//     List <string> messages = JsonSerializer.Deserialize("Global.json");
+//     messages.Add(message);
+//     string convert = JsonSerializer.Serialize(messages);
+//     File.WriteAllText(groupName+".json", convert);
+// });
+
 app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
 {
     try
