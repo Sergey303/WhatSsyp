@@ -25,13 +25,10 @@ function sendMessage() {
     const jsonString = JSON.stringify(
         {Name: "", text: text, filePath: "", date: "", room: ""});
         
-    if (text === "") {
-        alert("FILL  IN  THE  TEXT!!!!");
-        return;
-    }
+    if (text === "") {return;}
     Chat.send("chat", jsonString);
     document.getElementById("messageInp").value = "";
-
+    document.getElementById('sendBtn').disabled = true;
     // alert(name + ": " + text);
 }
 
