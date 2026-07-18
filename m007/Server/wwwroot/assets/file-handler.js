@@ -18,9 +18,12 @@ function getFileType(filePath) {
     
     return '.tpl-download-btn';
 }
-function activateMedia(fileMsg, fileUrl) {
+function activateMedia(fileUrl, text, name, date) {
     const type = getFileType(fileUrl);
     const fileName = fileUrl.trim().split("\\").at(-1);
+    const messages = document.getElementById("chatBox");
+    const fileMTemp = document.getElementById("file-template");
+    const fileMsg = fileMTemp.content.cloneNode(true);
 
     if (type === '.tpl-img') {
         const img = fileMsg.querySelector(type);
@@ -53,8 +56,7 @@ function activateMedia(fileMsg, fileUrl) {
     //     giframe.src = fileUrl;
     //     giframe.style.display = 'block';
     // } 
-    
-    else {
+    else if (fileUrl) {
         const btn = fileMsg.querySelector('.tpl-download-btn');
         if (btn) 
         { 
@@ -63,16 +65,15 @@ function activateMedia(fileMsg, fileUrl) {
             btn.textContent = fileName;
         }
     }
+
+    const name = fileMsg.querySelector(".name-block");
+    const text = fileMsg.querySelector(".text-block");
+    name.textContent = name;
+    text.textContent = text;
     
-    
-    // else if (type === 'embed') {  // MOZHET VSE SLOMAT!                                                    !!!!!
-        //   const placeholder = document.getElementById('tpl-embed-placeholder');
-        //   placeholder.innerHTML = `<embed src="${fileUrl}" type="application/pdf" width="100%" height="500px">`;
-        //   placeholder.style.display = 'block';
-    // }
+    messages.appendChild(fileMsg);
 }
 
-//formdata
 
 class FileUploadManager {
     constructor(options = {}) {
@@ -84,7 +85,7 @@ class FileUploadManager {
         this.allFiles = [];
         this.files = [];
             
-        this.fileInput = document.getElementById('fileInp');
+        this.fileInput = document.getElementById('fileInput');
         this.fileList = document.getElementById('fileList');
         this.stats = document.getElementById('stats');
         this.messages = document.getElementById('fileMessages');
