@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Primitives;
+using System.Data;
 public class ChatHub : Hub
 {
     //private static Dictionary<string, List <string>> roomMembers = new Dictionary<string, List<string>>();
@@ -42,13 +43,13 @@ public class ChatHub : Hub
                 Console.WriteLine(item.Value);
                 Console.WriteLine(item.Type);
             }
+            List<Message> messages = JsonSerializer.Deserialize<List <Message>>(File.ReadAllText("DataMessages.json"));
+            messages.Add(new Message {name=name, text=text, room=room});
+            string convert = JsonSerializer.Serialize(messages, new JsonSerializerOptions{WriteIndented=true});
+            File.WriteAllText("DataMessages.json", convert, Encoding.UTF8);
+            return Clients.Group(room).SendAsync("chat", room + ":" + name + ": " + text);
         }
-
-        if (name == "")
-        {
-            return Clients.Caller.SendAsync("system", "Сначала войди");
-        }
-        return Clients.Group(room).SendAsync("chat", room + ":" + name + ": " + text);
+        return Clients.Caller.SendAsync("system", "Сначала войди");
     }
     private Task joinRoom(string json)
     {

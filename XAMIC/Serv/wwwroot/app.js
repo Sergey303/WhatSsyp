@@ -2,18 +2,23 @@ Auth.start(startApp);
 const loginName = document.getElementById("loginName");
 const loginPassword = document.getElementById("password");
 const UserName = document.getElementById("username");
-var nameI;
+var roomName;
+var messages;
 function startApp() {
     Chat.send("connected");
     Chat.connect();
     console.log("1");
+    loadRooms();
+    //console.log(window.location);
+    if (window.location.pathname != "/hub.html") {
+        window.location.assign("/hub.html");
+    }
 }
 function login() {
     const name = loginName.value;
     const password = loginPassword.value;
     const username = UserName.value;
     Auth.login(name, password, username, startApp);
-    nameI = UserName.value;
 }
 function registration() {
     const name = loginName.value;
@@ -35,14 +40,12 @@ Chat.receive("chat", function(text) {
 });
 
 function sendMessage() {
-    const text = document.getElementById("messageInput").value;
-    const room = document.getElementById("messageRoom").value;
-    
+    const text = document.getElementById("messageInput").value;  
     if (text==="") {
         alert("Сообщение");
         return;
     }
-    Chat.send("chat", JSON.stringify({text:text, room:room}));
+    Chat.send("chat", JSON.stringify({text:text, room:roomName}));
     document.getElementById("messageInput").value = "";   
 }
 function showMessage(text) {
@@ -60,11 +63,18 @@ function showMessage(text) {
 const roomNameInput = document.getElementById("roomNameInput");
 const roomsBlock = document.getElementById("rooms");
 function showRooms(rooms) {
-    roomsBlock.textContent = "";
+    // roomsBlock.textContent = "";
+    // for (const room of rooms) {
+    //     const item = document.createElement("li");
+    //     item.classname = "list-group-item";
+    //     item.textContent = room.name;
+    //     roomsBlock.appendChild(item);
+    // }
     for (const room of rooms) {
         const item = document.createElement("li");
-        item.classname = "list-group-item";
+        item.className = "list-group-item";
         item.textContent = room.name;
+        item.onclick = function() { joinR(room.name); };
         roomsBlock.appendChild(item);
     }
 }
@@ -85,9 +95,11 @@ function createRoom() {
 }
 Chat.receive("roomMembers", function(text){const members = JSON.parse(text); console.log(members);});
 
-function joinR() {
+function joinR(room) {
     //const name = document.getElementById("nameInput").value.trim();
-    const room = document.getElementById("roomNameInput").value.trim();
+    Api.get("/messages", (mess)=>{messages=JSON.parse(mess)});
     const data = {RoomName:room};
-    Chat.send("joinRoom", JSON.stringify(data));
+    Chat.send("joinRoom", JSON.stringify(data));   
+     
+    roomName = room;
 }
