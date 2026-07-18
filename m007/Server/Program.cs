@@ -103,7 +103,7 @@ app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
 
     Claim nameClaim1 = new Claim(ClaimTypes.Name, login.Name);
     Claim nameClaim2 = new Claim(userName, login.UserName);
-    List<Claim> claims = [nameClaim1, nameClaim2];
+    List<Claim> claims = {nameClaim1, nameClaim2};
 
     ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
     ClaimsPrincipal user = new ClaimsPrincipal(identity);

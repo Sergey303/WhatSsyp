@@ -19,7 +19,7 @@ class Message
     {
         get;
         set;
-    } = [];
+    } = {};
     public string dat
     {
         get;
