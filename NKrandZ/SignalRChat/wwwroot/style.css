@@ -124,7 +124,7 @@ h1 {
     position: absolute;
     top: 10px;
     font-size: 26px;
-    width: 200px;
+    width: 350px;
     align-items: center;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -204,7 +204,7 @@ h1 {
 }
 
 .messages {
-    overflow: scroll;
+    overflow-y: scroll;
     height: 440px;
     overflow-wrap: break-word;
     word-break: break-all;
