@@ -34,16 +34,20 @@ function sendMessage() {
 
 
 Chat.receive("chat", function (text) {
-    console.log(text);
     const msgObj = JSON.parse(text);
     if (msgObj.text) {
     }
     if (msgObj.filePath) {
-        const fileUrl = "http://172.16.47.27:8080/api/MLfile?filePath=" + filePath;
+        msgObj.filePath = "http://172.16.47.27:8080/api/MLfile?filePath=" + filePath;
     }
-    const newFileMsg = activateMedia(msgObj.filePath, msgObj.text, msgObj.name, msgObj.date);
+    console.log("1");
+    try {
+        activateMedia(msgObj.filePath, msgObj.text, msgObj.name, msgObj.date);
+    }
+    catch(error) {
+        console.error(error);
+    }
     console.log(fileUrl);
-    messages.appendChild(newFileMsg);
 });
 
 // document.getElementById("fileInp").addEventListener("change", function (event) {
