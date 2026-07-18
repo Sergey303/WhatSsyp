@@ -32,33 +32,18 @@ function sendMessage() {
     // alert(name + ": " + text);
 }
 
-function showMessage(name, text, messageBlockId) {
-    const messages = document.getElementById(messageBlockId);
-    const block = document.createElement("div");
-    block.className = "message";
-    block.textContent = text;
-    messages.appendChild(block);
-}
-
-function showFile(filePath, messageBlockId) {
-    const fileUrl = "http://172.16.47.27:8080/api/MLfile?filePath=" + filePath;
-    const messages = document.getElementById(messageBlockId);
-    const fileMTemp = document.getElementById("file-template");
-    const newFileMsg = fileMTemp.content.cloneNode(true);
-    activateMedia(newFileMsg, fileUrl);
-    console.log(fileUrl);
-    messages.appendChild(newFileMsg);
-}
 
 Chat.receive("chat", function (text) {
     console.log(text);
     const msgObj = JSON.parse(text);
     if (msgObj.text) {
-        showMessage(msgObj.name, msgObj.text, "chatBox");
     }
     if (msgObj.filePath) {
-        showFile(msgObj.filePath, "chatBox")
+        const fileUrl = "http://172.16.47.27:8080/api/MLfile?filePath=" + filePath;
     }
+    const newFileMsg = activateMedia(msgObj.filePath, msgObj.text, msgObj.name, msgObj.date);
+    console.log(fileUrl);
+    messages.appendChild(newFileMsg);
 });
 
 // document.getElementById("fileInp").addEventListener("change", function (event) {

@@ -40,35 +40,6 @@
     <div id="appPanel" class="d-none">        
         <button class="logout-btn" onclick="Auth.logout()">Выйти</button>
         <div id="messages">
-            <template id="file-template">
-                <div class="message" style="display: block">
-                    <!--siple test file downloader, old version:
-                    <a class="fileHA" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAeefR4LoJQ_nFipMLNB3nVe5sWMnzvdIogIW05YVxaWDDrySuV8kduys&s=10">download file</a>
-                    -->
-                    <a class="tpl-download-btn" href="#" download style="display: none">
-                        Скачать файл
-                    </a>
-    
-                    <!-- IMG: empty 1x1 (0 bytes, hidden)-->
-                    <img class="tpl-img" 
-                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" 
-                        data-src="" alt="" >
-    
-                    <!-- VID: no link (empty, hidden) -->
-                    <video class="tpl-video" controls>
-                        <source src="" type="video/mp4">
-                    </video>
-    
-                    <!-- AUD: no link (empty, hidden) -->
-                    <audio class="tpl-audio" controls>
-                        <source src="" type="audio/mpeg">
-                    </audio>
-    
-                    <!-- IFrame: safe link (empty, hidden) -->
-                    <iframe class="tpl-iframe" src="about:blank" sandbox="" allow-downloads data-src=""></iframe>
-                    <iframe class="tpl-g-iframe" src="about:blank" sandbox="" data-src=""></iframe>
-                </div>
-            </template>
         </div>
     </div>
     <div id="roomPanel" class="d-none">
@@ -86,6 +57,7 @@
     -->
         <input id="messageRoom" placeholder="выберите комнату">
         <input id="messageInput" placeholder="напишите сообщение">
+        <input id="fileInput" placeholder="выберите файл">
         <button class="image-button" onclick="sendMessage()">
             &#8629; 
         </button>
