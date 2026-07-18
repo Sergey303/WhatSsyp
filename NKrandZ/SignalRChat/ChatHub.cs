@@ -105,6 +105,7 @@ public class ChatHub : Hub
         }
 
         if (eventName == "newRoom"){
+            if (Rooms.rooms.Contains(message.group)){return Clients.Group(message.group).SendAsync("chat", text);}
             Rooms.rooms.Add(message.group);
             Rooms.usersByRoom[message.group] = new[] {message.user};
             Rooms.messagesByRoom[message.group] = new List<ChatMessage> {message};

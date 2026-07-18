@@ -1,68 +1,106 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.SignalR;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.Text.Json;
 using System.Text;
 using System.Security.Claims;
 
 public class ChatHub : Hub
 {
-    private static Dictionary<string, List <string>> roomMembers = new Dictionary<string, List<string>>();
-    public Task Send(string eventName, string text)
+    private static Dictionary<string, List<string>> roomMembers = new Dictionary<string, List<string>>();
+    private static Dictionary<string, List<string>> roomMessages = new Dictionary<string, List<string>>();
+
+    public async Task Send(string eventName, string text)
     {
         if (eventName == "chat")
         {
-            return SendChat(text);
+            await SendChat(text);
         }
-        if (eventName == "joinRoom")
+        else if (eventName == "joinRoom")
         {
-            return joinRoom(text);
+            await joinRoom(text);
         }
-        return Clients.All.SendAsync(eventName, text);
+        else if (eventName == "pct")
+        {
+            await Clients.All.SendAsync("pct", text);
+        }
+        else
+        {
+            await Clients.All.SendAsync(eventName, text);
+        }
     }
-    private Task SendChat(string text)
+
+    private async Task SendChat(string text)
     {
         string name = "";
         if (Context.User != null && Context.User.Identity != null && Context.User.Identity.Name != null)
         {
-            string userName = "UserName";
-            name = Context.User.FindFirst(userName)?.Value;
+            name = Context.User.FindFirst(ClaimTypes.Name)?.Value;
         }
-        
+
         if (string.IsNullOrEmpty(name))
         {
-            return Clients.Caller.SendAsync("system", "Сначала войди");
+            await Clients.Caller.SendAsync("system", "Сначала войди");
+            return;
         }
-        return Clients.All.SendAsync("chat", name + ": " + text);
+        
+        string message = name + ": " + text;
+        
+        if (!roomMessages.ContainsKey("Общий"))
+        {
+            roomMessages["Общий"] = new List<string>();
+        }
+        roomMessages["Общий"].Add(message);
+        
+        await Clients.All.SendAsync("chat", message);
     }
-    private Task joinRoom(string json)
+
+    private async Task joinRoom(string json)
     {
         RoomJoin join = JsonSerializer.Deserialize<RoomJoin>(json) ?? new RoomJoin();
-        if (join.RoomName == "" || join.UserName == "")
+        if (join.RoomName == "")
         {
-            return Clients.Caller.SendAsync("system", "нужное имя и название комнаты");
+            await Clients.Caller.SendAsync("system", "Нужно название комнаты");
+            return;
         }
-        Groups.AddToGroupAsync(Context.ConnectionId, join.RoomName).Wait();
-        if (roomMembers.ContainsKey(join.RoomName) == false)
+        
+        await Groups.AddToGroupAsync(Context.ConnectionId, join.RoomName);
+        
+        if (!roomMembers.ContainsKey(join.RoomName))
         {
             roomMembers[join.RoomName] = new List<string>();
         }
-        List<string> members = roomMembers[join.RoomName];
-        if (members.Contains(join.UserName) == false)
+        
+        string userName = "";
+        if (Context.User != null && Context.User.Identity != null)
         {
-            members.Add(join.UserName);
+            userName = Context.User.FindFirst(ClaimTypes.Name)?.Value ?? "";
         }
+        
+        List<string> members = roomMembers[join.RoomName];
+        if (!string.IsNullOrEmpty(userName) && !members.Contains(userName))
+        {
+            members.Add(userName);
+        }
+        
+        if (!roomMessages.ContainsKey(join.RoomName))
+        {
+            roomMessages[join.RoomName] = new List<string>();
+        }
+        
+        foreach (var msg in roomMessages[join.RoomName])
+        {
+            await Clients.Caller.SendAsync("chat", msg);
+        }
+        
         string membersJson = JsonSerializer.Serialize(members);
-        return Clients.Group(join.RoomName).SendAsync("roomMembers", membersJson);
+        await Clients.Group(join.RoomName).SendAsync("roomMembers", membersJson);
     }
+
     public bool isIpBlocked(string name)
     {
         string jsnBlockedIPs = File.ReadAllText("wwwroot/BlockedIPs.json", Encoding.UTF8);
         List<string>? blockedIPs = JsonSerializer.Deserialize<List<string>>(jsnBlockedIPs);
         string? requestIP = this.Context.GetHttpContext()?.Connection.RemoteIpAddress?.ToString();
         Console.WriteLine($"{name}.   IP: {requestIP}");
-        return blockedIPs.Contains(requestIP);
+        return blockedIPs != null && blockedIPs.Contains(requestIP);
     }
 }

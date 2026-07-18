@@ -14,15 +14,15 @@
     <p class="title"> Типа подзаголовок и тд</p> 
 <!--  р - показывает новый абзац  (перенос строки) (без этих штук текст плоский будет) -->
 
-<button class="bth bth-primary"
-        class="oform">
-    Проверка
-</button>
-
-
+<a href="rules.html"
+class="oform">
+<!-- Атрибут href задаёт адрес.
+Текст между <a> и </a> видит пользователь.-->
+    Так называемые правила
+</a> 
 
 <input
-    class="form-control"
+    class="form- hide"
     placeholder="Сюда ответ вводить и">
 
 <ul class="list-group"></ul>
@@ -59,10 +59,7 @@
         class="form-control"
         aria-placeholder="Сообщение">
 
-    <button
-        class="btn btn-primary">
-    Отправить
-    </button>
+
 </div>
 
 <button onclick="sayHello">
@@ -92,34 +89,40 @@
             Игра
         </h1>
 
-        <div class="alert alert-info"> <!-- alert — готовый блок сообщения. -->
-            Таймерчик (по желанию)
+        <div id="hide-when-press-start"> <!-- элементы что скрываются по "начать"-->
+
+            <div class="alert alert-info"> 
+                Таймерчик (по желанию)
+            </div>
+            
+            <select class="form-control">
+                <option> Играть с таймером</option>
+                <option> Игроть без таймера</option>
+            </select>
+
+            <p class="title"> Нажми "начать" (чтобы начать очев)</p> 
+
+            <button onclick="hideXStartGame()">
+                Начать
+            </button>
         </div>
-        
-        <select class="form-control">
-            <option> Играть с таймером</option>
-            <option> Игроть без таймера</option>
-        </select>
-
-        <p class="title"> Нажми "начать" (чтобы начать очев)</p> 
-        
-        <div id="afterStart"
-            class="hide">
-
+        <div id="open-when-press-start"
+        class="hide">
             <input
-            class="form-control"
+            onkeydown="keydown(event)"
             placeholder="Сюда ответ вводить и тд">
+
+            <button
+            class="btn btn-primary">
+                 Оответить
+            </button>
         </div>
 
-                <button onclick="startGame()">
-                    Начать
-                </button>
-
- 
 </div>
         
-        <button onclick="openMmm()">
-            Нажми
+        <button onclick="openMmmhideNnn()"
+                id="nnn">
+            Нажми пж
         </button>       
         
 <script src="index.js"></script>
