@@ -107,6 +107,7 @@ function register() {
     const username = document.getElementById("nameInput").value.trim();
     const login = document.getElementById("loginInput").value.trim();
     const password = document.getElementById("passwordInput").value.trim();
+    if (username == "" || login == "" || password == ""){return;}
     const loginMessage = {
         username: username,
         login: login,
@@ -153,6 +154,7 @@ function newRoom() {
 
 function appendRoom() {
     const name = document.getElementById("roomNameInput").value.trim();
+    if (name == ""){return;}
     document.getElementById("roomNameInput").value = "";
     const message = {
         message: "",

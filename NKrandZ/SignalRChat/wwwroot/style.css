@@ -73,11 +73,24 @@ h1 {
 }
 
 .chatCtrl {
+    position: relative;
     width: 300px;
     height: 60px;
     background: white;
     border: 1px solid #d1d5db;
     padding: 16px;
+}
+
+.chatCtrl button {
+    font-size: 24px;
+    border: 0px;
+    background: none;
+    position: absolute;
+    top: 9px;
+}
+
+.reload {
+    left: 53px;
 }
 
 .chatInfo {
@@ -88,6 +101,15 @@ h1 {
     background: white;
     border: 1px solid #d1d5db;
     padding: 16px;
+}
+
+.chatInfo button {
+    font-size: 24px;
+    border: 0px;
+    background: none;
+    position: absolute;
+    top: 9px;
+    right: 9px;
 }
 
 .chatName {
@@ -104,6 +126,7 @@ h1 {
 
 .dCInfo {
     height: 30px;
+    width: 30px;
 }
 .chat-select {
     position: relative;
