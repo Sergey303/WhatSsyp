@@ -1,6 +1,8 @@
 body {
     background: #eef2ff;
     color: #172033;
+    overflow: hidden;
+    
 }
 
 h1 {
@@ -116,7 +118,10 @@ h1 {
     position: absolute;
     top: 10px;
     font-size: 26px;
+    width: 200px;
     align-items: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .chatResult {
@@ -135,6 +140,14 @@ h1 {
     background: white;
     border: 1px solid #d1d5db;
     padding: 16px;
+}
+
+.roomResult {
+    width: 215px;
+    height: 400px;
+    overflow-y: scroll;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .newRoom {
@@ -156,6 +169,7 @@ h1 {
     height: 250px;
     background: white;
     border: 1px solid #d1d5db;
+    border-radius: 20px;
     padding: 16px;
 }
 
@@ -178,6 +192,13 @@ h1 {
     background: white;
     border: 1px solid #d1d5db;
     padding: 16px;
+}
+
+.messages {
+    overflow: scroll;
+    height: 440px;
+    overflow-wrap: break-word;
+    word-break: break-all;
 }
 
 .card {
