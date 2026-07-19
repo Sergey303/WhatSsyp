@@ -43,7 +43,9 @@ D:\Программирование\VSCode\WhatSsyp\Papka2\obj\Debug\net10.0\Ser
 D:\Программирование\VSCode\WhatSsyp\Papka2\obj\Debug\net10.0\Serv.genruntimeconfig.cache
 D:\Программирование\VSCode\WhatSsyp\Papka2\obj\Debug\net10.0\ref\Serv.dll
 D:\Программирование\VSCode\WhatSsyp\Papka2\obj\Debug\net10.0\compressed\00btbm21da-{0}-ilntiegw13-ilntiegw13.gz
-D:\Программирование\VSCode\WhatSsyp\Papka2\obj\Debug\net10.0\compressed\wc8s3tynm2-{0}-5km1jldqnp-5km1jldqnp.gz
-D:\Программирование\VSCode\WhatSsyp\Papka2\obj\Debug\net10.0\compressed\04eeosny3t-{0}-wj1n5opkxl-wj1n5opkxl.gz
-D:\Программирование\VSCode\WhatSsyp\Papka2\obj\Debug\net10.0\compressed\ky5ml3bt93-{0}-xckabdm4fy-xckabdm4fy.gz
-D:\Программирование\VSCode\WhatSsyp\Papka2\obj\Debug\net10.0\compressed\i8kw2ad0sz-{0}-f1bt5okzfe-f1bt5okzfe.gz
+D:\Программирование\VSCode\WhatSsyp\Papka2\obj\Debug\net10.0\compressed\ky5ml3bt93-{0}-dk1ww9x7gt-dk1ww9x7gt.gz
+D:\Программирование\VSCode\WhatSsyp\Papka2\obj\Debug\net10.0\compressed\6oxe0x3rbk-{0}-p9985tmwpv-p9985tmwpv.gz
+D:\Программирование\VSCode\WhatSsyp\Papka2\obj\Debug\net10.0\compressed\i8kw2ad0sz-{0}-9queychvap-9queychvap.gz
+D:\Программирование\VSCode\WhatSsyp\Papka2\obj\Debug\net10.0\compressed\sxyqoj458h-{0}-ysg8w3sx1y-ysg8w3sx1y.gz
+D:\Программирование\VSCode\WhatSsyp\Papka2\obj\Debug\net10.0\compressed\04eeosny3t-{0}-8zkdpwt922-8zkdpwt922.gz
+D:\Программирование\VSCode\WhatSsyp\Papka2\obj\Debug\net10.0\compressed\wc8s3tynm2-{0}-dnloe1rzvs-dnloe1rzvs.gz

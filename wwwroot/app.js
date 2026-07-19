@@ -33,6 +33,11 @@ Chat.receive("system", function (text) {
     showSystemMessage(text);
 });
 
+Chat.receive("file", function (json) {
+    var fileData = JSON.parse(json);
+    showFile(fileData.filePath, fileData.fileName);
+});
+
 function sendMessage() {
     const text = document.getElementById("messageInput").value.trim();
     if (text === "") {
@@ -68,11 +73,14 @@ function rollDice() {
     }
 }
 
-function showFile(filePath) {
+function showFile(filePath, fileName) {
     const messages = document.getElementById("messages");
     const fileUrl = "/" + filePath;
     const type = getFileType(filePath);
-    const fileName = filePath.split("/").pop().split("\\").pop();
+    
+    if (!fileName) {
+        fileName = filePath.split("/").pop().split("\\").pop();
+    }
     
     const container = document.createElement("div");
     container.style.margin = "5px 0";
