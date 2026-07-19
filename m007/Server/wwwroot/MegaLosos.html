@@ -41,6 +41,13 @@
     <br>
     <div class="chat-box" id="chatBox">
         Блок чатв
+        <div class="message" style="display: block">
+            <div class="row">
+                <h6 class="name-block col-8">Name</h6>
+                <p class="date-block col-4"></p>
+            </div>
+            <p class="text-block">text</p>
+        </div>
         <template id="file-template">
             <div class="message" style="display: block">
                 <!--siple test file downloader, old version:
@@ -68,18 +75,13 @@
                 <!-- IFrame: safe link (empty, hidden) -->
                 <iframe class="tpl-iframe" src="about:blank" sandbox="" allow-downloads data-src=""></iframe>
                 <iframe class="tpl-g-iframe" src="about:blank" sandbox="" data-src=""></iframe>
+                
+                <div class="message" style="display:none">
+                    <h4 class="name-block">Name</h4>
+                    <p class="text-block">text</p>
+                </div>
             </div>
         </template>
-        <template id="text-tmeplate">
-            <div class="message" style="display: block">
-                <h4 class="name-block">Name</h4>
-                <p class="text-block">text</p>
-            </div>
-        </template>
-        <div class="message" style="display: block">
-            <h6 class="name-block">Name</h6>
-            <p class="text-block">text</p>
-        </div>
     </div>
     <div class="card" id="file-input-wrapper">
         <div class="card-body">
@@ -111,7 +113,7 @@
         
     </div> -->
     
-    <script src="assets/MLCA/file-handler.js"></script>
+    <script src="assets/file-handler.js"></script>
     <script src="assets/MLCA/auth-helper.js"></script>
     <script src="assets/signalr.min.js"></script>
     <script src="assets/MLCA/workshop-chat-helper.js"></script>
