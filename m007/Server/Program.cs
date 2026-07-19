@@ -232,7 +232,7 @@ app.MapPost("api/MLupload", async (IFormFile file) =>
 
 //app.MapGet("/", () => "Hello World!");
 app.MapHub<ChatHub>("/chatHub");
-app.Run("http://0.0.0.0:8080");
+app.Run();
 
 
 void AddAccountToList(string name, string login, string password)
