@@ -128,6 +128,11 @@ app.MapPost("api/upload", async (IFormFile file) =>
     return Results.Ok(filePath);
 }).DisableAntiforgery();
 
+app.MapGet("api/MLmessages", () =>
+{
+    
+});
+
 app.Run("http://0.0.0.0:8080");
 
 
