@@ -68,28 +68,9 @@ app.MapPost("/api/rooms", (Room room) =>
     }
     return Results.Ok();
 });
-
-
-app.MapPost("/olele", (LoginRequest request) =>
+IResult entry(LoginRequest login, HttpContext context)
 {
     List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsers.json"));
-    if (Users.FirstOrDefault(x => x.UserName == request.UserName) == null)
-    {
-        Users.Add(new LoginRequest() { Name = request.Name, Password = request.Password, UserName = request.UserName });
-        string ser = JsonSerializer.Serialize(Users);
-        File.WriteAllText("DataUsers.json", ser);
-        return Results.Ok();
-    }
-    else
-    {
-        return Results.Unauthorized();
-    }
-    
-});
-app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
-{
-    List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsers.json"));
-
     if (Users.FirstOrDefault(x => x.Name == login.Name && x.Password == login.Password && x.UserName == login.UserName) == null)
     {
         return Results.Unauthorized();
@@ -103,7 +84,28 @@ app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
     ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
     ClaimsPrincipal user = new ClaimsPrincipal(identity);
     context.SignInAsync(user).Wait();
-    return Results.Ok();
+    return Results.Ok(); 
+}
+
+app.MapPost("/olele", (LoginRequest request, HttpContext context) =>
+{
+    List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsers.json"));
+    if (Users.FirstOrDefault(x => x.UserName == request.UserName) == null)
+    {
+        Users.Add(new LoginRequest() { Name = request.Name, Password = request.Password, UserName = request.UserName });
+        string ser = JsonSerializer.Serialize(Users);
+        File.WriteAllText("DataUsers.json", ser);
+        return entry(request, context);
+    }
+    else
+    {
+        return Results.Unauthorized();
+    }
+    
+});
+app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
+{
+    return entry(login, context);
 });
 app.MapGet("/api/me", (HttpContext context) =>
 {

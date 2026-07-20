@@ -20,7 +20,7 @@ class Message
         get;
         set;
     } = [];
-    public string dat
+    public string date
     {
         get;
         set;
