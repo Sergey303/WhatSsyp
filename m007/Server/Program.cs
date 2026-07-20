@@ -32,6 +32,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization();
 
 builder.Services.AddSignalR();
+builder.Services.AddHostedService<MyBackGroundService>();
 
 var app = builder.Build();
 app.UseAuthentication();
@@ -239,10 +240,16 @@ app.MapPost("api/MLupload", async (IFormFile file) =>
     return Results.Ok(filePath);
 }).DisableAntiforgery();
 //end MEGA LOSOS...
-
+app.MapGet("/api/MyTasks", () =>
+{
+    List<MyTask> lo = MyTask.GetListOfTask();
+    string json = JsonSerializer.Serialize(lo);
+    return json;
+});
 
 //app.MapGet("/", () => "Hello World!");
 app.MapHub<ChatHub>("/chatHub");
+app.MapHub<ScheduleHub>("/scheduleHub");
 app.Run();
 
 

@@ -1,0 +1,31 @@
+body {
+    font-size: 18;
+}
+
+.headline {
+    color: darkblue;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    font-size: 45px;
+}
+
+.our-title{
+    color: darkblue;
+}
+
+.our-title1{
+    color: darkblue;
+    font-size: 20px;
+}
+.our-title2{
+    color: rgb(255, 255, 255);
+    font-size: px;
+}
+
+.inf{
+    border: 1px inset darkblue;
+    font-size: 15px;
+    padding: 20px;
+    border-radius: 10px;
+}
