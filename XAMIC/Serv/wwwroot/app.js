@@ -9,6 +9,7 @@ function startApp() {
     Chat.connect();
     console.log("1");
     loadRooms();
+    joinR("Global");
     //console.log(window.location);
     if (window.location.pathname != "/hub.html") {
         window.location.assign("/hub.html");
@@ -73,6 +74,7 @@ function showRooms(rooms) {
     //     item.textContent = room.name;
     //     roomsBlock.appendChild(item);
     // }
+    roomsBlock.textContent = "";
     for (const room of rooms) {
         const item = document.createElement("li");
         item.className = "list-group-item";

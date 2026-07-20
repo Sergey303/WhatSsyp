@@ -1,16 +1,16 @@
-class LoginRequest
+class LoginRequest3
 {
-    public string name
+    public string Name
     {
         get;
         set;
     } = "";
-    public string password
+    public string Password
     {
         get;
         set;
     } = "";
-    public string login
+    public string UserName
     {
         get;
         set;

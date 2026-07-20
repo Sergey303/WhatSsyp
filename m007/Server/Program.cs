@@ -64,7 +64,7 @@ Rooms.messagesByRoom["General"] = new List<ChatMessage> {};
 Rooms.messagesByRoom["Games"] = new List<ChatMessage> {};
 Rooms.messagesByRoom["School"] = new List<ChatMessage> {};
 
-app.MapGet("/api/rooms", () => Rooms.rooms);
+// app.MapGet("/api/rooms", () => Rooms.rooms);
 app.MapGet("/api/users", () => users);
 app.MapGet("/api/chat-users", () => chatUsers);
 app.MapGet("/api/rooms/{roomName}/users",  (string roomName) =>
@@ -90,38 +90,38 @@ app.MapPost("/api/roomsAlexander", (Room room) =>
 });
 
 
-app.MapPost("/olele", (LoginRequest request) =>
-{
-    if (Users.FirstOrDefault(x=>x.UserName==request.UserName)==null)
-    {
-        Users.Add(new LoginRequest() { Name = request.Name, Password = request.Password, UserName = request.UserName});
-        string ser = JsonSerializer.Serialize(Users);
-        File.WriteAllText("DataUsersAlexander.json", ser);
-        return Results.Ok();
-    }
-    else
-    {
-        return Results.Unauthorized();
-    }
+// app.MapPost("/olele", (LoginRequest request) =>
+// {
+//     if (Users.FirstOrDefault(x=>x.name==request.name)==null)
+//     {
+//         Users.Add(new LoginRequest() { Name = request.Name, Password = request.Password, UserName = request.UserName});
+//         string ser = JsonSerializer.Serialize(Users);
+//         File.WriteAllText("DataUsersAlexander.json", ser);
+//         return Results.Ok();
+//     }
+//     else
+//     {
+//         return Results.Unauthorized();
+//     }
     
-});
-app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
-{
-    if (Users.FirstOrDefault(x=>x.Name == login.Name && x.Password == login.Password && x.UserName == login.UserName)==null)
-    {
-        return Results.Unauthorized();
-    }
-    string userName = "UserName";
+// });
+// app.MapPost("api/login", (LoginRequest3 login, HttpContext context) =>
+// {
+//     if (Users.FirstOrDefault(x=>x.name == login.Name && x.password == login.Password && x.name == login.UserName)==null)
+//     {
+//         return Results.Unauthorized();
+//     }
+//     string userName = "UserName";
 
-    Claim nameClaim1 = new Claim(ClaimTypes.Name, login.Name);
-    Claim nameClaim2 = new Claim(userName, login.UserName);
-    List<Claim> claims = new List<Claim> {nameClaim1, nameClaim2};
+//     Claim nameClaim1 = new Claim(ClaimTypes.Name, login.Name);
+//     Claim nameClaim2 = new Claim(userName, login.UserName);
+//     List<Claim> claims = new List<Claim> {nameClaim1, nameClaim2};
 
-    ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-    ClaimsPrincipal user = new ClaimsPrincipal(identity);
-    context.SignInAsync(user).Wait();
-    return Results.Ok();
-});
+//     ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+//     ClaimsPrincipal user = new ClaimsPrincipal(identity);
+//     context.SignInAsync(user).Wait();
+//     return Results.Ok();
+// });
 app.MapGet("/api/me", (HttpContext context) =>
 {
     string name = "";
@@ -133,7 +133,6 @@ app.MapGet("/api/me", (HttpContext context) =>
     {
         return Results.Unauthorized();
     }
-
     return Results.Ok(new { name = name });
 });
 app.MapPost("/api/logout", (HttpContext context) => { context.SignOutAsync().Wait(); return Results.Ok(); });
@@ -247,11 +246,116 @@ app.MapGet("api/MLmessages", (string room) =>
 });
 //end MEGA LOSOS...
 
-
 //app.MapGet("/", () => "Hello World!");
 app.MapHub<ChatHub>("/chatHub");
-app.Run();
 
+///;
+
+// app.UseStaticFiles(new StaticFileOptions
+// {
+//     FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+//         Path.Combine(Directory.GetCurrentDirectory(), "uploads")),
+//     RequestPath = "/uploads"
+// });
+
+app.MapGet("/api/rooms", () => rooms);
+
+app.MapPost("/api/rooms", (Room room) =>
+{
+    rooms.Add(room);
+    SaveRooms(rooms);
+    return Results.Ok();
+});
+
+app.MapPost("api/upload", async (IFormFile file) =>
+{
+    string dir = Path.Combine(Directory.GetCurrentDirectory(), "uploads", Guid.NewGuid().ToString());
+    string filePath = Path.Combine(dir, file.FileName);
+    Directory.CreateDirectory(dir);
+
+    using (var stream = new FileStream(filePath, FileMode.Create))
+    {
+        await file.CopyToAsync(stream);
+    }
+    
+    string relativePath = filePath.Replace(Directory.GetCurrentDirectory(), "").Replace("\\", "/").TrimStart('/');
+    return Results.Ok(relativePath);
+}).DisableAntiforgery();
+
+
+app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
+{
+    try
+    {
+        string name = loginData.name;
+        string login = loginData.login;
+        string password = loginData.password;
+        if (accountsList.Any(a => a.name == name || a.login == login))
+        {
+            return Results.BadRequest();
+        }
+        AddAccountToList(name, login, password);
+        AddAccountToFile(name, login, password);
+        return Results.Ok();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+        return Results.Problem();
+    }
+});
+
+app.MapPost("/api/logout", async (HttpContext context) =>
+{
+    await context.SignOutAsync();
+    return Results.Ok();
+});
+
+app.MapPost("/api/login", async (LoginRequest loginData, HttpContext context) =>
+{
+    if (!accountsList.Any(a => a.login == loginData.login && a.password == loginData.password))
+    {
+        return Results.Unauthorized();
+    }
+    Account? _logAcc = accountsList.Find(a => a.login == loginData.login);
+
+    Claim nameClaim = new Claim(ClaimTypes.Name, _logAcc.name);
+    Claim loginClaim = new Claim(ClaimTypes.NameIdentifier, _logAcc.login);
+    Claim passwordClaim = new Claim(ClaimTypes.SerialNumber, _logAcc.login);
+    List<Claim> claims = new();
+    claims.Add(nameClaim);
+    claims.Add(loginClaim);
+    claims.Add(passwordClaim);
+
+    ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+    ClaimsPrincipal user = new ClaimsPrincipal(identity);
+
+    await context.SignInAsync(user);
+
+    return Results.Ok();
+});
+
+app.MapGet("/", async () => 
+{
+    var path = Path.Combine(builder.Environment.WebRootPath, "regAndrey.html");
+    return Results.File(path, "text/html");
+});
+
+app.Run("http://0.0.0.0:8080");
+
+void SaveRooms(List<Room> roomsList)
+{
+    try
+    {
+        string path = "wwwroot/rooms.json";
+        string json = JsonSerializer.Serialize(roomsList);
+        File.WriteAllText(path, json, Encoding.UTF8);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Ошибка сохранения комнат: " + ex.Message);
+    }
+}
 
 void AddAccountToList(string name, string login, string password)
 {
@@ -263,4 +367,19 @@ void AddAccountToFile(string name, string login, string password)
 {
     string jsn = JsonSerializer.Serialize(accountsList);
     File.WriteAllText(AccountProcessor.filePath, jsn, Encoding.UTF8);
+}
+
+List<Room> LoadRooms()
+{
+    try
+    {
+        string path = "wwwroot/rooms.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path, Encoding.UTF8);
+            return JsonSerializer.Deserialize<List<Room>>(json) ?? new List<Room>();
+        }
+    }
+    catch { }
+    return new List<Room>();
 }
