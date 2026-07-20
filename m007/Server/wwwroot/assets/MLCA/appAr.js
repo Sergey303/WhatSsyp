@@ -28,9 +28,15 @@ function sendMessage(filePath) {
     const text = inpMessage.value.trim();
     const date = new Date().toLocaleString();
     const jsonString = JSON.stringify(
+<<<<<<< HEAD
         {name: "", text: text, filePath: filePath || "", date: date, room: ""});
     console.log(filePath);
     Chat.send("MLChat", jsonString);
+=======
+        {Name: "", text: text, filePath: filePath || "", date: date, room: ""});
+    console.log(filePath);
+    Chat.send("chat", jsonString);
+>>>>>>> bb26018ab8eaa48e14e0074235cea2cf1ce57d05
     document.getElementById("messageInp").value = "";
     document.getElementById('sendBtn').disabled = true;
     // alert(name + ": " + text);
@@ -40,6 +46,7 @@ function sendMessage(filePath) {
 Chat.receive("chat", function (text) {
     // console.log(text);
     const msgObj = JSON.parse(text);
+<<<<<<< HEAD
     console.log(msgObj.filePath);
     if (msgObj.filePath != "") {
         msgObj.filePath = "http://172.16.47.27:8080/api/MLfile?filePath=" + msgObj.filePath;
@@ -56,6 +63,33 @@ Chat.receive("chat", function (text) {
     }
     console.log(fileUrl);
 });
+=======
+    try {
+        showMessage(msgObj)
+    } catch(error) {
+        console.error("Error processing message:", error);
+    }
+});
+
+function showMessage(msgObj) {
+    const time = new Date().toLocaleString('ru-RU', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    const date = new Date().toLocaleString('ru-RU', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
+    if ((msgObj.date || "").split(", ")[0] == date) {
+        msgObj.date = time;
+    }
+    if (msgObj.filePath) {
+        msgObj.filePath = "http://172.16.47.27:8080/api/MLfile?filePath=" + msgObj.filePath;
+    }
+    activateMedia(msgObj.filePath || "", msgObj.text || "", msgObj.name || "User", msgObj.date || new Date().toLocaleString());
+}
+>>>>>>> bb26018ab8eaa48e14e0074235cea2cf1ce57d05
 
 // document.getElementById("fileInp").addEventListener("change", function (event) {
 //     const file = document.getElementById("fileInp").file;
@@ -85,6 +119,13 @@ const signInLogin = document.getElementById("loginInp");
 const signInPassword = document.getElementById("passwordInp");
 
 Auth.start(startApp);
+
+Api.get("api/MLmessages?room=''", (jsonText) => {
+    const messages = JSON.parse(jsonText);
+    for (_m of messages) {
+        showMessage(_m);
+    }
+});
 
 function startApp() {
     Chat.connect();

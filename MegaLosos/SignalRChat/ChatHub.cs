@@ -35,6 +35,7 @@ public class ChatHub : Hub
         {
             return Clients.Caller.SendAsync("system", "Сначала войди");
         }
+        
 
         return Clients.All.SendAsync("chat", AddNameToMsg(text, name));
     }

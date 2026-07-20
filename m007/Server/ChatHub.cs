@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Security.Claims;
 using System.Text;
+using System.Dynamic;
 
 public class ChatMessage {
      public string group { get; set; } = "general";
@@ -230,7 +231,11 @@ public class ChatHub : Hub {
     
     private Task OldSendChat(string text)
     {
+<<<<<<< HEAD
         Console.WriteLine("123123");
+=======
+        
+>>>>>>> bb26018ab8eaa48e14e0074235cea2cf1ce57d05
         if (Context?.User?.Identity?.Name != null)
         {
             Console.WriteLine("1212");
@@ -461,10 +466,4 @@ public class ChatHub : Hub {
     // }
 }
 
-public struct DbRecord
-{
-    public string user {get; set;}
-    public string group {get; set;}
-    public string message {get; set;} // текст или HTML-текст
-    public string dt{get; set;} // DateTime
-}
+
