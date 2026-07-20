@@ -410,7 +410,7 @@ async function loadBook() {
     // try/catch позволяет показать ошибку на странице, а не остановить скрипт молча.
     try {
         // fetch отправляет GET-запрос на адрес, созданный через MapGet.
-        const response = await fetch("/api/book");
+        const response = await fetch("api/book");
 
         // response.ok равен false при HTTP-ошибках, например 404 или 500.
         if (!response.ok) {

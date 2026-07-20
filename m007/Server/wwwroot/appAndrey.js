@@ -191,7 +191,7 @@ function showRooms(rooms) {
 }
 
 function loadRooms() {
-    Api.get("/api/rooms", showRooms);
+    Api.get("api/rooms", showRooms);
 }
 
 function roomCreated() {
@@ -204,7 +204,7 @@ function createRoom() {
     if (name === "") {
         return;
     }
-    Api.post("/api/rooms", {name: name}, roomCreated);
+    Api.post("api/rooms", {name: name}, roomCreated);
 }
 
 Chat.receive("roomMembers", function(text) {

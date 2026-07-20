@@ -1,8 +1,8 @@
 /*
   api-helper.js
 
-  Api.get("/api/rooms", showRooms);
-  Api.post("/api/rooms", data, roomCreated);
+  Api.get("api/rooms", showRooms);
+  Api.post("api/rooms", data, roomCreated);
 */
 (function () {
     function readBody(response) {

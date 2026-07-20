@@ -91,7 +91,7 @@
         }
 
         const url =
-            options.url || "/chatHub";
+            options.url || "chatHub";
 
         if (!window.signalR) {
             demoMode = true;
