@@ -32,6 +32,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization();
 
 builder.Services.AddSignalR();
+builder.Services.AddHostedService<MyBackGroundService>();
 
 var app = builder.Build();
 app.UseAuthentication();
@@ -252,7 +253,6 @@ app.MapGet("api/MLmessages", (string room) =>
 //end MEGA LOSOS...
 
 //app.MapGet("/", () => "Hello World!");
-app.MapHub<ChatHub>("/chatHub");
 
 ///;
 
@@ -287,6 +287,17 @@ app.MapPost("api/upload", async (IFormFile file) =>
     return Results.Ok(relativePath);
 }).DisableAntiforgery();
 
+//end MEGA LOSOS...
+app.MapGet("/api/MyTasks", () =>
+{
+    List<MyTask> lo = MyTask.GetListOfTask();
+    string json = JsonSerializer.Serialize(lo);
+    return json;
+});
+
+//app.MapGet("/", () => "Hello World!");
+app.MapHub<ChatHub>("/chatHub");
+app.MapHub<ScheduleHub>("/scheduleHub");
 
 app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
 {
@@ -309,6 +320,7 @@ app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
         return Results.Problem();
     }
 });
+
 
 app.MapPost("/api/logout", async (HttpContext context) =>
 {
