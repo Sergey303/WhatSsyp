@@ -10,7 +10,7 @@
 </head>
 <body>
 
-    <h1 class="title">Типа заголовок и тд</h1>
+    <h1 class="title">Игрулька и тд</h1>
     <p class="title"> Типа подзаголовок и тд</p> 
 <!--  р - показывает новый абзац  (перенос строки) (без этих штук текст плоский будет) -->
 
@@ -27,9 +27,10 @@ class="oform">
     class="hide"> 
 
         <h1 id="title">
-            Игра
+            Игра 
         </h1>
 
+        <div id=text>  </div>
         <div id="hide-when-press-start"> <!-- элементы что скрываются по "начать"-->
 
             <div class="alert alert-info"> 
@@ -50,6 +51,7 @@ class="oform">
         <div id="open-when-press-start"
         class="hide">
             <input
+            id = "somethig"
             onkeydown="keydown(event)"
             placeholder="Сюда ответ вводить и тд">
 
@@ -57,15 +59,32 @@ class="oform">
             class="btn btn-primary">
                  Оответить
             </button>
+
+            <p>
+                <div id="anser">  </div>
+                
+            </p>
+            <p>
+                <button id="again"
+                onclick="startAgain()">
+                     Заново
+                </button>
+    
+            </p>
         </div>
 
 </div>
         
-<p><button onclick="openMmmhideNnn()"
+    <p>
+    <button onclick="openMmmhideNnn()"
                 id="nnn">
             Нажми пж
-        </button></p> 
+        </button>
+    </p> 
         
+
+<script src="assets/signalr.min.js"></script>
+<script src="assets/workshop-chat-helper.js"></script>
 <script src="index.js"></script>
 </body>
 </html>

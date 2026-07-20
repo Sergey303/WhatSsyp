@@ -1,6 +1,4 @@
 
-
-
 function openMmm() {
     const hidedtext = 
         document.getElementById(
@@ -18,10 +16,10 @@ const title =
         "title");
 
 function startGame() {
-    title.textContent =
+    title.innerHTML =
         "Игра началась";
 
-    // hidedtext.classList.add('hide');
+
 }
 
 function openMmm() {
@@ -37,9 +35,7 @@ function openMmm() {
 }
 
 function hideNnn() {
-    const openedtext = 
-        document.getElementById(
-            "nnn");  //Кавычки ставятся если это константа, без ковычек - если параметр
+    const openedtext = document.getElementById("nnn");  //Кавычки ставятся если это константа, без ковычек - если параметр
  
     console.log(openedtext);
 
@@ -51,13 +47,27 @@ function openMmmhideNnn() {
     hideNnn();
 }
 
+function randomNumber(a, b){
+    return Math.floor(Math.random() * (b - a + 1)) + a;
+}
+
+let r;
+let f;
 
 function hideXStartGame() {
     hideX("hide-when-press-start", false)
     startGame();
     hideX("open-when-press-start", true)
-}
+    const x = randomNumber(0,100);
+    const y = randomNumber(0,100);
 
+    const text = document.getElementById(
+        "text"); 
+
+        text.innerHTML = x + "+" + y;
+        r = x;
+        f = y;
+} 
 
 function hideX(idhtmlElement, visible) {
     const openedtext = 
@@ -67,10 +77,10 @@ function hideX(idhtmlElement, visible) {
     console.log(openedtext);
 
 if (visible == true) {
-    openedtext.classList.remove('hide')
+    openedtext.classList.remove('hide');
 }
 else {
-    openedtext.classList.add('hide')
+    openedtext.classList.add('hide');
 }
 }
 
@@ -78,6 +88,40 @@ function keydown(event)
 {
     console.log(event.key);
     if (event.key == 'Enter')
-    console.log(
-        "Nnnn");
+    {
+    // console.log(
+    //     "Nnnn");
+    const s = document.getElementById("somethig");
+    if (s.value == "") {
+        console.log("Это не число!");
+    }
+    const k = Number(s.value);
+   
+    const text = document.getElementById(
+        "anser"); 
+
+        if (Number.isNaN(k)) {
+
+                text.innerHTML = ("эт не число");
+            
+        }
+        else{
+        if(r+f == k){
+            text.innerHTML = ("Верно");
+        }
+        else {
+            text.innerHTML = ("не");
+        }
+        }
+
+    }
+}
+
+function startAgain() {
+    hideXStartGame();
+        // 2. Очищаем поле ввода от старого ответа пользователя
+        document.getElementById("somethig").value = "";
+
+        // 3. Очищаем старую надпись "Верно / Неверно"
+        document.getElementById("anser").innerHTML = "";
 }
