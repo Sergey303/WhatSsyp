@@ -2,13 +2,14 @@ Auth.start(startApp);
 const loginName = document.getElementById("loginName");
 const loginPassword = document.getElementById("password");
 const UserName = document.getElementById("username");
-var roomName;
+var roomName="Global";
 var messages;
 function startApp() {
     Chat.send("connected");
     Chat.connect();
     console.log("1");
     loadRooms();
+    joinR("Global");
     //console.log(window.location);
     if (window.location.pathname != "/hub.html") {
         window.location.assign("/hub.html");
@@ -24,13 +25,7 @@ function registration() {
     const name = loginName.value;
     const password = loginPassword.value;
     const username = UserName.value;
-    Api.post("/olele", {Name:name, Password:password, UserName: username}, function(response) {
-        if (response.ok) {
-            alert("Успешная регистрация");
-        } else {
-            alert("Регситрация не удалась");
-        }
-    });
+    Api.post("/olele", {Name:name, Password:password, UserName: username}, startApp);
 }
 
 
@@ -41,6 +36,9 @@ Chat.receive("chat", function(t) {
         showMessage(convert.name + ":" + convert.text);
     }
 });
+function doinging() {
+    window.location.assign('/t-rex-runner-gh-pages/index.html');
+}
 
 function sendMessage() {
     const text = document.getElementById("messageInput").value;  
@@ -57,6 +55,7 @@ function showMessage(text) {
     block.className = "message";
     block.textContent = text;
     messages.appendChild(block);
+    messages.scrollTop = messages.scrollHeight;
 }
 
 
@@ -73,6 +72,7 @@ function showRooms(rooms) {
     //     item.textContent = room.name;
     //     roomsBlock.appendChild(item);
     // }
+    roomsBlock.textContent = "";
     for (const room of rooms) {
         const item = document.createElement("li");
         item.className = "list-group-item";

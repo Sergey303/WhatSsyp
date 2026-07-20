@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row p-1">
+            <div class="col-6"><input type="text" id="userInput" placeholder="User" /></div>
+        </div>
+
+        <div class="row p-1">
+            <select class="form-select col-1" size="6" style="width:200px;height:250px;">
+                <option value="1" selected>Один</option>
+                <option value="2">Два</option>
+                <option value="3">Три</option>
+            </select>
+            <div class="overflow-auto border" style="height: 150px; width: 300px; height: 250px;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Элемент 1</li>
+                    <li class="list-group-item">Элемент 2</li>
+                    <li class="list-group-item">Элемент 3</li>
+                    <li class="list-group-item"> Элемент 4 Элемент 4 Элемент 4 Элемент 4 Элемент 4 Элемент 4</li>
+                    <li class="list-group-item">Элемент 5</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="row p-1">
+            <div class="col-md-4">
+                <input type="text" class="form-control" id="messageInput" placeholder="Message" />
+            </div>
+        </div>
+        <div class="row p-1">
+            <div class="col-md-4">
+                <input type="file" class="form-control" id="messageInput" placeholder="Message" />
+            </div>
+        </div>
+        <div class="row p-1">
+            <div class="col-md-2" style="width:150px;">
+                <input type="button" id="sendButton" value="Send message" />
+            </div>
+            <div class="col-md-2" style="width:150px;">
+                <input type="button" id="clearButton" value="Clear message" />
+            </div>
+        </div>
+
+    </div>
+
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/signalr/chat.js"></script>
+</body>
+</html>
