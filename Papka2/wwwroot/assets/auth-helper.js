@@ -1,43 +1,15 @@
 (function () {
-    function getPanel(id) {
-        return document.getElementById(id);
-    }
-
-    function showLogin() {
-        getPanel("loginCard")
-            .classList.remove("d-none");
-
-        getPanel("appPanel")
-            .classList.add("d-none");
-    }
-
-    function showApp() {
-        getPanel("loginCard")
-            .classList.add("d-none");
-
-        getPanel("appPanel")
-            .classList.remove("d-none");
-    }
-
-    function runReady(ready) {
-        if (typeof ready === "function") {
-            ready();
-        }
-    }
-
     function start(ready) {
         fetch("/api/me")
             .then(function (response) {
                 if (response.ok) {
-                    // showApp();
-                    runReady(ready);
-                } else {
-                    // showLogin();
+                    if (typeof ready === "function") {
+                        ready();
+                    }
                 }
             })
             .catch(function (error) {
                 console.error(error);
-                // showLogin();
             });
     }
 
@@ -60,9 +32,9 @@
                     alert("Неверное имя или пароль");
                     return;
                 }
-                // showApp();
-                window.location.assign('http://localhost:8080/index.html');
-                runReady(ready);
+                if (typeof ready === "function") {
+                    ready();
+                }
             })
             .catch(function (error) {
                 console.error(error);
@@ -86,7 +58,9 @@
                     alert("Name or login is already taken!");
                     return;
                 }
-                runReady(ready);
+                if (typeof ready === "function") {
+                    ready();
+                }
             })
             .catch(function (error) {
                 console.error(error);
@@ -100,7 +74,7 @@
                 method: "POST"
             })
             .then(function () {
-                location.reload();
+                window.location.assign('/');
             })
             .catch(function (error) {
                 console.error(error);

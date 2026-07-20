@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Security.Claims;
+using System.Text;
 
 public class ChatMessage {
     public string group { get; set; } = "general";
@@ -18,8 +19,17 @@ public class LoginMessage {
     
 }
 
-public class ChatHub : Hub {
+class jsonMsg
+{
+    public string name { get; set; } = "";
+    public string text { get; set; } = "";
+    public string filePath { get; set; } = "";
+    public string date { get; set; } = "";
+    public string room { get; set; } = "";
+}
 
+public class ChatHub : Hub {
+    List<Room> roomMembers=JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("RoomsAlexander.json"));
     private static Dictionary<string, string> userList = new Dictionary<string, string>()
     {
         ["ZOVchik"] = "12345678",
@@ -107,6 +117,7 @@ public class ChatHub : Hub {
             }
 
             if (eventName == "SoZVoNnewRoom"){
+                if (Rooms.rooms.Contains(message.group)){return Clients.Group(message.group).SendAsync("chat", jtext);}
                 Rooms.rooms.Add(message.group);
                 Rooms.usersByRoom[message.group] = new[] {message.user};
                 Rooms.messagesByRoom[message.group] = new List<ChatMessage> {message};
@@ -115,6 +126,32 @@ public class ChatHub : Hub {
 
             return Clients.Group(message.group).SendAsync("chat", jtext);
         }
+        else if (eventName == "joinRoom") {
+            return joinRoom(jtext);
+        } else if (eventName == "chat") {
+            Message message = JsonSerializer.Deserialize<Message>(jtext);
+            string messageText = message.text;
+            string room = message.room;
+            return SendChat(messageText, room);
+        }
+        
+        else if (eventName == "MLChat") {
+            string? name = this.Context.GetHttpContext().User?.Identity?.Name?.ToString();
+            if (name == null)
+            {
+                return Clients.Caller.SendAsync("429");
+            }
+            if (isIpBlocked())
+            {
+                return Clients.Caller.SendAsync("429");
+            }
+            if (eventName == "MLChat")
+            {
+                return OldSendChat(jtext);
+            }
+            return Clients.All.SendAsync("chat", jtext);
+        }
+
 
         var jmes = JsonSerializer.Deserialize<DbRecord>(jtext);
         var fileInString = File.ReadAllText("DataBase.json");
@@ -125,6 +162,78 @@ public class ChatHub : Hub {
         var newText = JsonSerializer.Serialize<List<DbRecord>>(db, new JsonSerializerOptions(){WriteIndented=true});
         File.WriteAllText("DataBase.json", newText);
         return Clients.All.SendAsync("chat", jtext);
+    }
+    private Task SendChat(string text, string room)
+    {
+        string name = "";
+        if (Context.User != null && Context.User.Identity != null && Context.User.Identity.Name != null)
+        {
+            //name = Context.User.Claims.FirstOrDefault((x)=>((x.Type == ClaimTypes.UserData)))?.Value;
+            string userName = "UserName";
+            name = Context.User.FindFirst(userName).Value;
+            foreach (var item in Context.User.Claims)
+            {
+                Console.WriteLine(item.Value);
+                Console.WriteLine(item.Type);
+            }
+        }
+        
+        if (name == "")
+        {
+            return Clients.Caller.SendAsync("system", "Сначала войди");
+        }
+        return Clients.Group(room).SendAsync("chat", room + ":" + name + ": " + text);
+    }
+    
+    private Task OldSendChat(string text)
+    {
+        if (Context?.User?.Identity?.Name != null)
+        {
+            var jsonMsg_ = JsonSerializer.Deserialize<jsonMsg>(text);
+            jsonMsg_.name = Context.User.Identity.Name;
+            text = JsonSerializer.Serialize(jsonMsg_);
+        }
+        else
+        {
+            return Clients.Caller.SendAsync("system", "Сначала войди");
+        }
+        Console.WriteLine(text);
+        return Clients.All.SendAsync("chat", text);
+    }
+    public bool isIpBlocked()
+    {
+        string jsnBlockedIPs = File.ReadAllText("wwwroot/BlockedIPs.json", Encoding.UTF8);
+        List<string>? blockedIPs = JsonSerializer.Deserialize<List<string>>(jsnBlockedIPs);
+        string? requestIP = this.Context.GetHttpContext()?.Connection.RemoteIpAddress?.ToString();
+        return blockedIPs.Contains(requestIP);
+    }
+    private Task joinRoom(string json)
+    {
+        RoomJoin join = JsonSerializer.Deserialize<RoomJoin>(json) ?? new RoomJoin();
+        if (join.RoomName == "" || join.UserName == "")
+        {
+            return Clients.Caller.SendAsync("system", "нужное имя и название комнаты");
+        }
+        Groups.AddToGroupAsync(Context.ConnectionId, join.RoomName).Wait();
+        if (roomMembers.FirstOrDefault(x => join.RoomName == x.name) != null)
+        {
+            //List<string> members = roomMembers[join.RoomName];
+            List<string> members = roomMembers.FirstOrDefault(x => join.RoomName == x.name).Members;
+            if (members.Contains(join.UserName) == false)
+            {
+                members.Add(join.UserName);
+            }
+            roomMembers.FirstOrDefault(x => join.RoomName == x.name).Members = members;
+            string output = JsonSerializer.Serialize(roomMembers);
+            File.WriteAllText("RoomsAlexander.json", output);
+            string membersJson = JsonSerializer.Serialize(members);
+            return Clients.Group(join.RoomName).SendAsync("roomMembers", membersJson);
+        }
+        else
+        {
+            return Task.CompletedTask;
+        }
+        
     }
 }
 

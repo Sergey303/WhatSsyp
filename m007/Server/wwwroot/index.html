@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="assets/bootstrap.min.css">
+    <link rel="stylesheet" href="styleAlexander.css">
+</head>
+<body>
+    
+     
+    <div id="loginPanel" >
+        <h1 class="tittle1">XAMIC</h1>
+        <div class="login-wrapper">
+            <div class="login-form">
+                <h2>Вход в мессенджер</h2>
+
+
+                <div class="input-group">
+                    <label for="loginname">Логин (Login name)</label>
+                    <input type="text" id="loginName" placeholder="ivan_99" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Пароль (Password)</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="username">Имя пользователя (Username)</label>
+                    <input type="text" id="username" placeholder="Иван Иванов" required>
+                    </div>
+                
+                <button onclick="registration()" type="submit" style="margin-bottom: 10px;">Зарегистрироваться</button>
+                <button onclick="login()" type="submit">Вход</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="appPanel" class="d-none">        
+        <button class="logout-btn" onclick="Auth.logout()">Выйти</button>
+        <div id="messages">
+        </div>
+    </div>
+    <div id="roomPanel" class="d-none">
+        <input id="roomNameInput" class="form-control" placeholder="Название комнаты">
+        <button class="btn btn-primary mt-2" onclick="createRoom()">Создать комнату</button>
+        <button class="btn btn-primary mt-2" onclick="joinR()" >Войти в комнату</button>
+        <ul id="rooms" class="list-group mt-2" style="margin-bottom: 50px;"></ul>
+    <!--
+    <div class="send-row">
+        <input id="nameInput" placeholder="name">
+        <button onclick="showName()">
+            Показать имя
+        </button>
+    </div>
+    -->
+        <input id="messageRoom" placeholder="выберите комнату">
+        <input id="messageInput" placeholder="напишите сообщение">
+        <input id="fileInput" placeholder="выберите файл">
+        <button class="image-button" onclick="sendMessage()">
+            &#8629; 
+        </button>
+    </div>
+
+    <script src="assets/auth-helper.js"></script>
+    <script src="assets/signalr.min.js"></script>
+    <script src="assets/workshop-chat-helper.js"></script>
+    <script src="assets/api-helper.js"></script>
+    <script src="appAlexander.js"></script>
+    <script src="assets/file-handler.js"></script>
+</body>
+<html>

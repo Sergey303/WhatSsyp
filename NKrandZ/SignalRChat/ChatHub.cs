@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Collections.Generic;
 
 public class ChatMessage {
-    public string group { get; set; } = "general";
+    public string group { get; set; } = "General";
     public string user { get; set; } = "";
     public string message { get; set; } = "";
     public string dt { get; set; } = "";
@@ -105,6 +105,7 @@ public class ChatHub : Hub
         }
 
         if (eventName == "newRoom"){
+            if (Rooms.rooms.Contains(message.group)){return Clients.Group(message.group).SendAsync("chat", text);}
             Rooms.rooms.Add(message.group);
             Rooms.usersByRoom[message.group] = new[] {message.user};
             Rooms.messagesByRoom[message.group] = new List<ChatMessage> {message};

@@ -79,7 +79,7 @@ Chat.receive("historyFirst", function(text){
 
 Chat.receive("messageHistory", function(json){
     const message = JSON.parse(json);
-    showMessage(message.group + ": " + message.user + ": " + message.message);
+    showMessage(message.user + ": " + message.message);
 });
 
 Chat.receive("loginResult", function (text) {
@@ -95,7 +95,7 @@ Chat.receive("loginResult", function (text) {
 Chat.receive("chat", function (json) {
     try {
         const message = JSON.parse(json);
-        showMessage(message.group + ": " + message.user + ": " + message.message);
+        showMessage(message.user + ": " + message.message);
     } catch (error) {
         showMessage("Failed to load Json");
     }
@@ -107,6 +107,7 @@ function register() {
     const username = document.getElementById("nameInput").value.trim();
     const login = document.getElementById("loginInput").value.trim();
     const password = document.getElementById("passwordInput").value.trim();
+    if (username == "" || login == "" || password == ""){return;}
     const loginMessage = {
         username: username,
         login: login,
@@ -135,7 +136,7 @@ function joinRoom(rm) {
         dt: new Date().toLocaleTimeString(),
         group: rm
     };
-    
+    document.getElementById("chatName").textContent=rm;
     const json = JSON.stringify(message);
     Chat.send("joinRoom", json);
 }
@@ -153,6 +154,7 @@ function newRoom() {
 
 function appendRoom() {
     const name = document.getElementById("roomNameInput").value.trim();
+    if (name == ""){return;}
     document.getElementById("roomNameInput").value = "";
     const message = {
         message: "",
