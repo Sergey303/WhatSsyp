@@ -56,10 +56,8 @@ Chat.receive("chat", function (text) {
     }
 });
 
-<<<<<<< HEAD
-function showMessage() {
-    
-=======
+
+
 function showMessage(msgObj) {
     const time = new Date().toLocaleString('ru-RU', {
         hour: '2-digit',
@@ -81,7 +79,6 @@ function showMessage(msgObj) {
         msgObj.filePath = "";
     }
     activateMedia(msgObj.filePath || "", msgObj.text || "", msgObj.name || "User", msgObj.date || "-");
->>>>>>> bb26018ab8eaa48e14e0074235cea2cf1ce57d05
 }
 
 // document.getElementById("fileInp").addEventListener("change", function (event) {

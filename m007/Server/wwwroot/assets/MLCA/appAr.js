@@ -28,15 +28,10 @@ function sendMessage(filePath) {
     const text = inpMessage.value.trim();
     const date = new Date().toLocaleString();
     const jsonString = JSON.stringify(
-<<<<<<< HEAD
         {name: "", text: text, filePath: filePath || "", date: date, room: ""});
     console.log(filePath);
     Chat.send("MLChat", jsonString);
-=======
-        {Name: "", text: text, filePath: filePath || "", date: date, room: ""});
-    console.log(filePath);
-    Chat.send("chat", jsonString);
->>>>>>> bb26018ab8eaa48e14e0074235cea2cf1ce57d05
+
     document.getElementById("messageInp").value = "";
     document.getElementById('sendBtn').disabled = true;
     // alert(name + ": " + text);
@@ -46,24 +41,6 @@ function sendMessage(filePath) {
 Chat.receive("chat", function (text) {
     // console.log(text);
     const msgObj = JSON.parse(text);
-<<<<<<< HEAD
-    console.log(msgObj.filePath);
-    if (msgObj.filePath != "") {
-        msgObj.filePath = "http://172.16.47.27:8080/api/MLfile?filePath=" + msgObj.filePath;
-        console.log(msgObj.filePath);
-    }
-    
-    console.log(msgObj);
-    try {
-        console.log(msgObj.filePath, msgObj.text, msgObj.name, msgObj.date);
-        activateMedia(msgObj.filePath, msgObj.text, msgObj.name, msgObj.date);
-    }
-    catch(error) {
-        console.error(error);
-    }
-    console.log(fileUrl);
-});
-=======
     try {
         showMessage(msgObj)
     } catch(error) {
@@ -89,7 +66,6 @@ function showMessage(msgObj) {
     }
     activateMedia(msgObj.filePath || "", msgObj.text || "", msgObj.name || "User", msgObj.date || new Date().toLocaleString());
 }
->>>>>>> bb26018ab8eaa48e14e0074235cea2cf1ce57d05
 
 // document.getElementById("fileInp").addEventListener("change", function (event) {
 //     const file = document.getElementById("fileInp").file;
