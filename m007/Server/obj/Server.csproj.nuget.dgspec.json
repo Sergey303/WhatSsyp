@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\usr\\WhatSsyp\\m007\\Server\\Server.csproj": {}
+    "C:\\usr\\mag\\whatssyp\\m007\\Server\\Server.csproj": {}
   },
   "projects": {
-    "C:\\usr\\WhatSsyp\\m007\\Server\\Server.csproj": {
+    "C:\\usr\\mag\\whatssyp\\m007\\Server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\usr\\WhatSsyp\\m007\\Server\\Server.csproj",
+        "projectUniqueName": "C:\\usr\\mag\\whatssyp\\m007\\Server\\Server.csproj",
         "projectName": "Server",
-        "projectPath": "C:\\usr\\WhatSsyp\\m007\\Server\\Server.csproj",
+        "projectPath": "C:\\usr\\mag\\whatssyp\\m007\\Server\\Server.csproj",
         "packagesPath": "C:\\Users\\programmer\\.nuget\\packages\\",
-        "outputPath": "C:\\usr\\WhatSsyp\\m007\\Server\\obj\\",
+        "outputPath": "C:\\usr\\mag\\whatssyp\\m007\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

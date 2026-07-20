@@ -72,6 +72,10 @@ Chat.receive("chat", function (text) {
     }
 });
 
+function showMessage() {
+    
+}
+
 // document.getElementById("fileInp").addEventListener("change", function (event) {
 //     const file = document.getElementById("fileInp").file;
     

@@ -225,17 +225,22 @@ app.MapPost("api/MLregin", (LoginRequest2 loginData, HttpContext context) =>
     }
 });
 
-app.MapPost("api/MLupload", async (IFormFile file) =>
+app.MapPost("api/MLupload", async (IFormFile? file) =>
 {
-    string dir = Path.Combine(Directory.GetCurrentDirectory(), "uploads", Guid.NewGuid().ToString());
-    string filePath = Path.Combine(dir, file.FileName);
-    Directory.CreateDirectory(dir);
+    try {
+        string dir = Path.Combine(Directory.GetCurrentDirectory(), "uploads", Guid.NewGuid().ToString());
+        string filePath = Path.Combine(dir, file.FileName);
+        Directory.CreateDirectory(dir);
 
-    using (var stream = new FileStream(filePath, FileMode.Create))
-    {
-        await file.CopyToAsync(stream);
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+        return Results.Ok(filePath);
     }
-    return Results.Ok(filePath);
+    catch {
+        return Results.BadRequest("");
+    }
 }).DisableAntiforgery();
 //end MEGA LOSOS...
 

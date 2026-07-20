@@ -15,13 +15,10 @@ function getFileType(filePath) {
 
     if (['.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.rtf', '.odt', '.ods', '.odp']
         .some(ext => name.endsWith(ext))) return '.tpl-g-iframe';
-    if (filePath) {
-        return '';
-    }
-    return '.tpl-download-btn'
+    
+    return '.tpl-download-btn';
 }
-
-function activateMedia(fileUrl, text, name, date) {
+window.activateMedia = function activateMedia(fileUrl, text, name, date) {
     const type = getFileType(fileUrl);
     const fileName = fileUrl.trim().split("\\").at(-1);
     const messages = document.getElementById("chatBox");
@@ -68,14 +65,16 @@ function activateMedia(fileUrl, text, name, date) {
         }
     }
 
-    const name = fileMsg.querySelector(".name-block");
-    const text = fileMsg.querySelector(".text-block");
-    name.textContent = name;
-    text.textContent = text;
-    
+    const nameBlc = fileMsg.querySelector(".name-block");
+    const textBlc = fileMsg.querySelector(".text-block");
+    const dateBlc = fileMsg.querySelector(".date-block");
+    nameBlc.textContent = name;
+    textBlc.textContent = text;
+    dateBlc.textContent = date;
     messages.appendChild(fileMsg);
 }
 
+//formdata
 
 class FileUploadManager {
     constructor(options = {}) {
@@ -87,7 +86,7 @@ class FileUploadManager {
         this.allFiles = [];
         this.files = [];
             
-        this.fileInput = document.getElementById('fileInput');
+        this.fileInput = document.getElementById('fileInp');
         this.fileList = document.getElementById('fileList');
         this.stats = document.getElementById('stats');
         this.messages = document.getElementById('fileMessages');
@@ -171,16 +170,18 @@ class FileUploadManager {
     }
     
     sendFile(file) {
+        if (!file) {
+            sendMessage("");
+        }
         const formdata = new FormData();
         formdata.append("file", file);
         Api.postFile("api/MLupload", formdata, (filePath) => {
-            showFile(filePath, "chatBox");
+            sendMessage(filePath);
         });
     }
 
     handleFiles(fileList) {
         const newFiles = Array.from(fileList);
-        console.log("handleFiles");
 
         if (this.files.length + newFiles.length > this.maxFiles) {
             alert(`file amount exceeded (${this.files.length + newFiles.length
@@ -249,9 +250,8 @@ class FileUploadManager {
     
     async uploadFiles() {
         if (this.files.length === 0) {
-            return;
+            this.sendFile("");
         }
-        
         const totalSize = this.getSize(this.files);
         if (totalSize > this.maxSizeBytes) {
             alert(`Total size esceeds the limit (${totalSize}/${this.maxSizeBytes})`)

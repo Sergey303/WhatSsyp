@@ -18,15 +18,14 @@ function accountReg(name, login, password) {
     }
 }
 
-function sendMessage() {
+function sendMessage(filePath) {
     const inpMessage = document.getElementById("messageInp");
     const text = inpMessage.value.trim();
-    const room = ""
+    const date = new Date().toLocaleString();
     const jsonString = JSON.stringify(
-        {Name: "", text: text, filePath: "", date: "", room: ""});
-        
-    if (text === "") {return;}
-    Chat.send("MLChat", jsonString);
+        {name: "", text: text, filePath: filePath || "", date: date, room: ""});
+    console.log(filePath);
+    Chat.send("chat", jsonString);
     document.getElementById("messageInp").value = "";
     document.getElementById('sendBtn').disabled = true;
     // alert(name + ": " + text);
@@ -34,14 +33,17 @@ function sendMessage() {
 
 
 Chat.receive("chat", function (text) {
+    // console.log(text);
     const msgObj = JSON.parse(text);
-    if (msgObj.text) {
+    console.log(msgObj.filePath);
+    if (msgObj.filePath != "") {
+        msgObj.filePath = "http://172.16.47.27:8080/api/MLfile?filePath=" + msgObj.filePath;
+        console.log(msgObj.filePath);
     }
-    if (msgObj.filePath) {
-        msgObj.filePath = "http://172.16.47.27:8080/api/MLfile?filePath=" + filePath;
-    }
-    console.log("1");
+    
+    console.log(msgObj);
     try {
+        console.log(msgObj.filePath, msgObj.text, msgObj.name, msgObj.date);
         activateMedia(msgObj.filePath, msgObj.text, msgObj.name, msgObj.date);
     }
     catch(error) {
