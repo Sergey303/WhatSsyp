@@ -9,7 +9,11 @@ var processor = new AccountProcessor();
 var accountsList = processor.LoadAccounts();
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options =>
+{
+    options.MaximumReceiveMessageSize = 256 * 1024;
+});
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
 builder.Services.AddAntiforgery(options => 
@@ -43,13 +47,14 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/uploads"
 });
 
-List<Room> rooms = new List<Room>();
+List<Room> rooms = LoadRooms();
 
 app.MapGet("/api/rooms", () => rooms);
 
 app.MapPost("/api/rooms", (Room room) =>
 {
-    rooms.Add(room); 
+    rooms.Add(room);
+    SaveRooms(rooms);
     return Results.Ok();
 });
 
@@ -81,13 +86,6 @@ app.MapGet("/api/me", (HttpContext context) =>
     }
     return Results.Ok(new { name = name});
 });
-
-// app.MapPost("/x"+groupName, (message) => {
-//     List <string> messages = JsonSerializer.Deserialize("Global.json");
-//     messages.Add(message);
-//     string convert = JsonSerializer.Serialize(messages);
-//     File.WriteAllText(groupName+".json", convert);
-// });
 
 app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
 {
@@ -161,4 +159,33 @@ void AddAccountToFile(string name, string login, string password)
 {
     string jsn = JsonSerializer.Serialize(accountsList);
     File.WriteAllText(AccountProcessor.filePath, jsn, Encoding.UTF8);
+}
+
+List<Room> LoadRooms()
+{
+    try
+    {
+        string path = "wwwroot/rooms.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path, Encoding.UTF8);
+            return JsonSerializer.Deserialize<List<Room>>(json) ?? new List<Room>();
+        }
+    }
+    catch { }
+    return new List<Room>();
+}
+
+void SaveRooms(List<Room> roomsList)
+{
+    try
+    {
+        string path = "wwwroot/rooms.json";
+        string json = JsonSerializer.Serialize(roomsList);
+        File.WriteAllText(path, json, Encoding.UTF8);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Ошибка сохранения комнат: " + ex.Message);
+    }
 }

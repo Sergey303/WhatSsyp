@@ -23,6 +23,26 @@ class FileUploadManager {
         if (this.fileInput) {
             this.fileInput.addEventListener('change', (e) => this.handleFileSelect(e));
         }
+
+        document.body.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        document.body.addEventListener('dragenter', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        document.body.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                for (let i = 0; i < e.dataTransfer.files.length; i++) {
+                    this.sendFile(e.dataTransfer.files[i]);
+                }
+            }
+        });
     }
 
     handleFileSelect(event) {
@@ -36,8 +56,11 @@ class FileUploadManager {
         const formdata = new FormData();
         formdata.append("file", file);
         Api.postFile("api/upload", formdata, (filePath) => {
-            showFile(filePath);
-            Chat.send("chat", "[Файл: " + file.name + "]");
+            var fileData = {
+                filePath: filePath,
+                fileName: file.name
+            };
+            Chat.send("file", JSON.stringify(fileData));
         });
     }
 }

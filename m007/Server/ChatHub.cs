@@ -6,10 +6,18 @@ using System.Security.Claims;
 using System.Text;
 
 public class ChatMessage {
-    public string group { get; set; } = "general";
-    public string user { get; set; } = "";
-    public string message { get; set; } = "";
-    public string dt { get; set; } = "";
+     public string group { get; set; } = "general";
+     public string user { get; set; } = "";
+     public string message { get; set; } = "";
+     public string dt { get; set; } = "";
+}
+
+public class ChatMessageAndrey
+{
+    public string sender { get; set; } = "";
+    public string text { get; set; } = "";
+    public string time { get; set; } = "";
+    public string type { get; set; } = "text";
 }
 
 public class LoginMessage {
@@ -29,7 +37,12 @@ class jsonMsg
 }
 
 public class ChatHub : Hub {
-    List<Room> roomMembers=JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("RoomsAlexander.json"));
+    //List<Room> roomMembers=JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("RoomsAlexander.json"));
+    private static Dictionary<string, List<string>> roomMembersAndrey = new Dictionary<string, List<string>>();
+    private static Dictionary<string, List<ChatMessageAndrey>> roomMessages = new Dictionary<string, List<ChatMessageAndrey>>();
+    private static Dictionary<string, string> connectionRooms = new Dictionary<string, string>();
+    private static string messagesFilePath = "wwwroot/messages.json";
+    private static Dictionary<string, List<string>> roomMembers = new Dictionary<string, List<string>>();
     private static Dictionary<string, string> userList = new Dictionary<string, string>()
     {
         ["ZOVchik"] = "12345678",
@@ -42,6 +55,7 @@ public class ChatHub : Hub {
 
     private static Dictionary<string, string> connectionList = new Dictionary<string, string>(){};
 
+    
     public Task Send(string eventName, string jtext) {
         
         if (eventName.StartsWith("SoZVoN")){
@@ -126,14 +140,17 @@ public class ChatHub : Hub {
 
             return Clients.Group(message.group).SendAsync("chat", jtext);
         }
-        else if (eventName == "joinRoom") {
-            return joinRoom(jtext);
-        } else if (eventName == "chat") {
-            Message message = JsonSerializer.Deserialize<Message>(jtext);
-            string messageText = message.text;
-            string room = message.room;
-            return SendChat(messageText, room);
-        }
+        // else 
+        // if (eventName == "joinRoom") {
+        //     return joinRoom(jtext);
+        // } 
+        // else 
+        // if (eventName == "chat") {
+        //     Message message = JsonSerializer.Deserialize<Message>(jtext);
+        //     string messageText = message.text;
+        //     string room = message.room;
+        //     return SendChat(messageText, room);
+        // }
         
         else if (eventName == "MLChat") {
             string? name = this.Context.GetHttpContext().User?.Identity?.Name?.ToString();
@@ -150,18 +167,42 @@ public class ChatHub : Hub {
                 return OldSendChat(jtext);
             }
             return Clients.All.SendAsync("chat", jtext);
+        } 
+        else if (eventName == "chat")
+        {
+            string name = GetUserName();
+            if (string.IsNullOrEmpty(name))
+            {
+                await Clients.Caller.SendAsync("system", "Сначала войди");
+                return;
+            }
+
+           // SendChat(jtext);
+             var jmes = JsonSerializer.Deserialize<DbRecord>(jtext);
+            var fileInString = File.ReadAllText("DataBase.json");
+            var db = JsonSerializer.Deserialize<List<DbRecord>>(fileInString);
+            //message = jtext, dt = DateTime.Now.ToString("d")
+            
+            db.Add(new DbRecord() {message = jmes.message, user = name, group = jmes.group, dt = DateTime.Now.ToString()});
+            var newText = JsonSerializer.Serialize<List<DbRecord>>(db, new JsonSerializerOptions(){WriteIndented=true});
+            File.WriteAllText("DataBase.json", newText);
+            return Clients.All.SendAsync("chat", jtext);
+        }
+        else if (eventName == "joinRoom")
+        {
+            joinRoom(jtext);
+        }
+        else if (eventName == "file")
+        {
+            SendFileMessage(jtext);
+        }
+        else if (eventName == "voice")
+        {
+            SendVoiceMessage(jtext);
         }
 
 
-        var jmes = JsonSerializer.Deserialize<DbRecord>(jtext);
-        var fileInString = File.ReadAllText("DataBase.json");
-        var db = JsonSerializer.Deserialize<List<DbRecord>>(fileInString);
-        //message = jtext, dt = DateTime.Now.ToString("d")
-        
-        db.Add(new DbRecord() {message = jmes.message, user = jmes.user, group = jmes.group, dt = DateTime.Now.ToString()});
-        var newText = JsonSerializer.Serialize<List<DbRecord>>(db, new JsonSerializerOptions(){WriteIndented=true});
-        File.WriteAllText("DataBase.json", newText);
-        return Clients.All.SendAsync("chat", jtext);
+      
     }
     private Task SendChat(string text, string room)
     {
@@ -207,34 +248,213 @@ public class ChatHub : Hub {
         string? requestIP = this.Context.GetHttpContext()?.Connection.RemoteIpAddress?.ToString();
         return blockedIPs.Contains(requestIP);
     }
-    private Task joinRoom(string json)
+    // private Task joinRoom(string json)
+    // {
+    //     RoomJoin join = JsonSerializer.Deserialize<RoomJoin>(json) ?? new RoomJoin();
+    //     if (join.RoomName == "" || join.UserName == "")
+    //     {
+    //         return Clients.Caller.SendAsync("system", "нужное имя и название комнаты");
+    //     }
+    //     Groups.AddToGroupAsync(Context.ConnectionId, join.RoomName).Wait();
+    //     if (roomMembers.FirstOrDefault(x => join.RoomName == x.name) != null)
+    //     {
+    //         //List<string> members = roomMembers[join.RoomName];
+    //         List<string> members = roomMembers.FirstOrDefault(x => join.RoomName == x.name).Members;
+    //         if (members.Contains(join.UserName) == false)
+    //         {
+    //             members.Add(join.UserName);
+    //         }
+    //         roomMembers.FirstOrDefault(x => join.RoomName == x.name).Members = members;
+    //         string output = JsonSerializer.Serialize(roomMembers);
+    //         File.WriteAllText("RoomsAlexander.json", output);
+    //         string membersJson = JsonSerializer.Serialize(members);
+    //         return Clients.Group(join.RoomName).SendAsync("roomMembers", membersJson);
+    //     }
+    //     else
+    //     {
+    //         return Task.CompletedTask;
+    //     }
+        
+    // }
+    private async Task SendChat(string text)
+    {
+        string name = GetUserName();
+        if (string.IsNullOrEmpty(name))
+        {
+            await Clients.Caller.SendAsync("system", "Сначала войди");
+            return;
+        }
+
+        string roomName = GetRoomName();
+        
+        var message = new ChatMessageAndrey
+        {
+            sender = name,
+            text = text,
+            time = DateTime.Now.ToString("HH:mm"),
+            type = "text"
+        };
+
+        AddMessageToRoom(roomName, message);
+        await Clients.Group(roomName).SendAsync("chat", name + ": " + text);
+    }
+    private async Task SendFileMessage(string json)
+    {
+        string name = GetUserName();
+        if (string.IsNullOrEmpty(name))
+        {
+            await Clients.Caller.SendAsync("system", "Сначала войди");
+            return;
+        }
+
+        string roomName = GetRoomName();
+        
+        var message = new ChatMessageAndrey
+        {
+            sender = name,
+            text = json,
+            time = DateTime.Now.ToString("HH:mm"),
+            type = "file"
+        };
+
+        AddMessageToRoom(roomName, message);
+        await Clients.Group(roomName).SendAsync("file", json);
+    }
+
+    private async Task SendVoiceMessage(string json)
+    {
+        string name = GetUserName();
+        if (string.IsNullOrEmpty(name))
+        {
+            await Clients.Caller.SendAsync("system", "Сначала войди");
+            return;
+        }
+
+        string roomName = GetRoomName();
+        
+        var message = new ChatMessageAndrey
+        {
+            sender = name,
+            text = json,
+            time = DateTime.Now.ToString("HH:mm"),
+            type = "voice"
+        };
+
+        AddMessageToRoom(roomName, message);
+        await Clients.Group(roomName).SendAsync("voice", json);
+    }
+
+    private string GetUserName()
+    {
+        if (Context.User != null && Context.User.Identity != null && Context.User.Identity.Name != null)
+        {
+            return Context.User.FindFirst(ClaimTypes.Name)?.Value ?? "";
+        }
+        return "";
+    }
+
+    private string GetRoomName()
+    {
+        if (connectionRooms.ContainsKey(Context.ConnectionId))
+        {
+            return connectionRooms[Context.ConnectionId];
+        }
+        return "Общий";
+    }
+
+    private void AddMessageToRoom(string roomName, ChatMessageAndrey message)
+    {
+        if (!roomMessages.ContainsKey(roomName))
+        {
+            roomMessages[roomName] = new List<ChatMessageAndrey>();
+        }
+        roomMessages[roomName].Add(message);
+        SaveMessages();
+    }
+    private static void SaveMessages()
+    {
+        try
+        {
+            string json = JsonSerializer.Serialize(roomMessages);
+            File.WriteAllText(messagesFilePath, json, Encoding.UTF8);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Ошибка сохранения сообщений: " + ex.Message);
+        }
+    }
+
+    private async Task joinRoom(string json)
     {
         RoomJoin join = JsonSerializer.Deserialize<RoomJoin>(json) ?? new RoomJoin();
-        if (join.RoomName == "" || join.UserName == "")
+        if (join.RoomName == "")
         {
-            return Clients.Caller.SendAsync("system", "нужное имя и название комнаты");
-        }
-        Groups.AddToGroupAsync(Context.ConnectionId, join.RoomName).Wait();
-        if (roomMembers.FirstOrDefault(x => join.RoomName == x.name) != null)
-        {
-            //List<string> members = roomMembers[join.RoomName];
-            List<string> members = roomMembers.FirstOrDefault(x => join.RoomName == x.name).Members;
-            if (members.Contains(join.UserName) == false)
-            {
-                members.Add(join.UserName);
-            }
-            roomMembers.FirstOrDefault(x => join.RoomName == x.name).Members = members;
-            string output = JsonSerializer.Serialize(roomMembers);
-            File.WriteAllText("RoomsAlexander.json", output);
-            string membersJson = JsonSerializer.Serialize(members);
-            return Clients.Group(join.RoomName).SendAsync("roomMembers", membersJson);
-        }
-        else
-        {
-            return Task.CompletedTask;
+            await Clients.Caller.SendAsync("system", "Нужно название комнаты");
+            return;
         }
         
+        if (connectionRooms.ContainsKey(Context.ConnectionId))
+        {
+            string oldRoom = connectionRooms[Context.ConnectionId];
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, oldRoom);
+        }
+        
+        await Groups.AddToGroupAsync(Context.ConnectionId, join.RoomName);
+        connectionRooms[Context.ConnectionId] = join.RoomName;
+        
+        if (!roomMembers.ContainsKey(join.RoomName))
+        {
+            roomMembers[join.RoomName] = new List<string>();
+        }
+        
+        string userName = GetUserName();
+        
+        List<string> members = roomMembers[join.RoomName];
+        if (!string.IsNullOrEmpty(userName) && !members.Contains(userName))
+        {
+            members.Add(userName);
+        }
+        
+        if (roomMessages.ContainsKey(join.RoomName))
+        {
+            foreach (var msg in roomMessages[join.RoomName])
+            {
+                if (msg.type == "file")
+                {
+                    await Clients.Caller.SendAsync("file", msg.text);
+                }
+                else if (msg.type == "voice")
+                {
+                    await Clients.Caller.SendAsync("voice", msg.text);
+                }
+                else
+                {
+                    await Clients.Caller.SendAsync("chat", msg.sender + ": " + msg.text);
+                }
+            }
+        }
+        
+        string membersJson = JsonSerializer.Serialize(members);
+        await Clients.Group(join.RoomName).SendAsync("roomMembers", membersJson);
     }
+
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        if (connectionRooms.ContainsKey(Context.ConnectionId))
+        {
+            connectionRooms.Remove(Context.ConnectionId);
+        }
+        await base.OnDisconnectedAsync(exception);
+    }
+
+    // public bool isIpBlocked(string name)
+    // {
+    //     string jsnBlockedIPs = File.ReadAllText("wwwroot/BlockedIPs.json", Encoding.UTF8);
+    //     List<string>? blockedIPs = JsonSerializer.Deserialize<List<string>>(jsnBlockedIPs);
+    //     string? requestIP = this.Context.GetHttpContext()?.Connection.RemoteIpAddress?.ToString();
+    //     Console.WriteLine($"{name}.   IP: {requestIP}");
+    //     return blockedIPs != null && blockedIPs.Contains(requestIP);
+    // }
 }
 
 public struct DbRecord

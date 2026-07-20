@@ -1,58 +1,25 @@
-/*
-  auth-helper.js
-
-  Auth.start(startApp);
-  Auth.login(name, password, startApp);
-  Auth.logout();
-*/
 (function () {
-    function getPanel(id) {
-        return document.getElementById(id);
-    }
-
-    function showLogin() {
-        getPanel("loginPanel")
-            .classList.remove("d-none");
-
-        getPanel("appPanel")
-            .classList.add("d-none");
-        getPanel("roomPanel")
-            .classList.add("d-none");
-    }
-
-    function showApp() {
-        getPanel("loginPanel")
-            .classList.add("d-none");
-
-        getPanel("appPanel")
-            .classList.remove("d-none");
-        getPanel("roomPanel")
-            .classList.remove("d-none");
-    }
-
-    function runReady(ready) {
-        if (typeof ready === "function") {
-            ready();
-        }
-    }
-
-    function start(ready) {
-        fetch("api/me")
+    function start(ready, onError) {
+        fetch("/api/me")
             .then(function (response) {
                 if (response.ok) {
-                    showApp();
-                    runReady(ready);
-                } else {
-                    showLogin();
+                    if (typeof ready === "function") {
+                        ready();
+                    }
+                }
+                else{
+                    if(onError)
+                    onError()
                 }
             })
             .catch(function (error) {
                 console.error(error);
-                showLogin();
+                if(onError)
+                    onError()
             });
     }
 
-    function login(name, password, username, ready) {
+    function login(login, password, ready) {
         fetch(
             "/api/login",
             {
@@ -61,9 +28,9 @@
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    Name: name,
-                    Password: password,
-                    UserName : username
+                    login: login,
+                    password: password,
+                    name: ""
                 })
             })
             .then(function (response) {
@@ -71,9 +38,35 @@
                     alert("Неверное имя или пароль");
                     return;
                 }
+                if (typeof ready === "function") {
+                    ready();
+                }
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    }
 
-                showApp();
-                runReady(ready);
+    function regin(name, login, password, ready) {
+        fetch(
+            "/api/register",
+            {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    login: login,
+                    password: password,
+                    name: name
+                })
+            })
+            .then(function (response) {
+                if (!response.ok) {
+                    alert("Name or login is already taken!");
+                    return;
+                }
+                if (typeof ready === "function") {
+                    ready();
+                }
             })
             .catch(function (error) {
                 console.error(error);
@@ -87,7 +80,7 @@
                 method: "POST"
             })
             .then(function () {
-                location.reload();
+                window.location.assign('/');
             })
             .catch(function (error) {
                 console.error(error);
@@ -97,6 +90,7 @@
     window.Auth = {
         start: start,
         login: login,
-        logout: logout
+        logout: logout,
+        regin: regin
     };
 })();
