@@ -18,10 +18,12 @@ function getFileType(filePath) {
     
     return '.tpl-download-btn';
 }
-function activateMedia(fileMsg, fileUrl) {
+function activateMedia(fileUrl, text, name, date) {
     const type = getFileType(fileUrl);
     const fileName = fileUrl.trim().split("\\").at(-1);
-
+    const messages = document.getElementById("chatBox");
+    const fileMTemp = document.getElementById("file-template");
+    const fileMsg = fileMTemp.content.cloneNode(true);
     if (type === '.tpl-img') {
         const img = fileMsg.querySelector(type);
         img.src = fileUrl;
@@ -53,8 +55,7 @@ function activateMedia(fileMsg, fileUrl) {
     //     giframe.src = fileUrl;
     //     giframe.style.display = 'block';
     // } 
-    
-    else {
+    else if (fileUrl) {
         const btn = fileMsg.querySelector('.tpl-download-btn');
         if (btn) 
         { 
@@ -63,13 +64,14 @@ function activateMedia(fileMsg, fileUrl) {
             btn.textContent = fileName;
         }
     }
-    
-    
-    // else if (type === 'embed') {  // MOZHET VSE SLOMAT!                                                    !!!!!
-        //   const placeholder = document.getElementById('tpl-embed-placeholder');
-        //   placeholder.innerHTML = `<embed src="${fileUrl}" type="application/pdf" width="100%" height="500px">`;
-        //   placeholder.style.display = 'block';
-    // }
+
+    const nameBlc = fileMsg.querySelector(".name-block");
+    const textBlc = fileMsg.querySelector(".text-block");
+    const dateBlc = fileMsg.querySelector(".date-block");
+    nameBlc.textContent = name;
+    textBlc.textContent = text;
+    dateBlc.textContent = date;
+    messages.appendChild(fileMsg);
 }
 
 //formdata
@@ -168,16 +170,18 @@ class FileUploadManager {
     }
     
     sendFile(file) {
+        if (!file) {
+            sendMessage("");
+        }
         const formdata = new FormData();
         formdata.append("file", file);
         Api.postFile("api/upload", formdata, (filePath) => {
-            showFile(filePath, "chatBox");
+            sendMessage(filePath);
         });
     }
 
     handleFiles(fileList) {
         const newFiles = Array.from(fileList);
-        console.log("handleFiles");
 
         if (this.files.length + newFiles.length > this.maxFiles) {
             alert(`file amount exceeded (${this.files.length + newFiles.length
@@ -246,9 +250,8 @@ class FileUploadManager {
     
     async uploadFiles() {
         if (this.files.length === 0) {
-            return;
+            this.sendFile(null);
         }
-        
         const totalSize = this.getSize(this.files);
         if (totalSize > this.maxSizeBytes) {
             alert(`Total size esceeds the limit (${totalSize}/${this.maxSizeBytes})`)

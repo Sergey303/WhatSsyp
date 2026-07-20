@@ -47,7 +47,7 @@ app.MapGet("/api/me", (HttpContext context) =>
     return Results.Ok(new { name = name});
 });
 
-app.MapGet("api/fileR", (string filePath) =>
+app.MapGet("api/MLfile", (string filePath) =>
 {
     Console.WriteLine(filePath.Split("\\").Last());
     //C:\IAS\WhatSsyp\MegaLosos\SignalRChat\uploads\8523ed99-28d6-4eb5-86fa-b4ed3d00983d\x6jc2gc68ph81.mp4
@@ -127,6 +127,11 @@ app.MapPost("api/upload", async (IFormFile file) =>
     }
     return Results.Ok(filePath);
 }).DisableAntiforgery();
+
+app.MapGet("api/MLmessages", () =>
+{
+    
+});
 
 app.Run("http://0.0.0.0:8080");
 
