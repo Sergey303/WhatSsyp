@@ -79,7 +79,7 @@ Chat.receive("historyFirst", function(text){
 
 Chat.receive("messageHistory", function(json){
     const message = JSON.parse(json);
-    showMessage(message.group + ": " + message.user + ": " + message.message);
+    showMessage(message.user + ": " + message.message);
 });
 
 Chat.receive("loginResult", function (text) {
@@ -95,7 +95,7 @@ Chat.receive("loginResult", function (text) {
 Chat.receive("chat", function (json) {
     try {
         const message = JSON.parse(json);
-        showMessage(message.group + ": " + message.user + ": " + message.message);
+        showMessage(message.user + ": " + message.message);
     } catch (error) {
         showMessage("Failed to load Json");
     }

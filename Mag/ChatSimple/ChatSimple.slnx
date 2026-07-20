@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="../../../SignalRChat/SignalRChat.csproj" />
+  <Project Path="../Razor/Razor.csproj" />
+  <Project Path="../WebChat/WebChat.csproj" />
+  <Project Path="../WebUno/WebUno.csproj" />
+  <Project Path="ChatSimple.csproj" />
+</Solution>

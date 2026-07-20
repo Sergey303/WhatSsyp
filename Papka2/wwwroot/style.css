@@ -61,10 +61,12 @@ h1 {
 }
 
 .status-badge {
-    margin: 0 0 10px 0;
+    /* margin: 0 0 10px 0; */
+    margin: 0;
     font-size: 0.9rem;
     color: #64748b;
     flex-shrink: 0;
+    line-height: 1;
 }
 
 #messages {
@@ -206,4 +208,13 @@ button:hover {
 
 .logout-btn:hover {
     background: #dc2626 !important;
+}
+
+#CallBtn {
+    background: none;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }

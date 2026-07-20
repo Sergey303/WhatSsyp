@@ -1,9 +1,11 @@
+Auth.start(startApp);
 const signInName = document.getElementById("nameInp");
 const signInLogin = document.getElementById("loginInp");
 const signInPassword = document.getElementById("passwordInp");
 const roomNameInput = document.getElementById("roomNameInput");
 const roomsBlock = document.getElementById("rooms");
 const messagesBlock = document.getElementById("messages");
+let currentRoomName = "Общий"; 
 
 function clearMessages() {
     messagesBlock.innerHTML = '';
@@ -45,6 +47,8 @@ function sendMessage() {
     }
     Chat.send("chat", text);
     document.getElementById("messageInput").value = "";
+    const mes = signInName + ": " + text;
+    Api.post("/x"+currentRoomName, mes, ()=>{});
 }
 
 function rollDice() {
@@ -204,7 +208,15 @@ function createRoom() {
     if (name === "") {
         return;
     }
-    Api.post("/api/rooms", {name: name}, roomCreated);
+
+    // const fileContent = "[]";
+    // const blob = new Blob([fileContent], { type: 'text/plain' });
+    // const file = new File([blob], currentRoomName+'.txt', { type: 'text/plain' });
+    // const formData = new FormData();
+    // formData.append('name', name);
+    // formData.append('file', file);
+    
+    Api.post("/api/rooms", formData, roomCreated);
 }
 
 Chat.receive("roomMembers", function(text) {
@@ -216,7 +228,23 @@ function joinRoom(roomName) {
     clearMessages();
     const data = {RoomName: roomName, UserName: ""};
     Chat.send("joinRoom", JSON.stringify(data));
+    currentRoomName = roomName;
+    //loadRoomHistory(roomName);
 }
+
+// function loadRoomHistory(roomName) {
+//     const url = `/api/messages?room=${encodeURIComponent(roomName)}&limit=50`;
+//     Api.get(url, function(data) {
+//         clearMessages();
+//         if (!Array.isArray(data)) return;
+
+//         data.forEach(msg => {
+//             const displayText = msg.user ? `${msg.user}: ${msg.text}` : msg.text;
+//             showMessage(displayText);
+//         });
+//         messagesBlock.scrollTop = messagesBlock.scrollHeight;
+//     });
+// }
 
 function accountReg(name, login, password) {
     if (login.length < 3 || login.length > 20) {
@@ -242,7 +270,7 @@ function regin() {
         return;
     }
     Auth.regin(name_, login_, password_, function() {
-        window.location.assign('http://localhost:8080/index.html');
+        window.location.assign('/index.html');
     });
 }
 
@@ -250,7 +278,7 @@ function login() {
     const login_ = signInLogin.value.trim();
     const password_ = signInPassword.value.trim();
     Auth.login(login_, password_, function() {
-        window.location.assign('http://localhost:8080/index.html');
+        window.location.assign('/index.html');
     });
 }
 
@@ -269,9 +297,12 @@ document.getElementById("messageInput").addEventListener("keypress", function(e)
         sendMessage();
     }
 });
-document.getElementById("gameBtn").onclick = rollDice;
+//document.getElementById("gameBtn").onclick = rollDice;
+document.getElementById("gameBtn").onclick = doinging;
+function doinging() {
+    window.location.assign('/t-rex-runner-gh-pages/index.html'); 
+}
+
 document.getElementById("fileBtn").onclick = function() {
     document.getElementById("fileInp").click();
 };
-
-Auth.start(startApp);
