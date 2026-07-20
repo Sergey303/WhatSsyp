@@ -4,14 +4,25 @@
     <meta charset="utf-8">
     <title>Моя страница</title>
 
+
+    <link 
+    rel="stylesheet"
+    href="assets/bootstrap.min.css"> 
+
     <link
         rel="stylesheet"
         href="style.css">
 </head>
 <body>
 
-    <h1 class="title">Игрулькаи тд</h1>
-    <p class="title"> Типа подзаголовок и тд</p> 
+
+
+<div class="card container d-flex  align-items-center vh-50" style="width: 67rem;">
+
+    <h1 class="title"
+    text-align: center;>
+    Игрулька и тд</h1>
+    <p class="title"> Подзаголовок и тд</p> 
 <!--  р - показывает новый абзац  (перенос строки) (без этих штук текст плоский будет) -->
 
 <a href="rules.html"
@@ -21,10 +32,8 @@ class="oform">
     Так называемые правила
 </a> 
 
-
-
 <div id="mmm"
-    class="hide"> 
+    class="hide card" style="width: 67rem;"> 
 
         <h1 id="title">
             Игра 
@@ -33,18 +42,10 @@ class="oform">
         <div id=text>  </div>
         <div id="hide-when-press-start"> <!-- элементы что скрываются по "начать"-->
 
-            <div class="alert alert-info"> 
-                Таймерчик (по желанию)
-            </div>
-            
-            <select class="form-control">
-                <option> Играть с таймером</option>
-                <option> Игроть без таймера</option>
-            </select>
-
             <p class="title"> Нажми "начать" (чтобы начать очев)</p> 
 
-            <button onclick="hideXStartGame()">
+            <button class="card mb-3"
+            onclick="hideXStartGame()">
                 Начать
             </button>
         </div>
@@ -56,8 +57,7 @@ class="oform">
             placeholder="Сюда ответ вводить и тд">
 
             <button
-            class="btn btn-primary"
-            id="answerBtn"
+            class="btn btn-primary oform2 border-danger"
             onclick="clickAnswer()">
                  Оответить
             </button>
@@ -67,7 +67,9 @@ class="oform">
                 
             </p>
             <p>
-                <button id="again"
+                <button 
+                class="card mb-3 oform"
+                id="again"
                 onclick="startAgain()">
                      Заново
                 </button>
@@ -78,12 +80,14 @@ class="oform">
 </div>
         
     <p>
-    <button onclick="openMmmhideNnn()"
+    <button class="card mb-3"
+    onclick="openMmmhideNnn()"
                 id="nnn">
-            Нажми пж
+            Нажмиte
         </button>
     </p> 
         
+</div>
 
 <script src="assets/signalr.min.js"></script>
 <script src="assets/workshop-chat-helper.js"></script>

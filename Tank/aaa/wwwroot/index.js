@@ -52,12 +52,12 @@ function randomNumber(a, b){
 }
 
 let r;
-let f;
+let f; // так как мы делаем их черел лет их можно будет потом переписать
 
 function hideXStartGame() {
-    hideX("hide-when-press-start", false)
+    hideOrOpenX("hide-when-press-start", false)
     startGame();
-    hideX("open-when-press-start", true)
+    hideOrOpenX("open-when-press-start", true)
     const x = randomNumber(0,100);
     const y = randomNumber(0,100);
 
@@ -69,7 +69,7 @@ function hideXStartGame() {
         f = y;
 } 
 
-function hideX(idhtmlElement, visible) {
+function hideOrOpenX(idhtmlElement, visible) { 
     const openedtext = 
         document.getElementById(
             idhtmlElement); 
@@ -89,8 +89,8 @@ function keydown(event)
     console.log(event.key);
     if (event.key == 'Enter')
     {
-    // console.log(
-    //     "Nnnn");
+    console.log(
+        "Nnnn");
     const s = document.getElementById("somethig");
     if (s.value == "") {
         console.log("Это не число!");
