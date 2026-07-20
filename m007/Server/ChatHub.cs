@@ -58,6 +58,9 @@ public class ChatHub : Hub {
     
     public Task Send(string eventName, string jtext) {
         
+        Console.WriteLine($"event name: {eventName} jtext: {jtext}");
+
+
         if (eventName.StartsWith("SoZVoN")){
 
             if (eventName == "SoZVoNregister"){
@@ -227,9 +230,10 @@ public class ChatHub : Hub {
     
     private Task OldSendChat(string text)
     {
-        Console.WriteLine(text);
+        Console.WriteLine("123123");
         if (Context?.User?.Identity?.Name != null)
         {
+            Console.WriteLine("1212");
             var jsonMsg_ = JsonSerializer.Deserialize<jsonMsg>(text);
             jsonMsg_.name = Context.User.Identity.Name;
             text = JsonSerializer.Serialize(jsonMsg_);

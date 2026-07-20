@@ -72,6 +72,7 @@ window.activateMedia = function activateMedia(fileUrl, text, name, date) {
     textBlc.textContent = text;
     dateBlc.textContent = date;
     messages.appendChild(fileMsg);
+    scrollToBottom()
 }
 
 //formdata
