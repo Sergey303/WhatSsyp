@@ -1,0 +1,183 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\ChatSimple\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{61FD847D-9303-C57D-3097-CF3DEC96DC5B}|..\\WebUno\\WebUno.csproj|c:\\home\\dev2026\\syp2026\\whatssyp\\mag\\webuno\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A37B24F-783B-9636-701D-9F9081E95955}|..\\WebChat\\WebChat.csproj|c:\\home\\dev2026\\syp2026\\whatssyp\\mag\\webchat\\wwwroot\\index1.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A37B24F-783B-9636-701D-9F9081E95955}|..\\WebChat\\WebChat.csproj|c:\\home\\dev2026\\syp2026\\whatssyp\\mag\\webchat\\wwwroot\\index0.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EB85C344-A123-D066-B134-BDA3C0A40AB2}|ChatSimple.csproj|c:\\home\\dev2026\\syp2026\\whatssyp\\mag\\chatsimple\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{EB85C344-A123-D066-B134-BDA3C0A40AB2}|ChatSimple.csproj|solutionrelative:readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A37B24F-783B-9636-701D-9F9081E95955}|..\\WebChat\\WebChat.csproj|c:\\home\\dev2026\\syp2026\\whatssyp\\mag\\webchat\\wwwroot\\js\\chat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{333837C8-E25C-956F-661D-A3A16B04834A}|..\\Razor\\Razor.csproj|c:\\home\\dev2026\\syp2026\\whatssyp\\mag\\razor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A37B24F-783B-9636-701D-9F9081E95955}|..\\WebChat\\WebChat.csproj|c:\\home\\dev2026\\syp2026\\whatssyp\\mag\\webchat\\chathub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{333837C8-E25C-956F-661D-A3A16B04834A}|..\\Razor\\Razor.csproj|c:\\home\\dev2026\\syp2026\\whatssyp\\mag\\razor\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A37B24F-783B-9636-701D-9F9081E95955}|..\\WebChat\\WebChat.csproj|c:\\home\\dev2026\\syp2026\\whatssyp\\mag\\webchat\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{333837C8-E25C-956F-661D-A3A16B04834A}|..\\Razor\\Razor.csproj|c:\\home\\dev2026\\syp2026\\whatssyp\\mag\\razor\\wwwroot\\js\\chat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\WebUno\\Program.cs",
+              "RelativeDocumentMoniker": "..\\WebUno\\Program.cs",
+              "ToolTip": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\WebUno\\Program.cs",
+              "RelativeToolTip": "..\\WebUno\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-20T01:26:21.38Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "index1.html",
+              "DocumentMoniker": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\WebChat\\wwwroot\\index1.html",
+              "RelativeDocumentMoniker": "..\\WebChat\\wwwroot\\index1.html",
+              "ToolTip": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\WebChat\\wwwroot\\index1.html",
+              "RelativeToolTip": "..\\WebChat\\wwwroot\\index1.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACYAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-07-19T14:21:55.634Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ChatHub.cs",
+              "DocumentMoniker": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\WebChat\\ChatHub.cs",
+              "RelativeDocumentMoniker": "..\\WebChat\\ChatHub.cs",
+              "ToolTip": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\WebChat\\ChatHub.cs",
+              "RelativeToolTip": "..\\WebChat\\ChatHub.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-19T13:39:30.227Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "chat.js",
+              "DocumentMoniker": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\WebChat\\wwwroot\\js\\chat.js",
+              "RelativeDocumentMoniker": "..\\WebChat\\wwwroot\\js\\chat.js",
+              "ToolTip": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\WebChat\\wwwroot\\js\\chat.js",
+              "RelativeToolTip": "..\\WebChat\\wwwroot\\js\\chat.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-07-19T13:06:59.306Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Index0.html",
+              "DocumentMoniker": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\WebChat\\wwwroot\\Index0.html",
+              "RelativeDocumentMoniker": "..\\WebChat\\wwwroot\\Index0.html",
+              "ToolTip": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\WebChat\\wwwroot\\Index0.html",
+              "RelativeToolTip": "..\\WebChat\\wwwroot\\Index0.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-07-19T11:25:34.489Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\Razor\\Program.cs",
+              "RelativeDocumentMoniker": "..\\Razor\\Program.cs",
+              "ToolTip": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\Razor\\Program.cs",
+              "RelativeToolTip": "..\\Razor\\Program.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAcwCAAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-19T10:23:19.125Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Readme.md",
+              "DocumentMoniker": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\ChatSimple\\Readme.md",
+              "RelativeDocumentMoniker": "Readme.md",
+              "ToolTip": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\ChatSimple\\Readme.md",
+              "RelativeToolTip": "Readme.md",
+              "ViewState": "AgIAAJwAAAAAAAAAAAAswK0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-07-19T10:15:49.221Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\Razor\\Pages\\Index.cshtml",
+              "RelativeDocumentMoniker": "..\\Razor\\Pages\\Index.cshtml",
+              "ToolTip": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\Razor\\Pages\\Index.cshtml",
+              "RelativeToolTip": "..\\Razor\\Pages\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-19T10:03:40.286Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\WebChat\\Program.cs",
+              "RelativeDocumentMoniker": "..\\WebChat\\Program.cs",
+              "ToolTip": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\WebChat\\Program.cs",
+              "RelativeToolTip": "..\\WebChat\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-19T11:19:42.248Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "chat.js",
+              "DocumentMoniker": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\Razor\\wwwroot\\js\\chat.js",
+              "RelativeDocumentMoniker": "..\\Razor\\wwwroot\\js\\chat.js",
+              "ToolTip": "C:\\Home\\dev2026\\Syp2026\\WhatSsyp\\Mag\\Razor\\wwwroot\\js\\chat.js",
+              "RelativeToolTip": "..\\Razor\\wwwroot\\js\\chat.js",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-07-19T10:30:20.451Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

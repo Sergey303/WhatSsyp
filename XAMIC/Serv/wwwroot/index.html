@@ -1,4 +1,4 @@
-<!doctype html>
+!doctype html>
 <html lang="ru">
 <head>
     <meta charset="utf-8">
@@ -28,13 +28,15 @@
                 <div class="input-group">
                     <label for="username">Имя пользователя (Username)</label>
                     <input type="text" id="username" placeholder="Иван Иванов" required>
-                    </div>
+                </div>
                 
                 <button onclick="registration()" type="submit" style="margin-bottom: 10px;">Зарегистрироваться</button>
                 <button onclick="login()" type="submit">Вход</button>
             </div>
         </div>
     </div>
+
+
     <div id="appPanel" class="d-none">        
         <button class="logout-btn" onclick="Auth.logout()">Выйти</button>
         <div id="messages"></div>
@@ -42,8 +44,8 @@
     <div id="roomPanel" class="d-none">
         <input id="roomNameInput" class="form-control" placeholder="Название комнаты">
         <button class="btn btn-primary mt-2" onclick="createRoom()">Создать комнату</button>
-        <button class="btn btn-primary mt-2" onclick="joinR()">Войти в комнату</button>
-        <ul id="rooms" class="list-group mt-2   "></ul>
+        <button class="btn btn-primary mt-2" onclick="joinR()" >Войти в комнату</button>
+        <ul id="rooms" class="list-group mt-2" style="margin-bottom: 50px;"></ul>
     <!--
     <div class="send-row">
         <input id="nameInput" placeholder="name">
@@ -52,6 +54,7 @@
         </button>
     </div>
     -->
+        <input id="messageRoom" placeholder="выберите комнату">
         <input id="messageInput" placeholder="напишите сообщение">
         <button class="image-button" onclick="sendMessage()">
             &#8629; 

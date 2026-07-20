@@ -1,0 +1,14 @@
+C:\IAS\L1\LittleMathGame_L1\bin\Debug\net10.0\LittleMathGame_L1.exe
+C:\IAS\L1\LittleMathGame_L1\bin\Debug\net10.0\LittleMathGame_L1.deps.json
+C:\IAS\L1\LittleMathGame_L1\bin\Debug\net10.0\LittleMathGame_L1.runtimeconfig.json
+C:\IAS\L1\LittleMathGame_L1\bin\Debug\net10.0\LittleMathGame_L1.dll
+C:\IAS\L1\LittleMathGame_L1\bin\Debug\net10.0\LittleMathGame_L1.pdb
+C:\IAS\L1\LittleMathGame_L1\obj\Debug\net10.0\LittleMathGame_L1.GeneratedMSBuildEditorConfig.editorconfig
+C:\IAS\L1\LittleMathGame_L1\obj\Debug\net10.0\LittleMathGame_L1.AssemblyInfoInputs.cache
+C:\IAS\L1\LittleMathGame_L1\obj\Debug\net10.0\LittleMathGame_L1.AssemblyInfo.cs
+C:\IAS\L1\LittleMathGame_L1\obj\Debug\net10.0\LittleMathGame_L1.csproj.CoreCompileInputs.cache
+C:\IAS\L1\LittleMathGame_L1\obj\Debug\net10.0\LittleMathGame_L1.dll
+C:\IAS\L1\LittleMathGame_L1\obj\Debug\net10.0\refint\LittleMathGame_L1.dll
+C:\IAS\L1\LittleMathGame_L1\obj\Debug\net10.0\LittleMathGame_L1.pdb
+C:\IAS\L1\LittleMathGame_L1\obj\Debug\net10.0\LittleMathGame_L1.genruntimeconfig.cache
+C:\IAS\L1\LittleMathGame_L1\obj\Debug\net10.0\ref\LittleMathGame_L1.dll

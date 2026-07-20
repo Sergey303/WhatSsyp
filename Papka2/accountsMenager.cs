@@ -4,12 +4,14 @@ using System.Text.Json;
 public class AccountProcessor
 {
     public static string filePath = "wwwroot/accounts.json";
+    
     public List<Account> LoadAccounts()
     {
         try
         {
             string jsonStr = File.ReadAllText(filePath, Encoding.UTF8);
-            return JsonSerializer.Deserialize<List<Account>>(jsonStr);
+            var accounts = JsonSerializer.Deserialize<List<Account>>(jsonStr);
+            return accounts ?? new List<Account>();
         }
         catch
         {

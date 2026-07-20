@@ -1,23 +1,19 @@
 using Microsoft.AspNetCore.SignalR;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.IO;
-using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using System.Text.Json;
-using System.Reflection.Metadata.Ecma335;
-using Microsoft.AspNetCore.Http.HttpResults;
-using System.ComponentModel;
-using System.Net.Cache;
 
 var processor = new AccountProcessor();
 var accountsList = processor.LoadAccounts();
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options =>
+{
+    options.MaximumReceiveMessageSize = 256 * 1024;
+});
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
 builder.Services.AddAntiforgery(options => 
@@ -44,13 +40,22 @@ app.UseStaticFiles(new StaticFileOptions
     }
 });
 
-List<Room> rooms = new List<Room>();
-Room general = new Room();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "uploads")),
+    RequestPath = "/uploads"
+});
+
+List<Room> rooms = LoadRooms();
 
 app.MapGet("/api/rooms", () => rooms);
+
 app.MapPost("/api/rooms", (Room room) =>
 {
-    rooms.Add(room); return Results.Ok();
+    rooms.Add(room);
+    SaveRooms(rooms);
+    return Results.Ok();
 });
 
 app.MapPost("api/upload", async (IFormFile file) =>
@@ -63,7 +68,9 @@ app.MapPost("api/upload", async (IFormFile file) =>
     {
         await file.CopyToAsync(stream);
     }
-    return Results.Ok(filePath);
+    
+    string relativePath = filePath.Replace(Directory.GetCurrentDirectory(), "").Replace("\\", "/").TrimStart('/');
+    return Results.Ok(relativePath);
 }).DisableAntiforgery();
 
 app.MapGet("/api/me", (HttpContext context) =>
@@ -77,8 +84,7 @@ app.MapGet("/api/me", (HttpContext context) =>
     {
         return Results.Unauthorized();
     }
-
-    return Results.Ok(new { name = name });
+    return Results.Ok(new { name = name});
 });
 
 app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
@@ -88,8 +94,7 @@ app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
         string name = loginData.name;
         string login = loginData.login;
         string password = loginData.password;
-        if (accountsList.Any(a => a.name == name ||
-        a.login == login))
+        if (accountsList.Any(a => a.name == name || a.login == login))
         {
             return Results.BadRequest();
         }
@@ -104,22 +109,15 @@ app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
     }
 });
 
-app.MapGet("api/fileR", (string filePath) =>
+app.MapPost("/api/logout", async (HttpContext context) =>
 {
-    Console.WriteLine(filePath.Split("\\").Last());
-    return Results.File(filePath, "application/octet-stream", filePath.Split("\\").Last());
-});
-
-app.MapPost("/api/logout", (HttpContext context) =>
-{
-    context.SignOutAsync().Wait();
+    await context.SignOutAsync();
     return Results.Ok();
 });
 
 app.MapPost("/api/login", async (LoginRequest loginData, HttpContext context) =>
 {
-    if (!accountsList.Any(a =>
-    a.login == loginData.login && a.password == loginData.password))
+    if (!accountsList.Any(a => a.login == loginData.login && a.password == loginData.password))
     {
         return Results.Unauthorized();
     }
@@ -133,8 +131,7 @@ app.MapPost("/api/login", async (LoginRequest loginData, HttpContext context) =>
     claims.Add(loginClaim);
     claims.Add(passwordClaim);
 
-    ClaimsIdentity identity = new ClaimsIdentity(claims,
-        CookieAuthenticationDefaults.AuthenticationScheme);
+    ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
     ClaimsPrincipal user = new ClaimsPrincipal(identity);
 
     await context.SignInAsync(user);
@@ -143,11 +140,13 @@ app.MapPost("/api/login", async (LoginRequest loginData, HttpContext context) =>
 });
 
 app.MapHub<ChatHub>("/ChatHub");
+
 app.MapGet("/", async () => 
 {
     var path = Path.Combine(builder.Environment.WebRootPath, "reg.html");
     return Results.File(path, "text/html");
 });
+
 app.Run("http://0.0.0.0:8080");
 
 void AddAccountToList(string name, string login, string password)
@@ -160,4 +159,33 @@ void AddAccountToFile(string name, string login, string password)
 {
     string jsn = JsonSerializer.Serialize(accountsList);
     File.WriteAllText(AccountProcessor.filePath, jsn, Encoding.UTF8);
+}
+
+List<Room> LoadRooms()
+{
+    try
+    {
+        string path = "wwwroot/rooms.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path, Encoding.UTF8);
+            return JsonSerializer.Deserialize<List<Room>>(json) ?? new List<Room>();
+        }
+    }
+    catch { }
+    return new List<Room>();
+}
+
+void SaveRooms(List<Room> roomsList)
+{
+    try
+    {
+        string path = "wwwroot/rooms.json";
+        string json = JsonSerializer.Serialize(roomsList);
+        File.WriteAllText(path, json, Encoding.UTF8);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Ошибка сохранения комнат: " + ex.Message);
+    }
 }

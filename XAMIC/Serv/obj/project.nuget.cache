@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "Mc5yxi9h7rY=",
+  "success": true,
+  "projectFilePath": "C:\\IAS\\WhatSsyp\\XAMIC\\Serv\\Serv.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\programmer\\.nuget\\packages\\microsoft.aspnetcore.http.connections.client\\10.0.9\\microsoft.aspnetcore.http.connections.client.10.0.9.nupkg.sha512",
+    "C:\\Users\\programmer\\.nuget\\packages\\microsoft.aspnetcore.signalr.client\\10.0.9\\microsoft.aspnetcore.signalr.client.10.0.9.nupkg.sha512",
+    "C:\\Users\\programmer\\.nuget\\packages\\microsoft.aspnetcore.signalr.client.core\\10.0.9\\microsoft.aspnetcore.signalr.client.core.10.0.9.nupkg.sha512"
+  ],
+  "logs": []
+}
