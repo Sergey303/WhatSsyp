@@ -35,8 +35,11 @@ function registration() {
 
 
 
-Chat.receive("chat", function(text) {
-    showMessage(text);
+Chat.receive("chat", function(t) {
+    var convert = JSON.parse(t);
+    if (roomName == convert.room) {
+        showMessage(convert.name + ":" + convert.text);
+    }
 });
 
 function sendMessage() {
@@ -95,11 +98,20 @@ function createRoom() {
 }
 Chat.receive("roomMembers", function(text){const members = JSON.parse(text); console.log(members);});
 
-function joinR(room) {
+function joinR(roomname) {
+    roomName = roomname;
+
     //const name = document.getElementById("nameInput").value.trim();
-    Api.get("/messages", (mess)=>{messages=JSON.parse(mess)});
-    const data = {RoomName:room};
-    Chat.send("joinRoom", JSON.stringify(data));   
-     
-    roomName = room;
+    Api.get("/messages", (mess)=>{
+        messages=JSON.parse(mess);
+        const data = {RoomName:roomname};
+        const messagesHTML = document.getElementById("messages");
+        messagesHTML.innerHTML ="";
+        for (const message of messages) {
+            if (message.room == roomname) {
+                showMessage(message.name + ":" + message.text);
+            }
+        }
+        Chat.send("joinRoom", JSON.stringify(data));
+    });
 }

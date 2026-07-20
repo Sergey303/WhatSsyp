@@ -35,7 +35,7 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/messages", () => JsonSerializer.Deserialize<List<Message>>(File.ReadAllText("DataMessages.json")));
+app.MapGet("/messages", () => File.ReadAllText("DataMessages.json"));
 
 
 app.UseStaticFiles(new StaticFileOptions

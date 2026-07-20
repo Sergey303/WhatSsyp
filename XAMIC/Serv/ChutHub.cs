@@ -47,7 +47,7 @@ public class ChatHub : Hub
             messages.Add(new Message {name=name, text=text, room=room});
             string convert = JsonSerializer.Serialize(messages, new JsonSerializerOptions{WriteIndented=true});
             File.WriteAllText("DataMessages.json", convert, Encoding.UTF8);
-            return Clients.Group(room).SendAsync("chat", room + ":" + name + ": " + text);
+            return Clients.Group(room).SendAsync("chat", JsonSerializer.Serialize<Message>(new Message {name=name, text=text, room=room}));
         }
         return Clients.Caller.SendAsync("system", "Сначала войди");
     }
