@@ -117,6 +117,12 @@ function keydown(event)
     }
 }
 
+function clickAnswer() {
+    // Вызываем вашу большую функцию проверки 
+    // и притворяемся, что был нажат Enter
+    keydown({ key: 'Enter' });
+}
+
 function startAgain() {
     hideXStartGame();
         // 2. Очищаем поле ввода от старого ответа пользователя
