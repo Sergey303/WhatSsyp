@@ -1,18 +1,18 @@
 
 function loadRooms(){
-    loadListR("/api/rooms");
+    loadListR("api/rooms");
 }
 function loadUsers(){
-    loadList("/api/users");
+    loadList("api/users");
 }
 function loadChatUsers(){
-    loadListC("/api/chat-users");
+    loadListC("api/chat-users");
 }
 function loadRoomUsers(roomName){
-    loadListC("/api/rooms/" + roomName + "/users");
+    loadListC("api/rooms/" + roomName + "/users");
 }
 function loadListR(url){
-    fetch(url)
+    fetch(window.serverUrl + url)
         .then(function (response) {
             return response.json();
         })
@@ -21,7 +21,7 @@ function loadListR(url){
         });
 }
 function loadListC(url){
-    fetch(url)
+    fetch(window.serverUrl + url)
         .then(function (response) {
             return response.json();
         })
@@ -30,7 +30,7 @@ function loadListC(url){
         });
 }
 function loadList(url){
-    fetch(url)
+    fetch(window.serverUrl + url)
         .then(function (response) {
             return response.json();
         })
