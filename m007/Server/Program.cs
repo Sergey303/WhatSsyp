@@ -253,7 +253,6 @@ app.MapGet("api/MLmessages", (string room) =>
 //end MEGA LOSOS...
 
 //app.MapGet("/", () => "Hello World!");
-app.MapHub<ChatHub>("/chatHub");
 
 ///;
 
