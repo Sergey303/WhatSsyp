@@ -48,7 +48,7 @@ function sendMessage() {
         document.getElementById("messageInput").value = "";
         return;
     }
-    Chat.send("chat", text);
+    Chat.send("chat", {user:"", group:"", message:text, dt:""});
     document.getElementById("messageInput").value = "";
 }
 
@@ -254,7 +254,7 @@ function regin() {
         return;
     }
     Auth.regin(name_, login_, password_, function() {
-        window.location.assign('/index.html');
+        window.location.assign('/indexAndrey.html');
     });
 }
 
@@ -262,7 +262,7 @@ function login() {
     const login_ = signInLogin.value.trim();
     const password_ = signInPassword.value.trim();
     Auth.login(login_, password_, function() {
-        window.location.assign('/index.html');
+        window.location.assign('/indexAndrey.html');
     });
 }
 
@@ -286,4 +286,9 @@ document.getElementById("fileBtn").onclick = function() {
     document.getElementById("fileInp").click();
 };
 
-Auth.start(startApp);
+function myOnError() {
+    debugger
+    window.location.assign("/regAndrey.html");
+}
+
+Auth.start(startApp, myOnError);

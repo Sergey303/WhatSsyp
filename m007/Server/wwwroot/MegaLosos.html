@@ -41,15 +41,15 @@
     <br>
     <div class="chat-box" id="chatBox">
         Блок чатв
-        <div class="message" style="display: block">
-            <div class="row">
-                <h6 class="name-block col-8">Name</h6>
-                <p class="date-block col-4"></p>
-            </div>
-            <p class="text-block">text</p>
-        </div>
         <template id="file-template">
             <div class="message" style="display: block">
+                <div class="txt-message" style="display: block">
+                    <div class="row justify-content-between">
+                        <h4 class="name-block col-auto">User</h4>
+                        <h8 class="date-block col-auto"></h8>
+                    </div>
+                    <p class="text-block"></p>
+                </div>
                 <!--siple test file downloader, old version:
                 <a class="fileHA" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAeefR4LoJQ_nFipMLNB3nVe5sWMnzvdIogIW05YVxaWDDrySuV8kduys&s=10">download file</a>
                 -->
@@ -75,11 +75,6 @@
                 <!-- IFrame: safe link (empty, hidden) -->
                 <iframe class="tpl-iframe" src="about:blank" sandbox="" allow-downloads data-src=""></iframe>
                 <iframe class="tpl-g-iframe" src="about:blank" sandbox="" data-src=""></iframe>
-                
-                <div class="message" style="display:none">
-                    <h4 class="name-block">Name</h4>
-                    <p class="text-block">text</p>
-                </div>
             </div>
         </template>
     </div>
@@ -90,7 +85,7 @@
             <div class="row">
                 <div class="col-2">
                     <button class="btn btn-primary" 
-                    onclick="sendMessage()" id ='sendBtn'>Send</button>
+                    id ='sendBtn'>Send</button> <!-- onclick="sendMessage()"-->
                 </div>
                 <div class="col-4">
                     <input type="file" id="fileInp" placeholder="File">
@@ -100,7 +95,6 @@
             </div>
         </div>
     </div>
-
     <!-- <div id="uploadContainer">
         <h2>Upload Files (Max: 5 files, 10MB total)</h2>
         
@@ -113,11 +107,11 @@
         
     </div> -->
     
+    <script src="assets/MLCA/api-helper.js"></script>
     <script src="assets/file-handler.js"></script>
     <script src="assets/MLCA/auth-helper.js"></script>
     <script src="assets/signalr.min.js"></script>
     <script src="assets/MLCA/workshop-chat-helper.js"></script>
-    <script src="assets/MLCA/api-helper.js"></script>
     <script src="assets/MLCA/appAr.js"></script>
 </body>
 </html>
