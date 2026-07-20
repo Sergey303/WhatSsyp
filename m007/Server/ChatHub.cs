@@ -231,11 +231,8 @@ public class ChatHub : Hub {
     
     private Task OldSendChat(string text)
     {
-<<<<<<< HEAD
         Console.WriteLine("123123");
-=======
-        
->>>>>>> bb26018ab8eaa48e14e0074235cea2cf1ce57d05
+
         if (Context?.User?.Identity?.Name != null)
         {
             Console.WriteLine("1212");

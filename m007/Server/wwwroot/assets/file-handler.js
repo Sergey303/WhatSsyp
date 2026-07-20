@@ -18,11 +18,8 @@ function getFileType(filePath) {
     
     return '.tpl-download-btn';
 }
-<<<<<<< HEAD
+
 window.activateMedia = function activateMedia(fileUrl, text, name, date) {
-=======
-function activateMedia(fileUrl, text, name, date) {
->>>>>>> bb26018ab8eaa48e14e0074235cea2cf1ce57d05
     const type = getFileType(fileUrl);
     const fileName = fileUrl.trim().split("\\").at(-1);
     const messages = document.getElementById("chatBox");
@@ -255,11 +252,7 @@ class FileUploadManager {
     
     async uploadFiles() {
         if (this.files.length === 0) {
-<<<<<<< HEAD
             this.sendFile("");
-=======
-            this.sendFile(null);
->>>>>>> bb26018ab8eaa48e14e0074235cea2cf1ce57d05
         }
         const totalSize = this.getSize(this.files);
         if (totalSize > this.maxSizeBytes) {
