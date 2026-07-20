@@ -13,34 +13,43 @@ using System.Collections.Generic;
 //     .Deserialize<Player>(json)
 //     ?? new Player();
 // Console.WriteLine(restoredPlayer.Name);
-List<Room> rooms = new List<Room>();
+// List<Room> rooms = new List<Room>();
 
-Room general = new Room();
-general.Name = "Общий";
-rooms.Add(general);
+// Room general = new Room();
+// general.Name = "Общий";
+// rooms.Add(general);
 
-Room games = new Room();
-general.Name = "Игры";
-rooms.Add(games);
+// Room games = new Room();
+// general.Name = "Игры";
+// rooms.Add(games);
 
-Random random = new Random();
+// Random random = new Random();
 
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSignalR();
 
+builder.Services.AddHostedService<MyBackGroundService>();
 var app = builder.Build();
 
-app.MapGet("/api/rooms", () => rooms);
+// app.MapGet("/api/rooms", () => rooms);
 
-app.MapPost("/api/rooms", (Room room) =>
+// app.MapPost("/api/rooms", (Room room) =>
+// {
+//     rooms.Add(room);
+
+//     return Results.Ok();
+// });
+
+// app.MapGet("/api/MyTasks", () => MyTask.GetListOfTask());
+app.MapGet("/api/MyTasks", () =>
 {
-    rooms.Add(room);
-
-    return Results.Ok();
+    List<MyTask> lo = MyTask.GetListOfTask();
+    string json = JsonSerializer.Serialize(lo);
+    return json;
 });
 
-app.MapGet("/api/dice", () => random.Next(1, 7));
+// app.MapGet("/api/dice", () => random.Next(1, 7));
 // app.UseDefaultFiles();
 app.UseStaticFiles();
 
