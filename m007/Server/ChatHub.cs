@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Security.Claims;
 using System.Text;
+using System.Dynamic;
 
 public class ChatMessage {
      public string group { get; set; } = "general";
@@ -228,6 +229,7 @@ public class ChatHub : Hub {
     
     private Task OldSendChat(string text)
     {
+        
         if (Context?.User?.Identity?.Name != null)
         {
             var jsonMsg_ = JsonSerializer.Deserialize<jsonMsg>(text);
@@ -457,10 +459,4 @@ public class ChatHub : Hub {
     // }
 }
 
-public struct DbRecord
-{
-    public string user {get; set;}
-    public string group {get; set;}
-    public string message {get; set;} // текст или HTML-текст
-    public string dt{get; set;} // DateTime
-}
+

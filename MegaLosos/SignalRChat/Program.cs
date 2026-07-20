@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 Console.WriteLine("start");
 var processor = new AccountProcessor();
@@ -128,9 +129,11 @@ app.MapPost("api/upload", async (IFormFile file) =>
     return Results.Ok(filePath);
 }).DisableAntiforgery();
 
-app.MapGet("api/MLmessages", () =>
+app.MapGet("api/MLmessages", (string room) =>
 {
-    
+    room = ""; //FIX LATER IF NEEDED
+    List<Message> messages = JsonSerializer.Deserialize<List <Message>>(File.ReadAllText("DataMessages.json"));
+    return JsonSerializer.Serialize(messages.Where(a => a.room == room));
 });
 
 app.Run("http://0.0.0.0:8080");
