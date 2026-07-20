@@ -33,6 +33,11 @@ Chat.receive("system", function (text) {
     showSystemMessage(text);
 });
 
+Chat.receive("file", function (json) {
+    var fileData = JSON.parse(json);
+    showFile(fileData.filePath, fileData.fileName);
+});
+
 function sendMessage() {
     const text = document.getElementById("messageInput").value.trim();
     if (text === "") {
@@ -68,15 +73,18 @@ function rollDice() {
     }
 }
 
-function showFile(filePath) {
+function showFile(filePath, fileName) {
     const messages = document.getElementById("messages");
     const fileUrl = "/" + filePath;
     const type = getFileType(filePath);
-    const fileName = filePath.split("/").pop().split("\\").pop();
-
+    
+    if (!fileName) {
+        fileName = filePath.split("/").pop().split("\\").pop();
+    }
+    
     const container = document.createElement("div");
     container.style.margin = "5px 0";
-
+    
     if (type === '.tpl-img') {
         const img = document.createElement("img");
         img.src = fileUrl;
@@ -85,7 +93,7 @@ function showFile(filePath) {
         img.style.display = "block";
         img.style.borderRadius = "8px";
         container.appendChild(img);
-
+        
         const downloadRow = document.createElement("div");
         downloadRow.style.marginTop = "5px";
         const link = document.createElement("a");
@@ -104,7 +112,7 @@ function showFile(filePath) {
         video.style.display = "block";
         video.style.borderRadius = "8px";
         container.appendChild(video);
-
+        
         const downloadRow = document.createElement("div");
         downloadRow.style.marginTop = "5px";
         const link = document.createElement("a");
@@ -121,7 +129,7 @@ function showFile(filePath) {
         audio.controls = true;
         audio.style.display = "block";
         container.appendChild(audio);
-
+        
         const downloadRow = document.createElement("div");
         downloadRow.style.marginTop = "5px";
         const link = document.createElement("a");
@@ -140,47 +148,51 @@ function showFile(filePath) {
         fileContainer.style.padding = "10px";
         fileContainer.style.background = "#f3f4f6";
         fileContainer.style.borderRadius = "8px";
-
+        
         const icon = document.createElement("span");
         icon.textContent = "📎";
         icon.style.fontSize = "24px";
-
+        
         const info = document.createElement("div");
         info.style.flex = "1";
-
+        
         const nameEl = document.createElement("div");
         nameEl.textContent = fileName;
         nameEl.style.fontWeight = "bold";
         nameEl.style.fontSize = "14px";
-
+        
         const link = document.createElement("a");
         link.href = fileUrl;
         link.textContent = "Скачать";
         link.download = fileName;
         link.style.color = "#2563eb";
         link.style.fontSize = "13px";
-
+        
         info.appendChild(nameEl);
         info.appendChild(link);
         fileContainer.appendChild(icon);
         fileContainer.appendChild(info);
         container.appendChild(fileContainer);
     }
-
+    
     messages.appendChild(container);
     messages.scrollTop = messages.scrollHeight;
 }
 
+function doinging() {
+    window.location.assign('/t-rex-runner-gh-pages/index.html');
+}
+
 function showRooms(rooms) {
     roomsBlock.innerHTML = '';
-
+    
     var generalItem = document.createElement("li");
     generalItem.className = "list-group-item";
     generalItem.textContent = "🌍 Глобальный чат";
     generalItem.style.fontWeight = "bold";
     generalItem.onclick = function() { joinRoom("Общий"); };
     roomsBlock.appendChild(generalItem);
-
+    
     for (const room of rooms) {
         const item = document.createElement("li");
         item.className = "list-group-item";
@@ -242,7 +254,7 @@ function regin() {
         return;
     }
     Auth.regin(name_, login_, password_, function() {
-        window.location.assign('http://localhost:8080/index.html');
+        window.location.assign('/index.html');
     });
 }
 
@@ -250,7 +262,7 @@ function login() {
     const login_ = signInLogin.value.trim();
     const password_ = signInPassword.value.trim();
     Auth.login(login_, password_, function() {
-        window.location.assign('http://localhost:8080/index.html');
+        window.location.assign('/index.html');
     });
 }
 
@@ -269,7 +281,7 @@ document.getElementById("messageInput").addEventListener("keypress", function(e)
         sendMessage();
     }
 });
-document.getElementById("gameBtn").onclick = rollDice;
+//document.getElementById("gameBtn").onclick = rollDice;
 document.getElementById("fileBtn").onclick = function() {
     document.getElementById("fileInp").click();
 };

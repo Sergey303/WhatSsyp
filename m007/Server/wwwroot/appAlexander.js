@@ -18,7 +18,7 @@ function registration() {
     const name = loginName.value;
     const password = loginPassword.value;
     const username = UserName.value;
-    Api.post("/olele", {Name:name, Password:password, UserName: username}, function(response) {
+    Api.post("olele", {Name:name, Password:password, UserName: username}, function(response) {
         if (response.ok) {
             alert("Успешная регистрация");
         } else {
@@ -55,7 +55,7 @@ function showMessage(text) {
 
 
 
-//Api.get("/api/rooms". showRooms);
+//Api.get("api/rooms". showRooms);
 const roomNameInput = document.getElementById("roomNameInput");
 const roomsBlock = document.getElementById("rooms");
 function showRooms(rooms) {
@@ -68,7 +68,7 @@ function showRooms(rooms) {
     }
 }
 function loadRooms() {
-    Api.get("/api/RoomsAlexander", showRooms);
+    Api.get("api/RoomsAlexander", showRooms);
 }
 function roomCreated() {
     roomNameInput.value = "";
@@ -80,7 +80,7 @@ function createRoom() {
     if (name === "") {
         return;
     }
-    Api.post("/api/RoomsAlexander", {name: name, Members:[]}, roomCreated);
+    Api.post("api/RoomsAlexander", {name: name, Members:[]}, roomCreated);
 }
 Chat.receive("roomMembers", function(text){const members = JSON.parse(text); console.log(members);});
 

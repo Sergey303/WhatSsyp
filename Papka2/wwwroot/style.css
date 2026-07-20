@@ -136,6 +136,14 @@ button:hover {
     background: #1d4ed8;
 }
 
+#voiceBtn {
+    background: #8b5cf6;
+}
+
+#voiceBtn:hover {
+    background: #7c3aed;
+}
+
 #gameBtn {
     background: green;
 }
@@ -154,11 +162,6 @@ button:hover {
 }
 
 #serverAddBtn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    width: 100%;
-}
-
-#joinServerBtn {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     width: 100%;
 }

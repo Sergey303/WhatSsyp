@@ -11,11 +11,8 @@ using System.ComponentModel;
 using System.Net.Cache;
 
 
-List<Room> rooms = JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("Rooms.json"));
-
 
 //user.json
-List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsers.json"));
 
 // Users.Add(new LoginRequest() { Name = "Men1", Password = "1234", UserName = "Андрей" });
 // string output1 = JsonSerializer.Serialize(Users);
@@ -37,6 +34,10 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapGet("/messages", () => File.ReadAllText("DataMessages.json"));
+
+
 app.UseStaticFiles(new StaticFileOptions
 {
     OnPrepareResponse = ctx =>
@@ -49,11 +50,16 @@ app.UseStaticFiles(new StaticFileOptions
         }
     }
 });
-
+app.MapGet("/", async () =>
+{
+    var path = Path.Combine(builder.Environment.WebRootPath, "reg.html");
+    return Results.File(path, "text.html");
+});
 //rooms
-app.MapGet("/api/rooms", () => rooms);
+app.MapGet("/api/rooms", () => JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("Rooms.json")));
 app.MapPost("/api/rooms", (Room room) =>
 {
+    List<Room> rooms = JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("Rooms.json"));
     if (rooms.FirstOrDefault(x => x.name == room.name) == null)
     {
         rooms.Add(room);
@@ -66,9 +72,10 @@ app.MapPost("/api/rooms", (Room room) =>
 
 app.MapPost("/olele", (LoginRequest request) =>
 {
-    if (Users.FirstOrDefault(x=>x.UserName==request.UserName)==null)
+    List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsers.json"));
+    if (Users.FirstOrDefault(x => x.UserName == request.UserName) == null)
     {
-        Users.Add(new LoginRequest() { Name = request.Name, Password = request.Password, UserName = request.UserName});
+        Users.Add(new LoginRequest() { Name = request.Name, Password = request.Password, UserName = request.UserName });
         string ser = JsonSerializer.Serialize(Users);
         File.WriteAllText("DataUsers.json", ser);
         return Results.Ok();
@@ -81,7 +88,9 @@ app.MapPost("/olele", (LoginRequest request) =>
 });
 app.MapPost("api/login", (LoginRequest login, HttpContext context) =>
 {
-    if (Users.FirstOrDefault(x=>x.Name == login.Name && x.Password == login.Password && x.UserName == login.UserName)==null)
+    List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsers.json"));
+
+    if (Users.FirstOrDefault(x => x.Name == login.Name && x.Password == login.Password && x.UserName == login.UserName) == null)
     {
         return Results.Unauthorized();
     }
