@@ -13,3 +13,19 @@ body {
 .our-title{
     color: darkblue;
 }
+
+.our-title1{
+    color: darkblue;
+    font-size: 20px;
+}
+.our-title2{
+    color: rgb(255, 255, 255);
+    font-size: px;
+}
+
+.inf{
+    border: 1px inset darkblue;
+    font-size: 15px;
+    padding: 20px;
+    border-radius: 10px;
+}

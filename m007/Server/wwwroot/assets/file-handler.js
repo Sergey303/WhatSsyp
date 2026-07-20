@@ -22,7 +22,6 @@ function getFileType(filePath) {
 }
 
 function activateMedia(fileUrl, text, name, date) {
-    console.log("2");
     const type = getFileType(fileUrl);
     const fileName = fileUrl.trim().split("\\").at(-1);
     const messages = document.getElementById("chatBox");

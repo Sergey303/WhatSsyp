@@ -18,15 +18,26 @@ List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.R
 var processor = new AccountProcessor();
 var accountsList = processor.LoadAccounts();
 var builder = WebApplication.CreateBuilder(args);
-
+// 1. Register CORS service and define a policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 builder.Services.AddAuthorization();
 
 builder.Services.AddSignalR();
+
 var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseDefaultFiles();
+app.UseCors("AllowAll");
 app.UseStaticFiles(new StaticFileOptions
 {
     OnPrepareResponse = ctx =>

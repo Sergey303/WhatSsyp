@@ -43,6 +43,13 @@
         Блок чатв
         <template id="file-template">
             <div class="message" style="display: block">
+                <div class="txt-message" style="display: block">
+                    <div class="row justify-content-between">
+                        <h4 class="name-block col-auto">User</h4>
+                        <h8 class="date-block col-auto"></h8>
+                    </div>
+                    <p class="text-block"></p>
+                </div>
                 <!--siple test file downloader, old version:
                 <a class="fileHA" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAeefR4LoJQ_nFipMLNB3nVe5sWMnzvdIogIW05YVxaWDDrySuV8kduys&s=10">download file</a>
                 -->
@@ -70,12 +77,6 @@
                 <iframe class="tpl-g-iframe" src="about:blank" sandbox="" data-src=""></iframe>
             </div>
         </template>
-        <template id="text-tmeplate">
-            <div class="message" style="display: block">
-                <h4 class="name-block">Name</h4>
-                <p class="text-block">text</p>
-            </div>
-        </template>
         <div class="message" style="display: block">
             <h6 class="name-block">Name</h6>
             <p class="text-block">text</p>
@@ -88,7 +89,7 @@
             <div class="row">
                 <div class="col-2">
                     <button class="btn btn-primary" 
-                    onclick="sendMessage()" id ='sendBtn'>Send</button>
+                    id ='sendBtn'>Send</button> <!-- onclick="sendMessage()"-->
                 </div>
                 <div class="col-4">
                     <input type="file" id="fileInp" placeholder="File">
@@ -111,7 +112,7 @@
         
     </div> -->
     
-    <script src="file-converter.js"></script>
+    <script src="file-handler.js"></script>
     <script src="assets/auth-helper.js"></script>
     <script src="assets/signalr.min.js"></script>
     <script src="assets/workshop-chat-helper.js"></script>

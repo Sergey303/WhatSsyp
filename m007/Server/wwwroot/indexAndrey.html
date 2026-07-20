@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Scam</title>
-    <link rel="stylesheet" href="styleAndrey.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="assets/files-style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
 </head>
@@ -12,7 +12,10 @@
         <div class="chat-row">        
             <div class="col-2">
                 <div class="chats-container">
-                    <p style="font-weight: bold; text-align: center;">Сервера</p>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <p style="font-weight: bold; text-align: center; flex: 1;">Сервера</p>
+                        <button id="voiceBtn" title="Голосовой чат" style="width: 32px; height: 32px; padding: 0; background: transparent; color: #666; font-size: 16px; border: 1px solid #ccc; border-radius: 50%; cursor: pointer;">🎤</button>
+                    </div>
                     <ul id="rooms" class="list-group">
                         <li onclick="joinRoom('Общий')" style="font-weight: bold;">🌍 Глобальный чат</li>
                     </ul>
@@ -31,7 +34,7 @@
                     <div class="input-row">
                         <input type="text" id="messageInput" placeholder="Сообщение..." autocomplete="off">
                         <input type="file" id="fileInp" style="display: none;">
-                        <button id="gameBtn" title="начать игру">🎲</button>
+                        <button id="gameBtn" onclick="doinging()" title="начать игру">🎲</button>
                         <button id="fileBtn" title="отправить файл">📄</button>
                         <button id="sendBtn" title="отправить">&#10550;</button>
                     </div>
@@ -44,6 +47,7 @@
     <script src="assets/auth-helper.js"></script>
     <script src="assets/api-helper.js"></script>
     <script src="file-convertor.js"></script>
-    <script src="appAndrey.js"></script>
+    <script src="voice.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

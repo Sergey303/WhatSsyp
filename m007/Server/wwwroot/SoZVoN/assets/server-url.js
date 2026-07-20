@@ -1,0 +1,1 @@
+window.serverUrl = "http://syp.iis.nsk.su/Chat/"

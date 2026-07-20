@@ -68,7 +68,7 @@
 
   async function connect(options) {
     options = options || {};
-    const url = options.url || "chatHub";
+    const url = options.url ||( window.serverUrl + "chatHub");
 
     if (!window.signalR) {
       demoMode = true;
