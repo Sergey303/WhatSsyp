@@ -32,6 +32,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization();
 
 builder.Services.AddSignalR();
+builder.Services.AddHostedService<MyBackGroundService>();
 
 var app = builder.Build();
 app.UseAuthentication();
@@ -225,17 +226,22 @@ app.MapPost("api/MLregin", (LoginRequest2 loginData, HttpContext context) =>
     }
 });
 
-app.MapPost("api/MLupload", async (IFormFile file) =>
+app.MapPost("api/MLupload", async (IFormFile? file) =>
 {
-    string dir = Path.Combine(Directory.GetCurrentDirectory(), "uploads", Guid.NewGuid().ToString());
-    string filePath = Path.Combine(dir, file.FileName);
-    Directory.CreateDirectory(dir);
+    try {
+        string dir = Path.Combine(Directory.GetCurrentDirectory(), "uploads", Guid.NewGuid().ToString());
+        string filePath = Path.Combine(dir, file.FileName);
+        Directory.CreateDirectory(dir);
 
-    using (var stream = new FileStream(filePath, FileMode.Create))
-    {
-        await file.CopyToAsync(stream);
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+        return Results.Ok(filePath);
     }
-    return Results.Ok(filePath);
+    catch {
+        return Results.BadRequest("");
+    }
 }).DisableAntiforgery();
 
 app.MapGet("api/MLmessages", (string room) =>
@@ -247,7 +253,6 @@ app.MapGet("api/MLmessages", (string room) =>
 //end MEGA LOSOS...
 
 //app.MapGet("/", () => "Hello World!");
-app.MapHub<ChatHub>("/chatHub");
 
 ///;
 
@@ -282,6 +287,17 @@ app.MapPost("api/upload", async (IFormFile file) =>
     return Results.Ok(relativePath);
 }).DisableAntiforgery();
 
+//end MEGA LOSOS...
+app.MapGet("/api/MyTasks", () =>
+{
+    List<MyTask> lo = MyTask.GetListOfTask();
+    string json = JsonSerializer.Serialize(lo);
+    return json;
+});
+
+//app.MapGet("/", () => "Hello World!");
+app.MapHub<ChatHub>("/chatHub");
+app.MapHub<ScheduleHub>("/scheduleHub");
 
 app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
 {
@@ -304,6 +320,7 @@ app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
         return Results.Problem();
     }
 });
+
 
 app.MapPost("/api/logout", async (HttpContext context) =>
 {

@@ -59,6 +59,9 @@ public class ChatHub : Hub {
     
     public Task Send(string eventName, string jtext) {
         
+        Console.WriteLine($"event name: {eventName} jtext: {jtext}");
+
+
         if (eventName.StartsWith("SoZVoN")){
 
             if (eventName == "SoZVoNregister"){
@@ -154,6 +157,7 @@ public class ChatHub : Hub {
         // }
         
         else if (eventName == "MLChat") {
+            Console.WriteLine(jtext);
             string? name = this.Context.GetHttpContext().User?.Identity?.Name?.ToString();
             if (name == null)
             {
@@ -174,8 +178,8 @@ public class ChatHub : Hub {
             string name = GetUserName();
             if (string.IsNullOrEmpty(name))
             {
-                await Clients.Caller.SendAsync("system", "Сначала войди");
-                return;
+                Clients.Caller.SendAsync("system", "Сначала войди");
+                return Clients.Caller.SendAsync("400");
             }
 
            // SendChat(jtext);
@@ -201,9 +205,7 @@ public class ChatHub : Hub {
         {
             SendVoiceMessage(jtext);
         }
-
-
-      
+        return Clients.Caller.SendAsync("400");
     }
     private Task SendChat(string text, string room)
     {
@@ -229,9 +231,11 @@ public class ChatHub : Hub {
     
     private Task OldSendChat(string text)
     {
-        
+        Console.WriteLine("123123");
+
         if (Context?.User?.Identity?.Name != null)
         {
+            Console.WriteLine("1212");
             var jsonMsg_ = JsonSerializer.Deserialize<jsonMsg>(text);
             jsonMsg_.name = Context.User.Identity.Name;
             text = JsonSerializer.Serialize(jsonMsg_);

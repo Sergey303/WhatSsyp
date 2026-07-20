@@ -54,6 +54,7 @@ app.MapGet("/api/MyTasks", () =>
 app.UseStaticFiles();
 
 app.MapHub<ChatHub>("/chatHub");
+app.MapHub<ScheduleHub>("/scheduleHub");
 string str = File.ReadAllText(@"wwwroot\index.html");
 // string str1 = File.ReadAllText(@"wwwroot\assets\schedule.html");
 app.MapGet("/", () => Results.Content(str, "text/html"));

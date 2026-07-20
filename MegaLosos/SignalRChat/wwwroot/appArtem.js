@@ -56,6 +56,8 @@ Chat.receive("chat", function (text) {
     }
 });
 
+
+
 function showMessage(msgObj) {
     const time = new Date().toLocaleString('ru-RU', {
         hour: '2-digit',

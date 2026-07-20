@@ -18,7 +18,8 @@ function getFileType(filePath) {
     
     return '.tpl-download-btn';
 }
-function activateMedia(fileUrl, text, name, date) {
+
+window.activateMedia = function activateMedia(fileUrl, text, name, date) {
     const type = getFileType(fileUrl);
     const fileName = fileUrl.trim().split("\\").at(-1);
     const messages = document.getElementById("chatBox");
@@ -72,6 +73,7 @@ function activateMedia(fileUrl, text, name, date) {
     textBlc.textContent = text;
     dateBlc.textContent = date;
     messages.appendChild(fileMsg);
+    scrollToBottom()
 }
 
 //formdata
@@ -250,7 +252,7 @@ class FileUploadManager {
     
     async uploadFiles() {
         if (this.files.length === 0) {
-            this.sendFile(null);
+            this.sendFile("");
         }
         const totalSize = this.getSize(this.files);
         if (totalSize > this.maxSizeBytes) {

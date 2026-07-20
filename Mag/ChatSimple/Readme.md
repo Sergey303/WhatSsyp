@@ -175,4 +175,57 @@ app.MapHub<ChatHub>("/chatHub");
 ### Новая попытка. Проект WebUno
 
 Создаю новые проект по шаблону web
+Добавляю index0.html, Добавляю статические файлы. 
+Добавляю SignalR. Для этого, добавляю строчки:
+```
+builder.Services.AddSignalR();
+// и перед app.MapRazorPages
+app.MapHub<ChatHub>("/chatHub");
 
+```
+Далее, в html вставляю:
+```
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>
+```
+Обеспечиваю их наличие по указанным местам. 
+
+Теперь записываю в index0 html формы ввода и вывода
+```
+<div class="container">
+    <div class="row p-1">
+        <div class="col-1">User</div>
+        <div class="col-5"><input type="text" id="userInput" /></div>
+    </div>
+    <div class="row p-1">
+        <div class="col-1">Message</div>
+        <div class="col-5"><input type="text" class="w-100" id="messageInput" /></div>
+    </div>
+    <div class="row p-1">
+        <div class="col-6 text-end">
+            <input type="button" id="sendButton" value="Send Message" />
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-6">
+            <hr />
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-6">
+            <ul id="messagesList"></ul>
+        </div>
+    </div>
+</div>
+<script src="js/signalr/dist/browser/signalr.js"></script>
+<script src="js/chat.js"></script>
+```
+Для стилевого оформления добавляю в header
+```
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+``` 
+Эта часть работает, посылает и принимает мессаджи. Теперь надо проверить на более простом мессадже. Пусть 
+это будет посылка текстовой и прем текстовой страницы. И JavaScript попробуем разместить там же. 
+```
+
+```

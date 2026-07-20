@@ -3,6 +3,11 @@ function sayHello() {
     alert("sup");
 }
 
+const chatBox = document.querySelector('.chat-box');
+function scrollToBottom() {
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
 function accountReg(name, login, password) {
     if (login.length < 3 || login.length > 20) {
         alert("Login must be at least 3 characters and not exceed 20 characters!");
@@ -23,9 +28,10 @@ function sendMessage(filePath) {
     const text = inpMessage.value.trim();
     const date = new Date().toLocaleString();
     const jsonString = JSON.stringify(
-        {Name: "", text: text, filePath: filePath || "", date: date, room: ""});
+        {name: "", text: text, filePath: filePath || "", date: date, room: ""});
     console.log(filePath);
-    Chat.send("chat", jsonString);
+    Chat.send("MLChat", jsonString);
+
     document.getElementById("messageInp").value = "";
     document.getElementById('sendBtn').disabled = true;
     // alert(name + ": " + text);
@@ -33,6 +39,7 @@ function sendMessage(filePath) {
 
 
 Chat.receive("chat", function (text) {
+    // console.log(text);
     const msgObj = JSON.parse(text);
     try {
         showMessage(msgObj)
