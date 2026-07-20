@@ -37,7 +37,7 @@
     }
 
     function start(ready) {
-        fetch("/api/me")
+        fetch("api/me")
             .then(function (response) {
                 if (response.ok) {
                     showApp();

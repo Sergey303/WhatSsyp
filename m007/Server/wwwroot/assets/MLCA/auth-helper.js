@@ -33,7 +33,7 @@
     }
 
     function start(ready) {
-        fetch("/api/fish")
+        fetch("api/fish")
             .then(function (response) {
                 if (response.ok) {
                     showApp();
