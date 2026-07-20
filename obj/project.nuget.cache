@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "SyIC7U/iZrc=",
+  "success": true,
+  "projectFilePath": "D:\\Программирование\\VSCode\\WhatSsyp\\Papka2\\Serv.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\igoni\\.nuget\\packages\\microsoft.aspnetcore.http.connections.client\\10.0.9\\microsoft.aspnetcore.http.connections.client.10.0.9.nupkg.sha512",
+    "C:\\Users\\igoni\\.nuget\\packages\\microsoft.aspnetcore.signalr.client\\10.0.9\\microsoft.aspnetcore.signalr.client.10.0.9.nupkg.sha512",
+    "C:\\Users\\igoni\\.nuget\\packages\\microsoft.aspnetcore.signalr.client.core\\10.0.9\\microsoft.aspnetcore.signalr.client.core.10.0.9.nupkg.sha512"
+  ],
+  "logs": []
+}
