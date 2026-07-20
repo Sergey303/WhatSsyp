@@ -238,6 +238,13 @@ app.MapPost("api/MLupload", async (IFormFile file) =>
     }
     return Results.Ok(filePath);
 }).DisableAntiforgery();
+
+app.MapGet("api/MLmessages", (string room) =>
+{
+    room = ""; //FIX LATER IF NEEDED
+    List<Message> messages = JsonSerializer.Deserialize<List <Message>>(File.ReadAllText("DataMessages.json"));
+    return messages.Where(a => a.room == room).ToList();
+});
 //end MEGA LOSOS...
 
 

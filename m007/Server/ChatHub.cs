@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Security.Claims;
 using System.Text;
+using System.Dynamic;
 
 public class ChatMessage {
     public string group { get; set; } = "general";
@@ -237,10 +238,4 @@ public class ChatHub : Hub {
     }
 }
 
-public struct DbRecord
-{
-    public string user {get; set;}
-    public string group {get; set;}
-    public string message {get; set;} // текст или HTML-текст
-    public string dt{get; set;} // DateTime
-}
+

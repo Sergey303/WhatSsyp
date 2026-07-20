@@ -76,7 +76,8 @@ C:\IAS\WhatSsyp\MegaLosos\SignalRChat\obj\Debug\net10.0\compressed\ce84dbnt6x-{0
 C:\IAS\WhatSsyp\MegaLosos\SignalRChat\obj\Debug\net10.0\compressed\29er3e7tiw-{0}-19sxokrbcg-19sxokrbcg.gz
 C:\IAS\WhatSsyp\MegaLosos\SignalRChat\obj\Debug\net10.0\compressed\329s76b3e0-{0}-b9g4ogp5tr-b9g4ogp5tr.gz
 C:\IAS\WhatSsyp\MegaLosos\SignalRChat\obj\Debug\net10.0\compressed\us764pjb74-{0}-zxf1i0saav-zxf1i0saav.gz
-C:\IAS\WhatSsyp\MegaLosos\SignalRChat\obj\Debug\net10.0\compressed\ynvlci67j5-{0}-6he1qrirbt-6he1qrirbt.gz
-C:\IAS\WhatSsyp\MegaLosos\SignalRChat\obj\Debug\net10.0\compressed\kzbpoxeo3y-{0}-qkltykwddk-qkltykwddk.gz
-C:\IAS\WhatSsyp\MegaLosos\SignalRChat\obj\Debug\net10.0\compressed\ihsb8y863z-{0}-ugt421wig8-ugt421wig8.gz
-C:\IAS\WhatSsyp\MegaLosos\SignalRChat\obj\Debug\net10.0\compressed\ez81qfbh2a-{0}-chjnift5bu-chjnift5bu.gz
+C:\IAS\WhatSsyp\MegaLosos\SignalRChat\bin\Debug\net10.0\DataMessages.json
+C:\IAS\WhatSsyp\MegaLosos\SignalRChat\obj\Debug\net10.0\compressed\ynvlci67j5-{0}-dop1c591hp-dop1c591hp.gz
+C:\IAS\WhatSsyp\MegaLosos\SignalRChat\obj\Debug\net10.0\compressed\kzbpoxeo3y-{0}-39t8a3i3cw-39t8a3i3cw.gz
+C:\IAS\WhatSsyp\MegaLosos\SignalRChat\obj\Debug\net10.0\compressed\ihsb8y863z-{0}-bykcw8t18k-bykcw8t18k.gz
+C:\IAS\WhatSsyp\MegaLosos\SignalRChat\obj\Debug\net10.0\compressed\ez81qfbh2a-{0}-8uipt51gea-8uipt51gea.gz
