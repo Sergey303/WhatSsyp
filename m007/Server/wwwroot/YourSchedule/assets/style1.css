@@ -29,3 +29,14 @@ body {
     padding: 20px;
     border-radius: 10px;
 }
+.list-group-item{
+    display: flex;
+    justify-content: space-between;
+}
+.trash::before{
+    content: '\1F5D1';
+    color: gray;
+}
+.toHigh{
+    align-items: center;
+}

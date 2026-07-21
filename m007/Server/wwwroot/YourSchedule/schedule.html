@@ -23,7 +23,7 @@
                         </h1>
                         <ul class="list-group" id="times">
                             <template id="timesTemplate">
-                                <li class="list-group-item">
+                                <li class="list-group-item toHigh">
                                 <div class="time-item">Введите время задачи</div>
                                 </li>
                             </template>
@@ -51,8 +51,13 @@
                         </h1>
                         <ul class="list-group" id="tasks">
                             <template id="tasksTemplate">
-                                <li class="list-group-item">
+                                <li class="list-group-item toHigh">
                                 <div class="task-item">Введите название задачи</div>
+                                <button
+                                    class="btn btn-primary trash"
+                                    data-index="-1"
+                                    onclick="sendPairForDelete(event)">
+                                </button>
                                 </li>
                             </template>
                         </ul>
