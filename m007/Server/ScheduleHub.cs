@@ -22,7 +22,13 @@ public class ScheduleHub : Hub
             tasks.RemoveAll(MyTask1 => MyTask1.Time == task.Time && MyTask1.Task == task.Task);
         }
         // tasks.Add(task);
-        tasks.Sort((x, y) => x.Time.CompareTo(y.Time));
+        // tasks.Sort((x, y) => x.Time.CompareTo(y.Time));
+        tasks.Sort((x, y) =>
+        {
+            TimeSpan t1 = TimeSpan.Parse(x.Time);
+            TimeSpan t2 = TimeSpan.Parse(y.Time);
+            return t1.CompareTo(t2);
+        });
         MyTask.SaveListOfTask(tasks);
         return Clients.All.SendAsync(eventName, text);
     }
