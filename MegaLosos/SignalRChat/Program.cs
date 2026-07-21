@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 Console.WriteLine("start");
 var processor = new AccountProcessor();
@@ -47,13 +48,14 @@ app.MapGet("/api/me", (HttpContext context) =>
     return Results.Ok(new { name = name});
 });
 
-app.MapGet("api/fileR", (string filePath) =>
+app.MapGet("api/MLfile", (string filePath) =>
 {
     Console.WriteLine(filePath.Split("\\").Last());
     //C:\IAS\WhatSsyp\MegaLosos\SignalRChat\uploads\8523ed99-28d6-4eb5-86fa-b4ed3d00983d\x6jc2gc68ph81.mp4
     //return Results.File(Path.Combine(Directory.GetCurrentDirectory(), "uploads", filePath), "", );
     return Results.File(filePath, "application/octet-stream", filePath.Split("\\").Last());
 });
+
 app.MapPost("/api/logout", (HttpContext context) =>
 {
     context.SignOutAsync().Wait();
@@ -94,11 +96,15 @@ app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
         string name = loginData.name;
         string login = loginData.login;
         string password = loginData.password;
-        if (accountsList.Any(a => a.name == name ||
-        a.login == login))
+        if (name.Length > 20 || login.Length > 20 || password.Length > 20)
         {
             return Results.BadRequest();
         }
+        if (accountsList.Any(a => a.name == name ||
+            a.login == login))
+            {
+                return Results.BadRequest();
+            }
         AddAccountToList(name, login, password);
         AddAccountToFile(name, login, password);
         return Results.Ok();
@@ -123,6 +129,12 @@ app.MapPost("api/upload", async (IFormFile file) =>
     return Results.Ok(filePath);
 }).DisableAntiforgery();
 
+app.MapGet("api/MLmessages", (string room) =>
+{
+    room = ""; //FIX LATER IF NEEDED
+    List<Message> messages = JsonSerializer.Deserialize<List <Message>>(File.ReadAllText("DataMessages.json"));
+    return JsonSerializer.Serialize(messages.Where(a => a.room == room));
+});
 
 app.Run("http://0.0.0.0:8080");
 

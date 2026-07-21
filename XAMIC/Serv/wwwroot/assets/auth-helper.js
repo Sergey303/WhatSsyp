@@ -6,6 +6,7 @@
   Auth.logout();
 */
 (function () {
+    /*
     function getPanel(id) {
         return document.getElementById(id);
     }
@@ -29,7 +30,7 @@
         getPanel("roomPanel")
             .classList.remove("d-none");
     }
-
+    */
     function runReady(ready) {
         if (typeof ready === "function") {
             ready();
@@ -40,15 +41,13 @@
         fetch("/api/me")
             .then(function (response) {
                 if (response.ok) {
-                    showApp();
                     runReady(ready);
                 } else {
-                    showLogin();
+                    
                 }
             })
             .catch(function (error) {
                 console.error(error);
-                showLogin();
             });
     }
 
@@ -72,7 +71,6 @@
                     return;
                 }
 
-                showApp();
                 runReady(ready);
             })
             .catch(function (error) {
@@ -87,7 +85,7 @@
                 method: "POST"
             })
             .then(function () {
-                location.reload();
+                window.location.assign('/');
             })
             .catch(function (error) {
                 console.error(error);

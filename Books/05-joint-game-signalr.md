@@ -354,7 +354,7 @@ async function startGame() {
     // В одном catch обрабатываем загрузку книги и первое подключение.
     try {
         // Все участники загружают одну и ту же книгу с /api/book.
-        const response = await fetch("/api/book");
+        const response = await fetch("api/book");
 
         // При 404 или 500 подключаться к игре без книги бессмысленно.
         if (!response.ok) {

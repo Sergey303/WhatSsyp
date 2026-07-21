@@ -213,7 +213,7 @@ async function loadBook() {
     // try/catch позволяет объяснить ошибку fetch прямо в интерфейсе.
     try {
         // Используем тот же /api/book, что и страница чтения.
-        const response = await fetch("/api/book");
+        const response = await fetch("api/book");
 
         // response.ok показывает, вернул ли сервер успешный HTTP-код.
         if (!response.ok) {

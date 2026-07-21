@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Моя страница</title>
+
+
+    <link 
+    rel="stylesheet"
+    href="assets/bootstrap.min.css"> 
+
+    <link
+        rel="stylesheet"
+        href="style.css">
+</head>
+<body>
+
+
+
+<div class="card container d-flex  align-items-center vh-50" style="width: 67rem;">
+
+    <h1 class="title"
+    text-align: center;>
+    Игрулька и тд</h1>
+    <p class="title"> Подзаголовок и тд</p> 
+<!--  р - показывает новый абзац  (перенос строки) (без этих штук текст плоский будет) -->
+
+<a href="rules.html"
+class="oform">
+<!-- Атрибут href задаёт адрес.
+Текст между <a> и </a> видит пользователь.-->
+    Так называемые правила
+</a> 
+
+<div id="mmm"
+    class="hide card" style="width: 67rem;"> 
+
+        <h1 id="title">
+            Игра 
+        </h1>
+
+        <div id=text>  </div>
+        <div id="hide-when-press-start"> <!-- элементы что скрываются по "начать"-->
+
+            <p class="title"> Нажми "начать" (чтобы начать очев)</p> 
+
+            <button class="card mb-3"
+            onclick="hideXStartGame()">
+                Начать
+            </button>
+        </div>
+        <div id="open-when-press-start"
+        class="hide">
+            <input
+            id = "somethig"
+            onkeydown="keydown(event)"
+            placeholder="Сюда ответ вводить и тд">
+
+            <button
+            class="btn btn-primary oform2 border-danger"
+            onclick="clickAnswer()">
+                 Оответить
+            </button>
+
+            <p>
+                <div id="anser">  </div>
+                
+            </p>
+            <p>
+                <button 
+                class="card mb-3 oform"
+                id="again"
+                onclick="startAgain()">
+                     Заново
+                </button>
+    
+            </p>
+        </div>
+
+</div>
+        
+    <p>
+    <button class="card mb-3"
+    onclick="openMmmhideNnn()"
+                id="nnn">
+            Нажмиte
+        </button>
+    </p> 
+        
+</div>
+
+<script src="assets/signalr.min.js"></script>
+<script src="assets/workshop-chat-helper.js"></script>
+<script src="index.js"></script>
+</body>
+</html>

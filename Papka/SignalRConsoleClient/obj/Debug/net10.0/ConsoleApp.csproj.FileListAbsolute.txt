@@ -1,4 +1,0 @@
-C:\usr\Papka\SignalRConsoleClient\obj\Debug\net10.0\ConsoleApp.GeneratedMSBuildEditorConfig.editorconfig
-C:\usr\Papka\SignalRConsoleClient\obj\Debug\net10.0\ConsoleApp.AssemblyInfoInputs.cache
-C:\usr\Papka\SignalRConsoleClient\obj\Debug\net10.0\ConsoleApp.AssemblyInfo.cs
-C:\usr\Papka\SignalRConsoleClient\obj\Debug\net10.0\ConsoleApp.csproj.CoreCompileInputs.cache

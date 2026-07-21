@@ -298,7 +298,7 @@ async function downloadBookZip() {
     // try/catch обработает ошибку сети или серверной упаковки.
     try {
         // fetch передаёт весь объект book в Minimal API.
-        const response = await fetch("/api/book/export", {
+        const response = await fetch("api/book/export", {
             // POST нужен, потому что книга передаётся в теле запроса.
             method: "POST",
 
