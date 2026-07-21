@@ -1,0 +1,14 @@
+C:\usr\TZ\CSharpLessons\bin\Debug\net10.0\CSharpLessons.exe
+C:\usr\TZ\CSharpLessons\bin\Debug\net10.0\CSharpLessons.deps.json
+C:\usr\TZ\CSharpLessons\bin\Debug\net10.0\CSharpLessons.runtimeconfig.json
+C:\usr\TZ\CSharpLessons\bin\Debug\net10.0\CSharpLessons.dll
+C:\usr\TZ\CSharpLessons\bin\Debug\net10.0\CSharpLessons.pdb
+C:\usr\TZ\CSharpLessons\obj\Debug\net10.0\CSharpLessons.GeneratedMSBuildEditorConfig.editorconfig
+C:\usr\TZ\CSharpLessons\obj\Debug\net10.0\CSharpLessons.AssemblyInfoInputs.cache
+C:\usr\TZ\CSharpLessons\obj\Debug\net10.0\CSharpLessons.AssemblyInfo.cs
+C:\usr\TZ\CSharpLessons\obj\Debug\net10.0\CSharpLessons.csproj.CoreCompileInputs.cache
+C:\usr\TZ\CSharpLessons\obj\Debug\net10.0\CSharpLessons.dll
+C:\usr\TZ\CSharpLessons\obj\Debug\net10.0\refint\CSharpLessons.dll
+C:\usr\TZ\CSharpLessons\obj\Debug\net10.0\CSharpLessons.pdb
+C:\usr\TZ\CSharpLessons\obj\Debug\net10.0\CSharpLessons.genruntimeconfig.cache
+C:\usr\TZ\CSharpLessons\obj\Debug\net10.0\ref\CSharpLessons.dll
