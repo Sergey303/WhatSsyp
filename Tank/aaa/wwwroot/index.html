@@ -32,16 +32,19 @@ class="oform">
     Так называемые правила
 </a> 
 <div id="aaa"
-class="card aaab">
+class="aaab card my-2">
 <div id="mmm"
     class="hide card" style="width: 67rem;"> 
 
-        <h1 id="title">
+        <h1 id="title"
+            class="ms-4">
             Игра 
         </h1>
 
-        <div id=text>  </div>
-        <div id="hide-when-press-start"> <!-- элементы что скрываются по "начать"-->
+        <div id=text
+        class="ms-2">  </div>
+        <div id="hide-when-press-start"
+        class="ps-2"> <!-- элементы что скрываются по "начать"-->
 
             <p class="title"> Нажми "начать" (чтобы начать очев)</p> 
 
@@ -55,21 +58,23 @@ class="card aaab">
             <input
             id = "somethig"
             onkeydown="keydown(event)"
+            class="ms-2"
             placeholder="Сюда ответ вводить и тд">
 
             <button
-            class="btn btn-primary oform2 border-danger"
+            class="btn btn-primary oform2 border-danger ms-1 "
             onclick="clickAnswer()">
                  Оответить
             </button>
 
             <p>
-                <div id="anser">  </div>
+                <div class="border p-3"
+                id="anser">  </div>
                 
             </p>
             <p>
                 <button 
-                class="card mb-3 oform"
+                class="card oform ms-2 mb-3 "
                 id="again"
                 onclick="startAgain()">
                      Заново
@@ -77,7 +82,8 @@ class="card aaab">
             </p>
         </div>
 </div>
-</div>
+
+</div class="ms-2">
         
     <p>
     <button class="card mb-3"
