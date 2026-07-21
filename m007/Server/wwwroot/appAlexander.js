@@ -18,7 +18,7 @@ function registration() {
     const name = loginName.value;
     const password = loginPassword.value;
     const username = UserName.value;
-    Api.post("olele", {Name:name, Password:password, UserName: username}, function(response) {
+    Api.post("api/register", {login:name, password:password, name: username}, function(response) {
         if (response.ok) {
             alert("Успешная регистрация");
         } else {
