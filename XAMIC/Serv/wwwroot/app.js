@@ -74,11 +74,19 @@ function showRooms(rooms) {
     // }
     roomsBlock.textContent = "";
     for (const room of rooms) {
-        const item = document.createElement("li");
-        item.className = "list-group-item";
-        item.textContent = room.name;
-        item.onclick = function() { joinR(room.name); };
-        roomsBlock.appendChild(item);
+        if (room.name == "Global") {
+            const item = document.createElement("li")
+            item.className = "list-group-item";
+            item.textContent = "🌍 Глобальный чат";
+            item.onclick = function() { joinR(room.name); };
+            roomsBlock.appendChild(item);
+        } else {
+            const item = document.createElement("li");
+            item.className = "list-group-item";
+            item.textContent = room.name;
+            item.onclick = function() { joinR(room.name); };
+            roomsBlock.appendChild(item);
+        }
     }
 }
 function loadRooms() {
