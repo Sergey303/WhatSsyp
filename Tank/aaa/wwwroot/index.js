@@ -103,31 +103,56 @@ function keydown(event)
         if (Number.isNaN(k)) {
 
                 text.innerHTML = ("эт не число");
-            
+                changeBackground(false);
         }
         else{
         if(r+f == k){
             text.innerHTML = ("Верно");
+            changeBackground(true);
+            
         }
         else {
             text.innerHTML = ("не");
+            changeBackground(false);
         }
         }
 
     }
 }
 
+
+function changeBackground(ansver) {
+    const color = 
+        document.getElementById(
+            "aaa");
+
+    console.log(color);
+
+
+    if (ansver == true) {
+        color.classList.remove('aaab');
+        color.classList.add('aaabc');
+    }
+    else {
+        color.classList.remove('aaabc');
+        color.classList.add('aaab');
+    }
+
+}
+
+
+
+
 function clickAnswer() {
-    // Вызываем вашу большую функцию проверки 
-    // и притворяемся, что был нажат Enter
+    // Вызываем keydown
     keydown({ key: 'Enter' });
 }
 
 function startAgain() {
     hideXStartGame();
-        // 2. Очищаем поле ввода от старого ответа пользователя
+        // Очищаем поле ввода от старого ответа пользователя
         document.getElementById("somethig").value = "";
 
-        // 3. Очищаем старую надпись "Верно / Неверно"
+        // Очищаем старую надпись 
         document.getElementById("anser").innerHTML = "";
 }
