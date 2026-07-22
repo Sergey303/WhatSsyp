@@ -1,0 +1,73 @@
+body { /* body выбирает HTML-тег body. */
+    font-size: 18px;
+}
+.message {
+    border: 1px solid black;
+}
+/* Точка перед message означает class. */
+
+
+#score {
+    font-size: 30px;
+} /* # перед score означает id. */
+/* Три селектора: 
+body -> тег
+.message -> class
+#score ->  id
+
+class это скорее как метка по которой можно выделять например строку 
+и както с ней взаимодействовать, после того кк обаратиться к ней */
+.chat {
+    width: 400px; /* width — ширина.  px — пиксели. */
+}
+
+.page {
+    max-width: 900px;  /* Блок может быть меньше 900px, но не больше. */
+} 
+
+
+
+.player-name {
+    font-weight: bold;
+}
+
+.title {
+    text-align: center;
+}
+
+/* Курсор над кнопкой */
+.buttton {
+    cursor: pointer;
+}
+/* Наведение  */
+.buttton:hover {
+    opacity: 0.9; 
+} /* :hover означает состояние, когда указатель находится над элементом.
+opacity меняет прозрачность. */
+
+.player {
+    display: flex; /* Теперь дочерние элементы могут расположиться рядом. */
+} /* display: flex пишется у родительского блока: */
+
+.player {
+    display: flex;
+    gap: 8px; /* Расстояние между элементами */
+    justify-content: space-between;  /* Разнести по краям: Одно окажется у одного края, другое — у другого.*/
+    align-items: center;
+}
+
+.col,
+.row {
+    display: flex;
+    flex-direction: row; 
+    gap: 5px; /* Расстояние между элементами */
+}/* Строка
+Элементы идут слева направо. */
+
+.oform {
+    display: flex;
+    flex-direction: column;
+} /*Колонка
+ Дочерние элементы идут сверху вниз. */
+
+
