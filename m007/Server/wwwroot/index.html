@@ -1,73 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="assets/bootstrap.min.css">
-    <link rel="stylesheet" href="styleAlexander.css">
+    <title>Мастерская номер 7</title>
+    <link 
+    rel="stylesheet"
+    href="assets/bootstrap.min.css"> 
+
 </head>
 <body>
-    
-     
-    <div id="loginPanel" >
-        <h1 class="tittle1">XAMIC</h1>
-        <div class="login-wrapper">
-            <div class="login-form">
-                <h2>Вход в мессенджер</h2>
+<div class="card container d-flex flex-column align-items-center vh-50" >
 
-
-                <div class="input-group">
-                    <label for="loginname">Логин (Login name)</label>
-                    <input type="text" id="loginName" placeholder="ivan_99" required>
-                </div>
-
-                <div class="input-group">
-                    <label for="password">Пароль (Password)</label>
-                    <input type="password" id="password" placeholder="••••••••" required>
-                </div>
-
-                <div class="input-group">
-                    <label for="username">Имя пользователя (Username)</label>
-                    <input type="text" id="username" placeholder="Иван Иванов" required>
-                    </div>
-                
-                <button onclick="registration()" type="submit" style="margin-bottom: 10px;">Зарегистрироваться</button>
-                <button onclick="login()" type="submit">Вход</button>
-            </div>
-        </div>
+    <div class="card mb-2 container d-flex  align-items-center vh-50" >
+    <h1 class="title" style="text-align: center;">
+    Мастерская номер 7</h1>
+    <p class="title"> Мессенджер с использованием SignalR | HTML | css | c#</p>
     </div>
 
 
-    <div id="appPanel" class="d-none">        
-        <button class="logout-btn" onclick="Auth.logout()">Выйти</button>
-        <div id="messages">
-        </div>
+    <div class="card mb-2 container d-flex  align-items-center vh-50" >
+        В повседневной жизни мы посточнно используем мессенджеры. Но как же они устроены? На базе сетевых технологий работают и мессенджеры, и многое другое, что с помощью них реализуется (например, многопользовательские игры).
+        В нашей мастерской мы, помимо изучения серверных технологий и проблематики создания непосредственно мессенджеров параллельно погружались в изучения таких языков програмирования как Javascript, C#, HTML  (и, конечно же, CSS)
+        
     </div>
-    <div id="roomPanel" class="d-none">
-        <input id="roomNameInput" class="form-control" placeholder="Название комнаты">
-        <button class="btn btn-primary mt-2" onclick="createRoom()">Создать комнату</button>
-        <button class="btn btn-primary mt-2" onclick="joinR()" >Войти в комнату</button>
-        <ul id="rooms" class="list-group mt-2" style="margin-bottom: 50px;"></ul>
-    <!--
-    <div class="send-row">
-        <input id="nameInput" placeholder="name">
-        <button onclick="showName()">
-            Показать имя
-        </button>
-    </div>
-    -->
-        <input id="messageRoom" placeholder="выберите комнату">
-        <input id="messageInput" placeholder="напишите сообщение">
-        <input id="fileInput" placeholder="выберите файл">
-        <button class="image-button" onclick="sendMessage()">
-            &#8629; 
-        </button>
-    </div>
+<div class="card container d-flex flex-column align-items-center vh-50" >
+    <h5>Наш состав</h5>
+    <h6>Мастера</h6>
+        <div>Марчук Александр Гурьевич</div>
+        <div>Лештаев Сергей Викторович</div>
+    <h6>Ученики</h6>
+        <div>Непомнящих Мария</div>
+        <div>Игонин Андрей</div>
+        <div>Ишикаев Артём</div>
+        <div>Погадаев Александр</div>
+        <div>Зайцева Татьяна</div>
+</div>
 
-    <script src="assets/auth-helper.js"></script>
-    <script src="assets/signalr.min.js"></script>
-    <script src="assets/workshop-chat-helper.js"></script>
-    <script src="assets/api-helper.js"></script>
-    <script src="appAlexander.js"></script>
-    <script src="assets/file-handler.js"></script>
+    <div class="card container d-flex flex-column align-items-center vh-50" >
+        <h5>Наши проекты</h5>
+        <a href="MLCA/index.html">Мегалосось</a>
+        <a href="Xamic/index.html">Хамик</a>
+        <a href="Scam/index.html">Скам-мессенджер</a>
+        <a href="YourSchedule/schedule.html">Планировщик</a>
+    </div>
+    <div class="card container d-flex flex-column align-items-center vh-50" >
+    <img src="assets/IMG_2212.JPG" width="300" />
+
+    </div>
+</div>
+
 </body>
-<html>
+</html>

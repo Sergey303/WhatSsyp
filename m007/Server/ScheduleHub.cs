@@ -8,10 +8,10 @@ using System.Text.Json;
 
 public class ScheduleHub : Hub
 {
-    public Task Send(string eventName, string text)
+    public async Task Send(string eventName, string text)
     {
         Console.WriteLine("[" + eventName + "]" + text);
-        List<MyTask> tasks = MyTask.GetListOfTask();
+        List<MyTask> tasks = await MyTask.GetListOfTaskAsync();
         if (eventName == "elementOfTable")
         {
             MyTask task = JsonSerializer.Deserialize<MyTask>(text);
@@ -30,7 +30,7 @@ public class ScheduleHub : Hub
             TimeSpan t2 = TimeSpan.Parse(y.Time);
             return t1.CompareTo(t2);
         });
-        return Clients.All.SendAsync(eventName, MyTask.SaveListOfTask(tasks));
+        await Clients.All.SendAsync(eventName, await MyTask.SaveListOfTaskAsync(tasks));
     }
     
 }

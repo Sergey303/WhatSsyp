@@ -1,19 +1,8 @@
-using Microsoft.AspNetCore.SignalR;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.IO;
-using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using System.ComponentModel;
-using System.Net.Cache;
 using System.Text;
-
-List<Room> rooms = JsonSerializer.Deserialize<List<Room>>(File.ReadAllText("RoomsAlexander.json"));
-
-List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsersAlexander.json"));
 
 var processor = new AccountProcessor();
 var accountsList = processor.LoadAccounts();
@@ -28,6 +17,7 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 builder.Services.AddAuthorization();
 
@@ -35,6 +25,7 @@ builder.Services.AddSignalR();
 builder.Services.AddHostedService<MyBackGroundService>();
 
 var app = builder.Build();
+app.UseMiddleware<DynamicBaseUrlMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseDefaultFiles();
@@ -54,202 +45,15 @@ app.UseStaticFiles(new StaticFileOptions
     }
 });
 
-string[] users = { "Masha", "Petya", "Ania", "Kirill" };
-string[] chatUsers = { "Masha", "Petya" };
-
-Rooms.usersByRoom["General"] = new string[] {};
-Rooms.usersByRoom["Games"] = new string[] {};
-Rooms.usersByRoom["School"] = new string[] {};
-
-Rooms.messagesByRoom["General"] = new List<ChatMessage> {};
-Rooms.messagesByRoom["Games"] = new List<ChatMessage> {};
-Rooms.messagesByRoom["School"] = new List<ChatMessage> {};
-
-// app.MapGet("/api/rooms", () => Rooms.rooms);
-app.MapGet("/api/users", () => users);
-app.MapGet("/api/chat-users", () => chatUsers);
-app.MapGet("/api/rooms/{roomName}/users",  (string roomName) =>
-{
-    if (Rooms.usersByRoom.ContainsKey(roomName))
-    {
-        return Rooms.usersByRoom[roomName];
-    }
-    return Array.Empty<string>();
-});
-
 //часть Александра
-app.MapGet("/api/roomsAlexander", () => rooms);
-app.MapPost("/api/roomsAlexander", (Room room) =>
-{
-    if (rooms.FirstOrDefault(x => x.name == room.name) == null)
-    {
-        rooms.Add(room);
-        string convert = JsonSerializer.Serialize(rooms);
-        File.WriteAllText("RoomsAlexander.json", convert);
-    }
-    return Results.Ok();
-});
+app.MapGet("/api/rooms", () => Room.rooms.Select(x => x.name));
 
-
-// app.MapPost("/olele", (LoginRequest request) =>
-// {
-//     if (Users.FirstOrDefault(x=>x.name==request.name)==null)
-//     {
-//         Users.Add(new LoginRequest() { Name = request.Name, Password = request.Password, UserName = request.UserName});
-//         string ser = JsonSerializer.Serialize(Users);
-//         File.WriteAllText("DataUsersAlexander.json", ser);
-//         return Results.Ok();
-//     }
-//     else
-//     {
-//         return Results.Unauthorized();
-//     }
-    
-// });
-// app.MapPost("api/login", (LoginRequest3 login, HttpContext context) =>
-// {
-//     if (Users.FirstOrDefault(x=>x.name == login.Name && x.password == login.Password && x.name == login.UserName)==null)
-//     {
-//         return Results.Unauthorized();
-//     }
-//     string userName = "UserName";
-
-//     Claim nameClaim1 = new Claim(ClaimTypes.Name, login.Name);
-//     Claim nameClaim2 = new Claim(userName, login.UserName);
-//     List<Claim> claims = new List<Claim> {nameClaim1, nameClaim2};
-
-//     ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-//     ClaimsPrincipal user = new ClaimsPrincipal(identity);
-//     context.SignInAsync(user).Wait();
-//     return Results.Ok();
-// });
-app.MapGet("/api/me", (HttpContext context) =>
-{
-    string name = "";
-    if (context.User.Identity != null && context.User.Identity.Name != null)
-    {
-        name = context.User.Identity.Name;
-    }
-    if (name == "")
-    {
-        return Results.Unauthorized();
-    }
-    return Results.Ok(new { name = name });
-});
-app.MapPost("/api/logout", (HttpContext context) => { context.SignOutAsync().Wait(); return Results.Ok(); });
-
-//MEGA LOSOS!!!!!!
-app.MapGet("/api/fish", (HttpContext context) =>
-{
-    string name = "";
-    // string login = "";
-
-    if (context.User?.Identity?.Name != null)
-    {
-        name = context.User.Identity.Name;
-        // var claims = context.User.Claims;
-        // login = claims.FirstOrDefault(a =>
-        //     a.GetType().ToString() == ClaimTypes.NameIdentifier).Value;
-    }
-
-    if (name == "")
-    {
-        return Results.Unauthorized();
-    }
-    return Results.Ok(new { name = name});
-});
-
-app.MapGet("api/MLfile", (string filePath) =>
+app.MapGet("api/file", (string filePath) =>
 {
     // Console.WriteLine(filePath.Split("\\").Last());
     return Results.File(filePath, "application/octet-stream", filePath.Split("\\").Last());
 });
 
-app.MapPost("/api/MLlogout", (HttpContext context) =>
-{
-    context.SignOutAsync().Wait();
-    return Results.Ok();
-});
-
-app.MapPost("/api/MLlogin", async (LoginRequest2 loginData, HttpContext context) =>
-{
-    if (!accountsList.Any(a =>
-    a.login == loginData.login && a.password == loginData.password))
-    {
-        return Results.Unauthorized();
-    }
-
-    Account? _logAcc = accountsList.Find(a => a.login == loginData.login);
-
-    Claim nameClaim = new Claim(ClaimTypes.Name, _logAcc.name);
-    Claim loginClaim = new Claim(ClaimTypes.NameIdentifier, _logAcc.login);
-    Claim passwordClaim = new Claim(ClaimTypes.SerialNumber, _logAcc.login);
-    List<Claim> claims = new();
-    claims.Add(nameClaim);
-    claims.Add(loginClaim);
-    claims.Add(passwordClaim);
-
-    ClaimsIdentity identity = new ClaimsIdentity(claims,
-        CookieAuthenticationDefaults.AuthenticationScheme);
-    ClaimsPrincipal user = new ClaimsPrincipal(identity);
-
-    await context.SignInAsync(user);
-
-    return Results.Ok();
-});
-
-app.MapPost("api/MLregin", (LoginRequest2 loginData, HttpContext context) =>
-{
-    try
-    {
-        string name = loginData.name;
-        string login = loginData.login;
-        string password = loginData.password;
-        if (name.Length > 20 || login.Length > 20 || password.Length > 20)
-        {
-            return Results.BadRequest();
-        }
-        if (accountsList.Any(a => a.name == name ||
-            a.login == login))
-        {
-            Console.WriteLine(name, login);
-            return Results.BadRequest();
-        }
-        AddAccountToList(name, login, password);
-        AddAccountToFile(name, login, password);
-        return Results.Ok();
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine(ex.Message);
-        return Results.Problem();
-    }
-});
-
-app.MapPost("api/MLupload", async (IFormFile? file) =>
-{
-    try {
-        string dir = Path.Combine(Directory.GetCurrentDirectory(), "uploads", Guid.NewGuid().ToString());
-        string filePath = Path.Combine(dir, file.FileName);
-        Directory.CreateDirectory(dir);
-
-        using (var stream = new FileStream(filePath, FileMode.Create))
-        {
-            await file.CopyToAsync(stream);
-        }
-        return Results.Ok(filePath);
-    }
-    catch {
-        return Results.BadRequest("");
-    }
-}).DisableAntiforgery();
-
-app.MapGet("api/MLmessages", (string room) =>
-{
-    room = ""; //FIX LATER IF NEEDED
-    List<Message> messages = JsonSerializer.Deserialize<List <Message>>(File.ReadAllText("DataMessages.json"));
-    return messages.Where(a => a.room == room).ToList();
-});
 //end MEGA LOSOS...
 
 //app.MapGet("/", () => "Hello World!");
@@ -263,14 +67,7 @@ app.MapGet("api/MLmessages", (string room) =>
 //     RequestPath = "/uploads"
 // });
 
-app.MapGet("/api/rooms", () => rooms);
 
-app.MapPost("/api/rooms", (Room room) =>
-{
-    rooms.Add(room);
-    SaveRooms(rooms);
-    return Results.Ok();
-});
 
 app.MapPost("api/upload", async (IFormFile file) =>
 {
@@ -288,9 +85,9 @@ app.MapPost("api/upload", async (IFormFile file) =>
 }).DisableAntiforgery();
 
 //end MEGA LOSOS...
-app.MapGet("/api/MyTasks", () =>
+app.MapGet("/api/MyTasks", async () =>
 {
-    List<MyTask> lo = MyTask.GetListOfTask();
+    List<MyTask> lo = await MyTask.GetListOfTaskAsync();
     string json = JsonSerializer.Serialize(lo);
     return json;
 });
@@ -299,18 +96,39 @@ app.MapGet("/api/MyTasks", () =>
 app.MapHub<ChatHub>("/chatHub");
 app.MapHub<ScheduleHub>("/scheduleHub");
 
-app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
+
+
+
+app.MapPost("/api/logout", async (HttpContext context) =>
+{
+    await context.SignOutAsync();
+    return Results.Ok();
+});
+app.MapGet("api/messages/{room?}", (string? room) =>
+{
+    room = ""; //FIX LATER IF NEEDED
+    List<Message> messages = JsonSerializer.Deserialize<List <Message>>(FileExtensions.ReadAllTextSafe("DataMessages.json", "[]"));
+    return messages.Where(a => a.room == room).ToList();
+});
+
+app.MapPost("api/register", async (LoginRequest loginData, HttpContext context) =>
 {
     try
     {
         string name = loginData.name;
         string login = loginData.login;
         string password = loginData.password;
-        if (accountsList.Any(a => a.name == name || a.login == login))
+        if (name.Length > 20 || login.Length > 20 || password.Length > 20)
         {
             return Results.BadRequest();
         }
-        AddAccountToList(name, login, password);
+        if (accountsList.Any(a => a.name == name ||
+                                  a.login == login))
+        {
+            Console.WriteLine(name, login);
+            return Results.BadRequest();
+        }
+        await AddAccountToList(name, login, password, context);
         AddAccountToFile(name, login, password);
         return Results.Ok();
     }
@@ -320,42 +138,32 @@ app.MapPost("api/register", (LoginRequest loginData, HttpContext context) =>
         return Results.Problem();
     }
 });
-
-
-app.MapPost("/api/logout", async (HttpContext context) =>
+app.MapGet("/api/me", (HttpContext context) =>
 {
-    await context.SignOutAsync();
-    return Results.Ok();
+    string name = "";
+    if (context.User.Identity != null && context.User.Identity.Name != null)
+    {
+        name = context.User.Identity.Name;
+    }
+    if (name == "")
+    {
+        return Results.Unauthorized();
+    }
+    return Results.Ok(new { name = name });
 });
-
 app.MapPost("/api/login", async (LoginRequest loginData, HttpContext context) =>
 {
-    if (!accountsList.Any(a => a.login == loginData.login && a.password == loginData.password))
+    string inputHash = HashCompute.Compute256(loginData.password);
+
+    if (!accountsList.Any(a => a.login == loginData.login && a.password == inputHash))
     {
         return Results.Unauthorized();
     }
     Account? _logAcc = accountsList.Find(a => a.login == loginData.login);
 
-    Claim nameClaim = new Claim(ClaimTypes.Name, _logAcc.name);
-    Claim loginClaim = new Claim(ClaimTypes.NameIdentifier, _logAcc.login);
-    Claim passwordClaim = new Claim(ClaimTypes.SerialNumber, _logAcc.login);
-    List<Claim> claims = new();
-    claims.Add(nameClaim);
-    claims.Add(loginClaim);
-    claims.Add(passwordClaim);
-
-    ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-    ClaimsPrincipal user = new ClaimsPrincipal(identity);
-
-    await context.SignInAsync(user);
+    await LoginAfterRegister(_logAcc, context);
 
     return Results.Ok();
-});
-
-app.MapGet("/", async () => 
-{
-    var path = Path.Combine(builder.Environment.WebRootPath, "regAndrey.html");
-    return Results.File(path, "text/html");
 });
 
 app.Run("http://0.0.0.0:8080");
@@ -374,9 +182,11 @@ void SaveRooms(List<Room> roomsList)
     }
 }
 
-void AddAccountToList(string name, string login, string password)
+async Task AddAccountToList(string name, string login, string password, HttpContext httpContext)
 {
-    Account _acc = new Account {name = name, login = login, password = password};
+    string hashPassword = HashCompute.Compute256(password);
+    Account _acc = new Account {name = name, login = login, password = hashPassword};
+    await LoginAfterRegister(_acc, httpContext);
     accountsList.Add(_acc);
 }
 
@@ -386,17 +196,18 @@ void AddAccountToFile(string name, string login, string password)
     File.WriteAllText(AccountProcessor.filePath, jsn, Encoding.UTF8);
 }
 
-List<Room> LoadRooms()
+async Task LoginAfterRegister(Account? logAcc, HttpContext httpContext)
 {
-    try
-    {
-        string path = "wwwroot/rooms.json";
-        if (File.Exists(path))
-        {
-            string json = File.ReadAllText(path, Encoding.UTF8);
-            return JsonSerializer.Deserialize<List<Room>>(json) ?? new List<Room>();
-        }
-    }
-    catch { }
-    return new List<Room>();
+    Claim nameClaim = new Claim(ClaimTypes.Name, logAcc.name);
+    Claim loginClaim = new Claim(ClaimTypes.NameIdentifier, logAcc.login);
+    Claim passwordClaim = new Claim(ClaimTypes.SerialNumber, logAcc.login);
+    List<Claim> claims = new();
+    claims.Add(nameClaim);
+    claims.Add(loginClaim);
+    claims.Add(passwordClaim);
+
+    ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+    ClaimsPrincipal user = new ClaimsPrincipal(identity);
+
+    await httpContext.SignInAsync(user);
 }

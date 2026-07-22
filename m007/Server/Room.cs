@@ -1,4 +1,6 @@
-class Room
+using System.Text.Json;
+
+public class Room
 {
     public string name
     {
@@ -10,4 +12,6 @@ class Room
         get;
         set;
     } = [];
+    public static List<Room> rooms => JsonSerializer.Deserialize<List<Room>>(FileExtensions.ReadAllTextSafe("Rooms.json", "[]"));
+    
 }

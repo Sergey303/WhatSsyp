@@ -94,7 +94,7 @@ function sendPairForDelete(event){
     //     return;
     // }
     const clickedIndex = event.target.dataset.index;
-    Api.get("/api/MyTasks", (result1) => JSON.parse(result1));
+    Api.get("api/MyTasks", (result1) => JSON.parse(result1));
     const index=result1.indexOf(clickedIndex);
     // const textToDelete = JSON.stringify(elementOfTable1);
     Chat.send("elementOfTable1", index);
@@ -102,7 +102,7 @@ function sendPairForDelete(event){
     timeInputToDelete.value = "";
 }
 
-Api.get("/api/MyTasks", (result) => showPairFromBase(JSON.parse(result)));
+Api.get("api/MyTasks", (result) => showPairFromBase(JSON.parse(result)));
 
 
 // function showTime(time){

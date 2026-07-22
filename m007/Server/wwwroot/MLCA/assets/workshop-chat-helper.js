@@ -37,6 +37,14 @@
         }
     }
 
+    function localReceiveFile(name, file) {
+        const list = receivers[name] || [];
+
+        for (const fn of list) {
+            fn(file);
+        }
+    }
+
     function registerSignalR(name) {
         if (!connection || registered[name]) {
             return;
@@ -59,6 +67,21 @@
                 "Send",
                 name,
                 text)
+            .catch(function (error) {
+                console.error(error);
+
+                localReceive(
+                    "system",
+                    "Не получилось отправить: " + name);
+            });
+    }
+
+    function invokeFile(name, file) {
+        return connection
+            .invoke(
+                "Send",
+                name,
+                file)
             .catch(function (error) {
                 console.error(error);
 
@@ -91,7 +114,7 @@
         }
 
         const url =
-            options.url || "scheduleHub";
+            options.url || "chatHub";
 
         if (!window.signalR) {
             demoMode = true;
@@ -116,7 +139,6 @@
         connection =
             new signalR.HubConnectionBuilder()
                 .withUrl(url)
-                .withAutomaticReconnect()
                 .build();
 
         for (const name in receivers) {
@@ -136,7 +158,6 @@
             .then(function () {
                 state = "connected";
                 demoMode = false;
-                console.log(connection.connectionId);
 
                 localReceive(
                     "system",
@@ -179,6 +200,7 @@
         invoke(name, text);
     }
 
+
     function receive(name, fn) {
         name = cleanName(name);
 
@@ -188,7 +210,6 @@
 
             return;
         }
-
         if (!receivers[name]) {
             receivers[name] = [];
         }
@@ -197,9 +218,26 @@
         registerSignalR(name);
     }
 
+    function receiveFile(name, fn) {
+        name = cleanName(name);
+
+        if (typeof fn !== "function") {
+            console.warn(
+                "Chat.receiveFile ждёт функцию вторым параметром.");
+
+            return;
+        }
+        if (!receivers[name]) {
+            receivers[name] = [];
+        }
+        receivers[name].push(fn);
+        registerSignalR(name);
+
+    }
+
     window.Chat = {
         connect: connect,
         send: send,
-        receive: receive
+        receive: receive,
     };
 })();

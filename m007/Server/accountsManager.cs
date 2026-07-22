@@ -1,7 +1,4 @@
-using System.Text;
 using System.Text.Json;
-
-
 
 
 public class AccountProcessor
@@ -11,7 +8,7 @@ public class AccountProcessor
     {
         try
         {
-            string jsonStr = File.ReadAllText(filePath, Encoding.UTF8);
+            string jsonStr = FileExtensions.ReadAllTextSafe(filePath, "[]");
             return JsonSerializer.Deserialize<List<Account>>(jsonStr);
         }
         catch
