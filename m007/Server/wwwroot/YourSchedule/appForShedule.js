@@ -7,7 +7,7 @@ const tasksInputToDelete=document.getElementById("tasksInputForDelete");
 
 Chat.receive("elementOfTable", function (text){
     console.log(text);
-    showPair(text);
+    showPairFromBase(JSON.parse(text));
 });
 
 // Chat.receive("elementOfTable1", function (text){
@@ -72,29 +72,32 @@ function sendPair(){
     timeInput.value = "";
 }
 
-function sendPairForDelete(){
-    const elementOfTable1 = {
-        Time: timeInputToDelete.value, 
-        Task: tasksInputToDelete.value
-    }
-    const timeToDelete = timeInputToDelete.value;
-    if (timeToDelete === ""){
-        return;
-    }
-    const timeForAlertDel=timeInputToDelete.value;
-    const ListTimeForAlert=timeForAlertDel.split(":");
-    const date = new Date();
-    date.setHours(ListTimeForAlert[0]);
-    date.setMinutes(ListTimeForAlert[1]);
-    // const invalidDate = new Date('invalid date');
-    // if (isNaN(invalid))
-    if (isNaN(date.getTime())){
-        alert("Некорректный формат времени. Введите заново");
-        timeInputToDelete.value = "";
-        return;
-    }
-    const textToDelete = JSON.stringify(elementOfTable1);
-    Chat.send("elementOfTable1", textToDelete);
+function sendPairForDelete(event){
+    // const elementOfTable1 = {
+    //     Time: timeInputToDelete.value, 
+    //     Task: tasksInputToDelete.value
+    // }
+    // const timeToDelete = timeInputToDelete.value;
+    // if (timeToDelete === ""){
+    //     return;
+    // }
+    // const timeForAlertDel=timeInputToDelete.value;
+    // const ListTimeForAlert=timeForAlertDel.split(":");
+    // const date = new Date();
+    // date.setHours(ListTimeForAlert[0]);
+    // date.setMinutes(ListTimeForAlert[1]);
+    // // const invalidDate = new Date('invalid date');
+    // // if (isNaN(invalid))
+    // if (isNaN(date.getTime())){
+    //     alert("Некорректный формат времени. Введите заново");
+    //     timeInputToDelete.value = "";
+    //     return;
+    // }
+    const clickedIndex = event.target.dataset.index;
+    Api.get("/api/MyTasks", (result1) => JSON.parse(result1));
+    const index=result1.indexOf(clickedIndex);
+    // const textToDelete = JSON.stringify(elementOfTable1);
+    Chat.send("elementOfTable1", index);
     tasksInputToDelete.value = "";
     timeInputToDelete.value = "";
 }
@@ -141,6 +144,8 @@ function showPairFromBase(result){
         const taskForAdd = taskTempContent.cloneNode(true);
         timeForAdd.querySelector('.time-item').textContent = res.Time;
         taskForAdd.querySelector('.task-item').textContent = res.Task;
+        const buttonDelete = taskForAdd.querySelector('.trash');
+        buttonDelete.dataset.index = result.indexOf(res);
         document.getElementById("times").appendChild(timeForAdd);
         document.getElementById("tasks").appendChild(taskForAdd);
     }   

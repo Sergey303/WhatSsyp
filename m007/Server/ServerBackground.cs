@@ -84,13 +84,15 @@ class MyTask
             return JsonSerializer.Deserialize<List<MyTask>>(tasks);
 
         }
-        public static void SaveListOfTask(List<MyTask> tasks) {
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true
-            };
-            string json = JsonSerializer.Serialize(tasks, options);
-            File.WriteAllText(@"wwwroot\YourSchedule\base.json", json, System.Text.Encoding.UTF8);
+    public static string SaveListOfTask(List<MyTask> tasks)
+    {
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true
+        };
+        string json = JsonSerializer.Serialize(tasks, options);
+        File.WriteAllText(@"wwwroot\YourSchedule\base.json", json, System.Text.Encoding.UTF8);
+        return json;
         }
     }
 

@@ -11,15 +11,16 @@ public class ScheduleHub : Hub
     public Task Send(string eventName, string text)
     {
         Console.WriteLine("[" + eventName + "]" + text);
-        MyTask task = JsonSerializer.Deserialize<MyTask>(text);
         List<MyTask> tasks = MyTask.GetListOfTask();
         if (eventName == "elementOfTable")
         {
+            MyTask task = JsonSerializer.Deserialize<MyTask>(text);
             tasks.Add(task);
         }
         else if (eventName == "elementOfTable1")
         {
-            tasks.RemoveAll(MyTask1 => MyTask1.Time == task.Time && MyTask1.Task == task.Task);
+            int.TryParse(text, out var textInt);
+            tasks.RemoveAt(textInt);
         }
         // tasks.Add(task);
         // tasks.Sort((x, y) => x.Time.CompareTo(y.Time));
@@ -29,8 +30,7 @@ public class ScheduleHub : Hub
             TimeSpan t2 = TimeSpan.Parse(y.Time);
             return t1.CompareTo(t2);
         });
-        MyTask.SaveListOfTask(tasks);
-        return Clients.All.SendAsync(eventName, text);
+        return Clients.All.SendAsync(eventName, MyTask.SaveListOfTask(tasks));
     }
     
 }

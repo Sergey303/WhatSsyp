@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.ComponentModel;
 using System.Net.Cache;
+using System.Security.Cryptography;
+using System.Text;
 
 
 
@@ -68,10 +70,11 @@ app.MapPost("/api/rooms", (Room room) =>
     }
     return Results.Ok();
 });
+
 IResult entry(LoginRequest login, HttpContext context)
 {
     List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsers.json"));
-    if (Users.FirstOrDefault(x => x.Name == login.Name && x.Password == login.Password && x.UserName == login.UserName) == null)
+    if (Users.FirstOrDefault(x => x.Name == login.Name && x.Password == HashCompute.Compute256(login.Password) && x.UserName == login.UserName) == null)
     {
         return Results.Unauthorized();
     }
@@ -92,7 +95,8 @@ app.MapPost("/olele", (LoginRequest request, HttpContext context) =>
     List<LoginRequest> Users = JsonSerializer.Deserialize<List<LoginRequest>>(File.ReadAllText("DataUsers.json"));
     if (Users.FirstOrDefault(x => x.UserName == request.UserName) == null)
     {
-        Users.Add(new LoginRequest() { Name = request.Name, Password = request.Password, UserName = request.UserName });
+        string HashPassword = HashCompute.Compute256(request.Password);
+        Users.Add(new LoginRequest() { Name = request.Name, Password = HashPassword, UserName = request.UserName });
         string ser = JsonSerializer.Serialize(Users);
         File.WriteAllText("DataUsers.json", ser);
         return entry(request, context);
