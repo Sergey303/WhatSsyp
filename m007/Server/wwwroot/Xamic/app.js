@@ -25,7 +25,7 @@ function registration() {
     const name = loginName.value;
     const password = loginPassword.value;
     const username = UserName.value;
-    Api.post("/api/register", {name, password, login: username}, startApp);
+    Api.post("api/register", {name, password, login: username}, startApp);
 }
 
 
