@@ -49,13 +49,7 @@ function showMessage(msgObj) {
         month: '2-digit',
         day: '2-digit'
     });
-    console.log(msgObj.date);
-    if ((msgObj.dt || "").split(", ")[0] == date) {
-        msgObj.dt = time;
-    }
-    else {
-        msgObj.filePath = "";
-    }
+
     activateMedia(msgObj.filePath || "", msgObj.message || "", msgObj.user || "User", msgObj.dt || "-");
 }
 
