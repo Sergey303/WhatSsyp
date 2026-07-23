@@ -53,9 +53,6 @@ function showMessage(msgObj) {
     if ((msgObj.dt || "").split(", ")[0] == date) {
         msgObj.dt = time;
     }
-    if (msgObj.filePath.length != 0) {
-        msgObj.filePath = "http://172.16.47.27:8080/api/MLfile?filePath=" + msgObj.filePath;
-    }
     else {
         msgObj.filePath = "";
     }

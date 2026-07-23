@@ -77,7 +77,7 @@ function rollDice() {
 
 function showFile(filePath, fileName) {
     const messages = document.getElementById("messages");
-    const fileUrl = "/" + filePath;
+    const fileUrl ="api/file?filePath=" + filePath;
     const type = getFileType(filePath);
     
     if (!fileName) {

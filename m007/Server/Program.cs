@@ -46,7 +46,7 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 //часть Александра
-app.MapGet("/api/rooms", () => Room.rooms.Select(x => x.name));
+app.MapGet("api/rooms", () => Room.rooms.Select(x => x.name));
 
 app.MapGet("api/file", (string filePath) =>
 {
@@ -99,7 +99,7 @@ app.MapHub<ScheduleHub>("/scheduleHub");
 
 
 
-app.MapPost("/api/logout", async (HttpContext context) =>
+app.MapPost("api/logout", async (HttpContext context) =>
 {
     await context.SignOutAsync();
     return Results.Ok();
@@ -138,7 +138,7 @@ app.MapPost("api/register", async (LoginRequest loginData, HttpContext context) 
         return Results.Problem();
     }
 });
-app.MapGet("/api/me", (HttpContext context) =>
+app.MapGet("api/me", (HttpContext context) =>
 {
     string name = "";
     if (context.User.Identity != null && context.User.Identity.Name != null)
@@ -151,7 +151,7 @@ app.MapGet("/api/me", (HttpContext context) =>
     }
     return Results.Ok(new { name = name });
 });
-app.MapPost("/api/login", async (LoginRequest loginData, HttpContext context) =>
+app.MapPost("api/login", async (LoginRequest loginData, HttpContext context) =>
 {
     string inputHash = HashCompute.Compute256(loginData.password);
 

@@ -26,20 +26,20 @@ window.activateMedia = function activateMedia(fileUrl, text, name, date) {
     const fileMsg = fileMTemp.content.cloneNode(true);
     if (type === '.tpl-img') {
         const img = fileMsg.querySelector(type);
-        img.src = fileUrl;
+        img.src = "api/file?filePath=" + fileUrl;
         img.style.display = 'block';
     } 
     
     else if (type === '.tpl-video') {
         const video = fileMsg.querySelector(type);
-        video.src = fileUrl;
+        video.src = "api/file?filePath=" + fileUrl;
         video.style.display = 'block';
         video.load();
     } 
     
     else if (type === '.tpl-audio') {
         const audio = fileMsg.querySelector(type);
-        audio.src = fileUrl;
+        audio.src ="api/file?filePath=" + fileUrl;
         audio.style.display = 'block';
         audio.load();
     } 
@@ -59,7 +59,7 @@ window.activateMedia = function activateMedia(fileUrl, text, name, date) {
         const btn = fileMsg.querySelector('.tpl-download-btn');
         if (btn) 
         { 
-            btn.href = fileUrl; 
+            btn.href ="api/file?filePath=" + fileUrl; 
             btn.style.display = 'block';
             btn.textContent = fileName;
         }

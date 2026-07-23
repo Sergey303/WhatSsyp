@@ -9,7 +9,7 @@ function startApp() {
     Chat.connect();
     console.log("1");
     loadRooms();
-    joinR("Global");
+    joinR("");
     //console.log(window.location);
     if (window.location.pathname != "/Xamic/hub.html") {
         window.location.assign("Xamic/hub.html");
@@ -74,7 +74,7 @@ function showRooms(rooms) {
     // }
     roomsBlock.textContent = "";
     for (const room of rooms) {
-        if (room == "Global") {
+        if (room == "") {
             const item = document.createElement("li")
             item.className = "list-group-item";
             item.textContent = "🌍 Глобальный чат";
