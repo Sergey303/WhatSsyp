@@ -50,8 +50,8 @@ app.MapGet("api/rooms", () => Room.rooms.Select(x => x.name));
 
 app.MapGet("api/file", (string filePath) =>
 {
-    // Console.WriteLine(filePath.Split("\\").Last());
-    return Results.File(filePath, "application/octet-stream", filePath.Split("\\").Last());
+    string fileFullPath = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+    return Results.File(fileFullPath, "application/octet-stream", filePath.Split("\\").Last());
 });
 
 //end MEGA LOSOS...
