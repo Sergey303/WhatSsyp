@@ -11,7 +11,7 @@ function startApp() {
     loadRooms();
     joinR("");
     //console.log(window.location);
-    if (window.location.pathname.endsWith("hub.html")) {
+    if (!window.location.pathname.endsWith("hub.html")) {
         window.location.assign("Xamic/hub.html");
     }
 }
